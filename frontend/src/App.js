@@ -1,4 +1,5 @@
 import logo from './logo.svg';
+import './output.css'
 import './App.css';
 import { useRef } from 'react'
 
@@ -20,6 +21,7 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <p>
 	  {react_feeling.current["react can"]}
+	  <p className="text-red-800">asdfasfsadf</p>
 	  <p>
            DO NOT Learn React
 	  </p>
