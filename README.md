@@ -7,9 +7,6 @@ first go to the frontend directory
 to init the frontend server:  
 ```npm start```
 
-to init tailwind compiler  
-```npx tailwindcss -i ./src/input.css -o ./src/output.css --watch```
-
 ## Backend: Python(fastapi)  
 ```cd backend```
 optional: you would want a python virtual env (or go global and be ballsy :D)  
