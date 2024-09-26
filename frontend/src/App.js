@@ -1,37 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
-import { useRef } from 'react'
+import logo from "./assets/BlueArchive.gif";
+import "./App.css";
+import { useRef } from "react";
 
-const server = "http://127.0.0.1:8000/"
+const server = "http://127.0.0.1:8000/";
 
 function App() {
-	const react_feeling = useRef(false);
-	fetch(server).then(
-		response => {
-			return response.json()
-		}
-	).then(
-		data => {react_feeling.current = data},
-	);
+  const react_feeling = useRef(false);
+  fetch(server)
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      react_feeling.current = data;
+    });
 
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-	  {react_feeling.current["react can"]}
-	  <p className="text-red-800">asdfasfsadf</p>
-	  <p>
-           DO NOT Learn React
-	  </p>
-        </p>
+        <div className="logo-container">
+          <img src={logo} className="App-logo" alt="logo" />
+        </div>
+        <p>Learn React</p>
+        <p>React is {react_feeling.current ? "good" : "bad"}</p>
         <a
           className="App-link"
-          href="https://go.dev"
+          href="https://www.youtube.com/watch?v=kVNSfzMDzAM"
           target="_blank"
           rel="noopener noreferrer"
         >
-	  Learn Go instead :D
+          &gt;&gt;Subscribe
         </a>
       </header>
     </div>
