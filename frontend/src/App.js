@@ -20,7 +20,7 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <p>
 	  {react_feeling.current["react can"]}
-	  <p className="text-red-800">asdfasfsadf</p>
+	  <p className="text-red-800">Vajayna</p>
 	  <p>
            DO NOT Learn React
 	  </p>
