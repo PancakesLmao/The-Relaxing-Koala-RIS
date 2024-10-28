@@ -1,12 +1,14 @@
 .App {
   text-align: center;
 }
+
 .logo-container {
   width: 300px;   /* Set the square width */
   height: 300px;  /* Set the square height */
   overflow: hidden;
   position: relative;
 }
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
