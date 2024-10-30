@@ -67,7 +67,7 @@ async def update_table(
     res = db.cursor.execute(query, order_id)
     if res.fetchone() == None:
         err: str = f"Cannot find the order: {order_id}"
-        return HTTPException(status_code=404, detail=err)
+        raise HTTPException(status_code=404, detail=err)
 
     query: str = '''
     select table_number from tables 
@@ -76,7 +76,7 @@ async def update_table(
     res = db.cursor.execute(query, order_id)
     if res.fetchone() == None:
         err: str = f"Cannot find the table: {table_number}"
-        return HTTPException(status_code=404, detail=err)
+        raise HTTPException(status_code=404, detail=err)
 
     query: str = '''
     UPDATE tables
