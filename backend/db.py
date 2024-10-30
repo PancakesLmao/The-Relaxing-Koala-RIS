@@ -13,6 +13,7 @@ class Db:
         self.init_tables()
 
     def init_tables(self) -> None:
+        # create staff
         query : str = '''
         CREATE TABLE IF NOT EXISTS staff (
                 first_name TEXT NOT NULL,
@@ -22,4 +23,17 @@ class Db:
                 )
         '''
         self.cursor.execute(query)
+
+        # create tables
+        query : str = '''
+        CREATE TABLE IF NOT EXISTS tables (
+                table_number INTEGER NOT NULL PRIMARY KEY,
+                table_capacity INTEGER NOT NULL,
+                table_status TEXT NOT NULL DEFAULT FALSE,
+                order_id TEXT,
+                date_added TEXT NOT NULL
+                )
+        '''
+        self.cursor.execute(query)
+
 

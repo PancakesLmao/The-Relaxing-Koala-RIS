@@ -14,7 +14,7 @@ class Staff(BaseModel):
 router = APIRouter()
 db = Db("db.sqlite")
 
-@router.get("/all-staff", status_code=200)
+@router.get("/get-staffs", status_code=200)
 async def all_staff() -> list[Staff]:
     response: list[Staff] = []
     query: str = '''

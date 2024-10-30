@@ -1,21 +1,37 @@
-from fastapi import APIRouter, Form
+from fastapi import APIRouter, Form, HTTPException
 from pydantic import BaseModel
 from typing import Annotated
 from db import Db
+import datetime
 
 router = APIRouter()
 db = Db("db.sqlite")
 
+class Table(BaseModel):
+    table_number: int
+    table_capacity: int
+    table_status: str
+    order_id: str | None 
+    date_added: str
+
 @router.get("/get-tables" ,status_code=200)
-async def get_tables():
+async def get_tables() -> list[Table]:
+    tables: list[Table] = []
     query: str = '''
-    select * from tables;
+    SELECT * FROM tables;
     '''
     res = db.cursor.execute(query)
-    print(res)
-    return
+    for table in res.fetchall():
+        tables.append(Table(
+                table_number = table[0],
+                table_capacity= table[1],
+                table_status = table[2],
+                order_id = table[3],
+                date_added = table[4],
+                ))
+    return tables
 
-@router.put("/add-table", status_code=201)
+@router.post("/add-table", status_code=201)
 async def add_table(
         table_number: Annotated[str, Form()],
         table_capacity: Annotated[str, Form()]
@@ -26,7 +42,54 @@ async def add_table(
     '''
 
     res = db.cursor.execute(query, table_number)
-    if res.fetchone() == None:
-        return
+    if res.fetchone() != None:
+        err: str = f"Table number:{table_number} already exists"
+        raise HTTPException(status_code=409, detail=err)
 
+    query: str = '''
+    INSERT INTO tables(table_number, table_capacity, date_added)
+    VALUES(?,?,?)
+    '''
+    db.cursor.execute(query, (table_number, table_capacity, datetime.datetime.now()))
+    db.connection.commit()
+
+    return
+
+@router.patch("/add-order-to-table", status_code=204)
+async def update_table(
+        table_number: Annotated[str, Form()],
+        order_id: Annotated[str, Form()],
+        ):
+    query: str = '''
+    select order_id from orders 
+    where order_id = ?;
+    '''
+    res = db.cursor.execute(query, order_id)
+    if res.fetchone() == None:
+        err: str = f"Cannot find the order: {order_id}"
+        return HTTPException(status_code=404, detail=err)
+
+    query: str = '''
+    select table_number from tables 
+    where table_number = ?;
+    '''
+    res = db.cursor.execute(query, order_id)
+    if res.fetchone() == None:
+        err: str = f"Cannot find the table: {table_number}"
+        return HTTPException(status_code=404, detail=err)
+
+    query: str = '''
+    UPDATE tables
+    SET order_id = ?
+    WHERE table_number = ?;
+    '''
+    db.cursor.execute(query, (order_id, table_number))
+
+    query: str = '''
+    UPDATE orders
+    SET table_number = ?
+    WHERE order_id = ?;
+    '''
+    db.cursor.execute(query, (table_number, order_id))
+    db.connection.commit()
     return
