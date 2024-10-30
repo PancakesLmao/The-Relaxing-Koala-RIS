@@ -36,8 +36,8 @@ async def add_staff(first_name: Annotated[str, Form()],
                     last_name: Annotated[str, Form()],
                     role: Annotated[str, Form()]):
     query: str = '''
-    select rowid from staff
-    where first_name=?, last_name=?;
+    SELECT rowid FROM staff
+    WHERE first_name=? AND last_name=?;
     '''
     res = db.cursor.execute(query, (first_name, last_name))
     if res.fetchone() != None:
