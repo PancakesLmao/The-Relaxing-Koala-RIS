@@ -25,7 +25,7 @@ app.add_middleware(
 # include the routers here
 app.include_router(index_router)
 app.include_router(customer_router, prefix="/customer")
-app.include_router(kitchen_router, prefix="/staff/kitchen")
-app.include_router(manager_router, prefix="/staff/manager")
-app.include_router(cashier_router, prefix="/staff/cashier")
-app.include_router(waiter_router, prefix="/staff/waiter")
+app.include_router(kitchen_router, prefix="/kitchen")
+app.include_router(manager_router, prefix="/manager")
+app.include_router(cashier_router, prefix="/cashier")
+app.include_router(waiter_router, prefix="/waiter")
