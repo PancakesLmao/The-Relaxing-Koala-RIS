@@ -14,7 +14,7 @@ class Staff(BaseModel):
 router = APIRouter()
 db = Db("db.sqlite")
 
-@router.get("/all-staff")
+@router.get("/all-staff", status_code=200)
 async def all_staff() -> list[Staff]:
     response: list[Staff] = []
     query: str = '''
@@ -31,7 +31,7 @@ async def all_staff() -> list[Staff]:
             ))
     return response
 
-@router.post("/add-staff")
+@router.post("/add-staff", status_code=201)
 async def add_staff(first_name: Annotated[str, Form()],
                     last_name: Annotated[str, Form()],
                     role: Annotated[str, Form()]):
@@ -43,7 +43,7 @@ async def add_staff(first_name: Annotated[str, Form()],
     db.connection.commit()
     return
 
-@router.delete("/remove-staff/{staff_id}")
+@router.delete("/remove-staff/{staff_id}", status_code=204)
 async def remove_staff(staff_id):
     query: str = '''
     DELETE FROM staff WHERE rowid=?;
