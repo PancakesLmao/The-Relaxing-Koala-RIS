@@ -1,5 +1,5 @@
 from typing import Annotated
-from fastapi import APIRouter, Form
+from fastapi import APIRouter, Form, HTTPException
 from db import Db
 from pydantic import BaseModel
 import datetime
@@ -35,6 +35,14 @@ async def all_staff() -> list[Staff]:
 async def add_staff(first_name: Annotated[str, Form()],
                     last_name: Annotated[str, Form()],
                     role: Annotated[str, Form()]):
+    query: str = '''
+    select rowid from staff
+    where first_name=?, last_name=?;
+    '''
+    res = db.cursor.execute(query, (first_name, last_name))
+    if res.fetchone() != None:
+        err: str = f"This employee already exists: {first_name} {last_name}"
+        raise HTTPException(status_code=409, detail=err)
     query: str = '''
     INSERT INTO staff(first_name, last_name, role, date_added)
     VALUES(?,?,?,?);
