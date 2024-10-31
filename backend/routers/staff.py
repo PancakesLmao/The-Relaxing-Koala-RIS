@@ -31,7 +31,7 @@ async def all_staff() -> list[Staff]:
             ))
     return response
 
-@router.post("/add-staff", status_code=201)
+@router.post("/add-staff", status_code=204)
 async def add_staff(first_name: Annotated[str, Form()],
                     last_name: Annotated[str, Form()],
                     role: Annotated[str, Form()]):
@@ -51,11 +51,25 @@ async def add_staff(first_name: Annotated[str, Form()],
     db.connection.commit()
     return
 
-@router.delete("/remove-staff/{staff_id}", status_code=204)
-async def remove_staff(staff_id):
+@router.delete("/remove-staff/", status_code=204)
+async def remove_staff(
+        first_name: Annotated[str, Form()],
+        last_name: Annotated[str, Form()]
+        ):
+
     query: str = '''
-    DELETE FROM staff WHERE rowid=?;
+    SELECT rowid FROM staff
+    WHERE first_name=? AND last_name=?;
     '''
-    db.cursor.execute(query, (staff_id))
+    res = db.cursor.execute(query, (first_name, last_name))
+    if res.fetchone() == None:
+        err: str = f"cannot find this employee: {first_name} {last_name}"
+        raise HTTPException(status_code=404, detail=err)
+
+    query: str = '''
+    DELETE FROM staff 
+    WHERE first_name=? AND last_name=?;
+    '''
+    db.cursor.execute(query, (first_name, last_name))
     db.connection.commit()
     return
