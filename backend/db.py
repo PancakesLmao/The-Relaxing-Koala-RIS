@@ -36,4 +36,60 @@ class Db:
         '''
         self.cursor.execute(query)
 
+        # create orders
+        query : str = '''
+        CREATE TABLE IF NOT EXISTS orders (
+                order_id INTEGER PRIMARY KEY NOT NULL,
+                table_number INTEGER,
+                date_added TEXT NOT NULL
+                )
+        '''
+        self.cursor.execute(query)
+
+        # create order_items
+        query : str = '''
+        CREATE TABLE IF NOT EXISTS order_items (
+                order_item_id INTEGER PRIMARY KEY NOT NULL,
+                order_id integer,
+                note text,
+                menu_item_id integer not null,
+                date_added TEXT NOT NULL
+                )
+        '''
+        self.cursor.execute(query)
+
+        # create menu_item
+        query : str = '''
+        CREATE TABLE IF NOT EXISTS menu_items (
+                menu_item_id integer primary key not null,
+                item_name text not null,
+                price real not null,
+                date_added TEXT NOT NULL
+                )
+        '''
+        self.cursor.execute(query)
+
+        # create invoices
+        query : str = '''
+        CREATE TABLE IF NOT EXISTS invoices (
+                invoice_id integer primary key not null,
+                order_id integer,
+                date_added TEXT NOT NULL
+                )
+        '''
+        self.cursor.execute(query)
+
+        # create receipts
+        query : str = '''
+        CREATE TABLE IF NOT EXISTS receipts (
+                receipt_id integer primary key not null,
+                invoice_id integer,
+                total_price real not null,
+                total_after_tax real not null,
+                amount_given real not null default 0.0,
+                change real default 0.0,
+                date_added TEXT NOT NULL
+                )
+        '''
+        self.cursor.execute(query)
 
