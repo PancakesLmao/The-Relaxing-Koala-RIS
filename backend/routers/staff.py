@@ -18,7 +18,7 @@ db = Db("db.sqlite")
 async def all_staff() -> list[Staff]:
     response: list[Staff] = []
     query: str = '''
-    SELECT rowid,* FROM staff;
+    SELECT * FROM staff;
     '''
     res = db.cursor.execute(query)
     for staff in res.fetchall():
@@ -31,45 +31,49 @@ async def all_staff() -> list[Staff]:
             ))
     return response
 
-@router.post("/add-staff", status_code=204)
+@router.post("/add-staff", status_code=201)
 async def add_staff(first_name: Annotated[str, Form()],
                     last_name: Annotated[str, Form()],
                     role: Annotated[str, Form()]):
     query: str = '''
-    SELECT rowid FROM staff
+    SELECT staff_id FROM staff
     WHERE first_name=? AND last_name=?;
     '''
     res = db.cursor.execute(query, (first_name, last_name))
     if res.fetchone() != None:
         err: str = f"This employee already exists: {first_name} {last_name}"
         raise HTTPException(status_code=409, detail=err)
+
     query: str = '''
-    INSERT INTO staff(first_name, last_name, role, date_added)
-    VALUES(?,?,?,?);
+    SELECT IFNULL(MAX(staff_id),0) FROM staff;
     '''
-    db.cursor.execute(query, (first_name,last_name,role,datetime.datetime.now()))
+    max_id = db.cursor.execute(query).fetchone()
+    query: str = '''
+    insert into staff(staff_id,first_name, last_name, role, date_added)
+    values(?,?,?,?,?);
+    '''
+    db.cursor.execute(query, (max_id + 1,first_name,last_name,role,datetime.datetime.now()))
     db.connection.commit()
     return
 
 @router.delete("/remove-staff", status_code=204)
 async def remove_staff(
-        first_name: Annotated[str, Form()],
-        last_name: Annotated[str, Form()]
+        staff_id: Annotated[str, Form()],
         ):
 
     query: str = '''
-    SELECT rowid FROM staff
-    WHERE first_name=? AND last_name=?;
+    SELECT staff_id FROM staff
+    WHERE staff_id=?;
     '''
-    res = db.cursor.execute(query, (first_name, last_name))
+    res = db.cursor.execute(query, staff_id)
     if res.fetchone() == None:
-        err: str = f"cannot find this employee: {first_name} {last_name}"
+        err: str = f"cannot find this employee: {staff_id}"
         raise HTTPException(status_code=404, detail=err)
 
     query: str = '''
     DELETE FROM staff 
-    WHERE first_name=? AND last_name=?;
+    WHERE staff_id=?;
     '''
-    db.cursor.execute(query, (first_name, last_name))
+    db.cursor.execute(query, staff_id)
     db.connection.commit()
     return
