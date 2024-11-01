@@ -59,6 +59,28 @@ async def add_table(
     db.connection.commit()
     return
 
+@router.patch("/change-status", status_code=204)
+async def change_status(
+        table_number: Annotated[str, Form()],
+        updated_status: Annotated[str, Form()]
+        ):
+    query: str = '''
+    select table_id from tables 
+    where table_id=?;
+    '''
+    res = db.cursor.execute(query, table_number)
+    if res.fetchone() == None:
+        err: str = f"This table does not exist {table_number}"
+        raise HTTPException(status_code=404, detail=err)
+    query: str = '''
+    update tables 
+    set table_status=?
+    where table_number=?;
+    '''
+    db.cursor.execute(query, (updated_status, table_number))
+    db.connection.commit()
+    return
+
 @router.delete("/remove-table", status_code=204)
 async def remove_table(
         table_number: Annotated[str, Form()],
