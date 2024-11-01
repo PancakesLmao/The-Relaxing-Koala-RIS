@@ -47,12 +47,16 @@ async def add_table(
         raise HTTPException(status_code=409, detail=err)
 
     query: str = '''
-    INSERT INTO tables(table_number, table_capacity, date_added)
-    VALUES(?,?,?)
+    SELECT IFNULL(MAX(table_id),0) FROM tables;
     '''
-    db.cursor.execute(query, (table_number, table_capacity, datetime.datetime.now()))
-    db.connection.commit()
+    max_id = db.cursor.execute(query).fetchone()
 
+    query: str = '''
+    INSERT INTO tables(table_id,table_number, table_capacity, date_added)
+    VALUES(?,?,?,?)
+    '''
+    db.cursor.execute(query, (max_id + 1,table_number, table_capacity, datetime.datetime.now()))
+    db.connection.commit()
     return
 
 @router.patch("/add-order-to-table", status_code=204)
