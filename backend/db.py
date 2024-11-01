@@ -29,7 +29,7 @@ class Db:
         query : str = '''
         create table if not exists tables (
                 table_id integer not null primary key,
-                table_number integer not null,
+                table_number integer not null unique,
                 table_capacity integer not null,
                 table_status text not null default false,
                 order_id text,
