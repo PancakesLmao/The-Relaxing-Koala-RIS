@@ -50,20 +50,20 @@ class Db:
         query : str = '''
         CREATE TABLE IF NOT EXISTS order_items (
                 order_item_id INTEGER PRIMARY KEY NOT NULL,
-                order_id integer,
-                note text,
-                menu_item_id integer not null,
+                order_id INTEGER,
+                note TEXT,
+                menu_item_id INTEGER NOT NULL,
                 date_added TEXT NOT NULL
                 )
         '''
         self.cursor.execute(query)
 
-        # create menu_item
+        # create menu_items
         query : str = '''
         CREATE TABLE IF NOT EXISTS menu_items (
-                menu_item_id integer primary key not null,
-                item_name text not null,
-                price real not null,
+                menu_item_id INTEGER PRIMARY KEY NOT NULL,
+                item_name TEXT NOT NULL,
+                price REAL NOT NULL,
                 date_added TEXT NOT NULL
                 )
         '''
@@ -72,8 +72,8 @@ class Db:
         # create invoices
         query : str = '''
         CREATE TABLE IF NOT EXISTS invoices (
-                invoice_id integer primary key not null,
-                order_id integer,
+                invoice_id INTEGER PRIMARY KEY NOT NULL,
+                order_id INTEGER,
                 date_added TEXT NOT NULL
                 )
         '''
@@ -82,12 +82,26 @@ class Db:
         # create receipts
         query : str = '''
         CREATE TABLE IF NOT EXISTS receipts (
-                receipt_id integer primary key not null,
-                invoice_id integer,
-                total_price real not null,
-                total_after_tax real not null,
-                amount_given real not null default 0.0,
-                change real default 0.0,
+                receipt_id INTEGER PRIMARY KEY NOT NULL,
+                invoice_id INTEGER,
+                total_price REAL NOT NULL,
+                total_after_tax REAL NOT NULL,
+                payment_method TEXT NOT NULL,
+                amount_given REAL NOT NULL DEFAULT 0.0,
+                change REAL DEFAULT 0.0,
+                date_added TEXT NOT NULL
+                )
+        '''
+        self.cursor.execute(query)
+
+        # create reservations
+        query : str = '''
+        CREATE TABLE IF NOT EXISTS reservations (
+                reservation_id INTEGER PRIMARY KEY NOT NULL,
+                name TEXT NOT NULL,
+                phone TEXT NOT NULL,
+                date_reserved TEXT NOT NULL,
+                notes TEXT,
                 date_added TEXT NOT NULL
                 )
         '''

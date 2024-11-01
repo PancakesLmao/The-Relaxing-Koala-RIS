@@ -51,7 +51,7 @@ async def add_staff(first_name: Annotated[str, Form()],
     db.connection.commit()
     return
 
-@router.delete("/remove-staff/", status_code=204)
+@router.delete("/remove-staff", status_code=204)
 async def remove_staff(
         first_name: Annotated[str, Form()],
         last_name: Annotated[str, Form()]
