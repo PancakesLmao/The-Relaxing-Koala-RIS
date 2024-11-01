@@ -61,12 +61,7 @@ async def remove_staff(
         staff_id: Annotated[str, Form()],
         ):
 
-    query: str = '''
-    SELECT staff_id FROM staff
-    WHERE staff_id=?;
-    '''
-    res = db.cursor.execute(query, staff_id)
-    if res.fetchone() == None:
+    if not staff_check_exists(staff_id):
         err: str = f"cannot find this employee: {staff_id}"
         raise HTTPException(status_code=404, detail=err)
 
@@ -77,3 +72,33 @@ async def remove_staff(
     db.cursor.execute(query, staff_id)
     db.connection.commit()
     return
+@router.post("/edit-staff", status_code=204)
+async def edit_staff(
+        staff_id: Annotated[str, Form()],
+        changed_first_name: Annotated[str, Form()],
+        changed_last_name: Annotated[str, Form()],
+        changed_role: Annotated[str, Form()],
+        ):
+
+    if not staff_check_exists(staff_id):
+        err: str = f"cannot find this employee: {staff_id}"
+        raise HTTPException(status_code=404, detail=err)
+
+    query: str =''' 
+    UPDATE staff 
+    SET first_name=?, last_name=?, role =?
+    WHERE staff_id=?;
+    '''
+    db.cursor.execute(query, (changed_first_name, changed_last_name, changed_role))
+    db.connection.commit()
+    return
+
+def staff_check_exists(staff_id:str) -> bool:
+    query: str = '''
+    SELECT staff_id FROM staff
+    WHERE staff_id=?;
+    '''
+    res = db.cursor.execute(query, staff_id)
+    if res.fetchone() == None:
+        return False
+    return True
