@@ -2,7 +2,7 @@
 server_address=$(cat ../server_address)
 
 if [ $# -lt 2 ]; then
-	echo "needs 2 args [table_num] [order_id]"
+	echo "needs 2 args [table_num] [customer_name]"
 	exit 1
 fi
 

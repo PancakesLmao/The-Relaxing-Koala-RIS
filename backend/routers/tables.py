@@ -123,10 +123,10 @@ async def update_table(request: Request):
     max_id = res.fetchone()[0]
 
     query: str = '''
-    insert into orders(order_id,table_number,name,status,date_added)
-    values(?,?,?,?,?);
+    insert into orders(order_id,table_number,name,date_added)
+    values(?,?,?,?);
     '''
-    db.cursor.execute(query, (max_id + 1,table_number,customer_name,'PENDING',datetime.datetime.now()))
+    db.cursor.execute(query, (max_id + 1,table_number,customer_name,datetime.datetime.now()))
 
     query: str = '''
     UPDATE tables

@@ -44,7 +44,7 @@ class Db:
                 order_id INTEGER PRIMARY KEY NOT NULL,
                 table_number INTEGER,
                 name TEXT NOT NULL,
-                status text not null,
+                status text not null default PENDING,
                 date_added TEXT NOT NULL
                 ) 
         '''
@@ -70,8 +70,8 @@ class Db:
                 menu_item_id INTEGER PRIMARY KEY NOT NULL,
                 item_name TEXT NOT NULL,
                 price REAL NOT NULL,
-                date_added TEXT NOT NULL,
-                image_name TEXT NOT NULL
+                image_name TEXT NOT NULL,
+                date_added TEXT NOT NULL
                 ) 
         '''
         self.cursor.execute(query)

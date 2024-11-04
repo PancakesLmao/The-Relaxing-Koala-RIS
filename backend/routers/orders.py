@@ -52,6 +52,17 @@ def check_if_order_exists(order_id: str):
         raise HTTPException(status_code=404, detail=err)
     return True
 
+def check_if_menu_item_exists(menu_item_id: str):
+    query: str = '''
+    select * from menu_items
+    where menu_item_id = ?;
+    '''
+    res = db.cursor.execute(query,menu_item_id)
+    if res.fetchone() == None:
+        err: str = f"This menu item does not exists: {menu_item_id}"
+        raise HTTPException(status_code=404, detail=err)
+    return True
+
 @router.get("/get-order", status_code=200)
 async def get_order(request: Request):
     body = await request.json()
@@ -79,9 +90,22 @@ async def get_order_items(request: Request):
     where order_id = ?;
     ''' 
     result = db.cursor.execute(query, order_id).fetchall()
-    print(result)
+    orders = []
+    menu_item_ids = []
+    for order in result:
+        order = list(order)
+        menu_item_ids.append(order[5])
+        orders.append(order)
 
-    return
+    for i in range(len(menu_item_ids)):
+        query: str = '''
+        select item_name, price from menu_items
+        where menu_item_id = ?;
+        '''
+        check_if_menu_item_exists(str(menu_item_ids[i]))
+        res = db.cursor.execute(query, str(menu_item_ids[i])).fetchone()
+        orders[i].append(res)
+    return orders
 
 @router.put("/add-order-item", status_code=204)
 async def add_order_item(request: Request):
@@ -90,7 +114,15 @@ async def add_order_item(request: Request):
     note = body["note"]
     menu_item_id = body["menu_item_id"]
     quantity = body["quantity"]
-    status = body["status"]
+
+    query: str = '''
+    select * from menu_items
+    where menu_item_id = ?;
+    '''
+    res = db.cursor.execute(query,menu_item_id)
+    if res.fetchone() == None:
+        err: str = f"This menu item does not exists: {menu_item_id}"
+        raise HTTPException(status_code=404, detail=err)
 
     check_if_order_exists(order_id)
     query: str = '''
@@ -98,8 +130,9 @@ async def add_order_item(request: Request):
     '''
     max_id = db.cursor.execute(query).fetchone()[0]
     query: str = '''
-    insert into order_items(order_item_id,order_id,note,menu_item_id,quantity,status)
-    values(?,?,?,?,?)
+    insert into order_items(order_item_id,order_id,note,menu_item_id,quantity,date_added)
+    values(?,?,?,?,?,?);
     '''
-    db.cursor.execute(query,(max_id + 1, order_id,note,menu_item_id,quantity,status))
+    db.cursor.execute(query,(max_id + 1, order_id,note,menu_item_id,quantity,datetime.datetime.now()))
+    db.connection.commit()
     return
