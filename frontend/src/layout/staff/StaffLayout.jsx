@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { setCookie, getCookie, deleteCookie } from "../../components/Methods";
+import { setCookie, getCookie, deleteCookie } from "../../js/staff/Methods";
 
 export default function StaffLayout() {
     setCookie("name", "Anle", 1);
