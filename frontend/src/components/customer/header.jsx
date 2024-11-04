@@ -23,7 +23,7 @@ export default function Header() {
   return (
     <>
       <header ref={headerRef} className={isScrolled ? "header-fixed" : ""}>
-        <div className="wrap-header">
+        <div className="wrap-header trans-0-4">
           <div className="container h-full px-7">
             <div className="bg-header flex justify-between items-center w-full h-full">
               {/* Logo */}

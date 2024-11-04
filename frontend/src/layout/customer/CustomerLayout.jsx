@@ -6,8 +6,7 @@ export default function CustomerLayout() {
     return (
         <div>
             <Header />
-            <div>Customer Page</div>
-            <br></br>
+            {/* <div>Customer Page</div> */}
             <Outlet />
         </div>
     )

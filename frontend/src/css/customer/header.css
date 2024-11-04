@@ -1,3 +1,10 @@
+.header-fixed .wrap-header {
+    position: fixed;
+    height: 100px;
+    background: #e2f1e7;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    opacity: 0.95;
+}
 .wrap-header {
     position: absolute;
     width: 100%;
@@ -6,12 +13,6 @@
     left: 0px;
     z-index: 100;
 }
-.header-fixed .wrap-menu-header {
-    position: fixed;
-    height: 100px;
-    background: #387478;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-}
 .bg-header {
     background-color: transparent;
     /* background-color: #387478; */
@@ -19,7 +20,10 @@
 .logo {
     height: 120px;
 }
-.main-menu li{
+.header-fixed .main-menu > li > a {
+    color: #28472a;
+}
+.main-menu > li > a{
     font-size: 1.2rem;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -29,6 +33,10 @@
 }
 .main-menu li:hover {
     color: #E2F1E7;
+}
+.header-fixed .btn-show-sidebar {
+    border-top: 2px solid #28472a;
+    border-bottom: 2px solid #28472a;
 }
 .btn-show-sidebar {
     width: 26px;
