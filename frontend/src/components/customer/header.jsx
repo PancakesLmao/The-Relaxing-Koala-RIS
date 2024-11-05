@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
-import "../../css/header.css";
-import HeaderBehavior from "../../js/header";
+import "../../css/customer/header.css";
+import HeaderBehavior from "../../js/customer/header";
 import Sidebar from "./sidebar";
 import logo from "../../assets/logo.png";
 
