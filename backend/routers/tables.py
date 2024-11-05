@@ -1,18 +1,33 @@
-from fastapi import APIRouter, Form, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
-from typing import Annotated
 from db import Db
 import datetime
+import random
 
 router = APIRouter()
 db = Db("db.sqlite")
 
+
 class Table(BaseModel):
     table_number: int
+    table_number: int
     table_capacity: int
-    table_status: str
+    table_status: str | None
     order_id: str | None 
     date_added: str
+
+tables: list[Table] = []
+
+
+def check_table_exists(table_number: str) -> bool:
+    query: str = '''
+    select * from tables 
+    where table_number= ?;
+    '''
+    result = db.cursor.execute(query, [table_number])
+    if result.fetchone() == None:
+        return False
+    return True
 
 @router.get("/get-tables" ,status_code=200)
 async def get_tables() -> list[Table]:
@@ -23,7 +38,7 @@ async def get_tables() -> list[Table]:
     res = db.cursor.execute(query)
     for table in res.fetchall():
         tables.append(Table(
-                table_number = table[0],
+                table_number= table[0],
                 table_capacity= table[1],
                 table_status = table[2],
                 order_id = table[3],
@@ -31,110 +46,93 @@ async def get_tables() -> list[Table]:
                 ))
     return tables
 
-@router.post("/add-table", status_code=201)
-async def add_table(
-        table_number: Annotated[str, Form()],
-        table_capacity: Annotated[str, Form()]
-        ):
-    query: str = '''
-    SELECT table_number FROM tables 
-    WHERE table_number=?;
-    '''
+@router.get("/get-single-table", status_code=200)
+async def get_single_table(request: Request):
+    body = await request.json()
+    table_number = str(body["table_number"])
 
-    res = db.cursor.execute(query, table_number)
-    if res.fetchone() != None:
-        err: str = f"Table number:{table_number} already exists"
+    if not check_table_exists(table_number):
+        err: str = f'This table does not exists: {table_number}'
+        raise HTTPException(status_code=404, detail=err)
+
+    query: str ='''
+    select * from tables
+    where table_number = ?;
+    '''
+    response = db.cursor.execute(query, table_number)
+
+    return response.fetchone()
+
+def init_tables():
+    if tables == []:
+        for i in range(10):
+            table = Table(table_number=i,
+                          table_capacity=random.choice([2,4,6]),
+                          table_status="UNOCCUPIED",
+                          order_id=None,
+                          date_added=str(datetime.datetime.now())
+                          )
+            tables.append(table)
+    query: str = '''
+    delete from tables;
+    '''
+    db.cursor.execute(query)
+    for table in tables:
+        query = '''
+        insert into tables
+        (table_number,table_number,table_capacity,table_status,order_id,date_added)
+        values
+        (?,?,?,?,?,?);
+        '''
+        db.cursor.execute(query, (table.table_number,
+                                  table.table_number,
+                                  table.table_capacity,
+                                  table.table_status,
+                                  table.order_id,
+                                  table.date_added,
+                                  )
+                          )
+    db.connection.commit()
+
+    return
+init_tables()
+
+@router.patch("/add-order", status_code=204)
+async def update_table(request: Request):
+    body = await request.json()
+    table_number = body["table_number"]
+    customer_name = body["customer_name"]
+
+    if not check_table_exists(table_number):
+        err: str = f'This table does not exists: {table_number}'
+        raise HTTPException(status_code=404, detail=err)
+
+    query: str = '''
+    select table_status from tables
+    where table_number=?;
+    '''
+    res = db.cursor.execute(query,table_number)
+    if res.fetchone()[0] == "OCCUPIED":
+        err: str = f'This table is already occupied, {table_number}'
         raise HTTPException(status_code=409, detail=err)
 
     query: str = '''
-    SELECT IFNULL(MAX(table_id),0) FROM tables;
+    select ifnull(max(order_id),0) from orders;
     '''
-    max_id = db.cursor.execute(query).fetchone()
+    res = db.cursor.execute(query)
+    max_id = res.fetchone()[0]
 
     query: str = '''
-    INSERT INTO tables(table_id,table_number, table_capacity, date_added)
-    VALUES(?,?,?,?)
+    insert into orders(order_id,table_number,name,date_added)
+    values(?,?,?,?);
     '''
-    db.cursor.execute(query, (max_id + 1,table_number, table_capacity, datetime.datetime.now()))
-    db.connection.commit()
-    return
-
-@router.patch("/change-status", status_code=204)
-async def change_status(
-        table_number: Annotated[str, Form()],
-        updated_status: Annotated[str, Form()]
-        ):
-    query: str = '''
-    select table_id from tables 
-    where table_id=?;
-    '''
-    res = db.cursor.execute(query, table_number)
-    if res.fetchone() == None:
-        err: str = f"This table does not exist {table_number}"
-        raise HTTPException(status_code=404, detail=err)
-    query: str = '''
-    update tables 
-    set table_status=?
-    where table_number=?;
-    '''
-    db.cursor.execute(query, (updated_status, table_number))
-    db.connection.commit()
-    return
-
-@router.delete("/remove-table", status_code=204)
-async def remove_table(
-        table_number: Annotated[str, Form()],
-        ):
-    query: str = '''
-    select table_id from tables 
-    where table_id=?;
-    '''
-    res = db.cursor.execute(query, table_number)
-    if res.fetchone() == None:
-        err: str = f"This table does not exist {table_number}"
-        raise HTTPException(status_code=404, detail=err)
-    query: str = '''
-    delete from tables
-    where table_number = ?;
-    '''
-    db.cursor.execute(query, table_number)
-    db.connection.commit()
-
-@router.patch("/add-order-to-table", status_code=204)
-async def update_table(
-        table_number: Annotated[str, Form()],
-        order_id: Annotated[str, Form()],
-        ):
-    query: str = '''
-    select order_id from orders 
-    where order_id = ?;
-    '''
-    res = db.cursor.execute(query, order_id)
-    if res.fetchone() == None:
-        err: str = f"Cannot find the order: {order_id}"
-        raise HTTPException(status_code=404, detail=err)
-
-    query: str = '''
-    select table_number from tables 
-    where table_number = ?;
-    '''
-    res = db.cursor.execute(query, order_id)
-    if res.fetchone() == None:
-        err: str = f"Cannot find the table: {table_number}"
-        raise HTTPException(status_code=404, detail=err)
+    db.cursor.execute(query, (max_id + 1,table_number,customer_name,datetime.datetime.now()))
 
     query: str = '''
     UPDATE tables
-    SET order_id = ?
+    SET order_id = ?, table_status = ?
     WHERE table_number = ?;
     '''
-    db.cursor.execute(query, (order_id, table_number))
-
-    query: str = '''
-    UPDATE orders
-    SET table_number = ?
-    WHERE order_id = ?;
-    '''
-    db.cursor.execute(query, (table_number, order_id))
+    db.cursor.execute(query, (max_id + 1, "OCCUPIED", table_number))
     db.connection.commit()
     return
