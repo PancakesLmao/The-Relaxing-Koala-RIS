@@ -139,11 +139,11 @@ async def get_order_items(order_id):
         order_items[i].set(res[0],res[1]) 
     return order_items
 
-@router.delete("/remove-order-item", status_code=204)
-async def remove_order_item(request:Request):
-    body = await request.json()
-    order_item_id = body["order_item_id"]
-
+class RemoveOrderItemReq(BaseModel):
+    order_item_id: str
+@router.delete("/remove-order-item", status_code=204, responses={404: {}})
+async def remove_order_item(request: RemoveOrderItemReq):
+    order_item_id = request.order_item_id
     query: str = '''
     select * from order_items where order_item_id=?;
     '''
@@ -160,13 +160,18 @@ async def remove_order_item(request:Request):
     db.connection.commit()
     
     return
-@router.put("/add-order-item", status_code=204)
-async def add_order_item(request: Request):
-    body = await request.json()
-    order_id = body["order_id"]
-    note = body["note"]
-    menu_item_id = body["menu_item_id"]
-    quantity = body["quantity"]
+
+class AddOrderItemReq(BaseModel):
+    order_id: str
+    note: str
+    menu_item_id: str
+    quantity: str
+@router.put("/add-order-item", status_code=204, responses= {404: {}})
+async def add_order_item(request: AddOrderItemReq):
+    order_id = request.order_id
+    note = request.note
+    menu_item_id = request.menu_item_id
+    quantity = request.quantity
 
     query: str = '''
     select * from menu_items

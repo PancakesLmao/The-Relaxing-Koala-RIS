@@ -100,11 +100,13 @@ def init_tables():
     return
 init_tables()
 
-@router.patch("/add-order", status_code=204)
-async def update_table(request: Request):
-    body = await request.json()
-    table_number = body["table_number"]
-    customer_name = body["customer_name"]
+class AddOrderReq(BaseModel):
+    table_number: str
+    customer_name: str
+@router.patch("/add-order", status_code=204, responses={404:{},409:{}})
+async def update_table(request: AddOrderReq):
+    table_number = request.table_number
+    customer_name = request.customer_name
 
     if not check_table_exists(table_number):
         err: str = f'This table does not exists: {table_number}'

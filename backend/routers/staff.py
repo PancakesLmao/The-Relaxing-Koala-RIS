@@ -41,10 +41,16 @@ async def all_staff() -> list[Staff]:
             ))
     return response
 
+class AddStaffReq(BaseModel):
+    first_name: str
+    last_name: str
+    role: str
 @router.post("/add-staff", status_code=201)
-async def add_staff(first_name: Annotated[str, Form()],
-                    last_name: Annotated[str, Form()],
-                    role: Annotated[str, Form()]):
+async def add_staff(request: AddStaffReq):
+    first_name = request.first_name
+    last_name = request.last_name
+    role = request.role
+
     query: str = '''
     SELECT staff_id FROM staff
     WHERE first_name=? AND last_name=?;
@@ -66,10 +72,11 @@ async def add_staff(first_name: Annotated[str, Form()],
     db.connection.commit()
     return
 
+class RemoveStaffReq(BaseModel):
+    staff_id: str
 @router.delete("/remove-staff", status_code=204)
-async def remove_staff(
-        staff_id: Annotated[str, Form()],
-        ):
+async def remove_staff(request: RemoveStaffReq):
+    staff_id = request.staff_id
 
     if not staff_check_exists(staff_id):
         err: str = f"cannot find this employee: {staff_id}"
@@ -82,13 +89,18 @@ async def remove_staff(
     db.cursor.execute(query, staff_id)
     db.connection.commit()
     return
+
+class EditStaffReq(BaseModel):
+    staff_id: str
+    changed_first_name: str
+    changed_last_name: str
+    changed_role: str
 @router.patch("/edit-staff", status_code=204)
-async def edit_staff(
-        staff_id: Annotated[str, Form()],
-        changed_first_name: Annotated[str, Form()],
-        changed_last_name: Annotated[str, Form()],
-        changed_role: Annotated[str, Form()],
-        ):
+async def edit_staff(request: EditStaffReq):
+    staff_id = request.staff_id
+    changed_first_name = request.changed_first_name
+    changed_last_name = request.changed_last_name
+    changed_role = request.changed_role
 
     if not staff_check_exists(staff_id):
         err: str = f"cannot find this employee: {staff_id}"
