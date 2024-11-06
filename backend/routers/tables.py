@@ -39,9 +39,9 @@ async def get_tables() -> list[Table]:
     for table in res.fetchall():
         tables.append(Table(
                 table_number= table[0],
-                table_capacity= table[1],
-                table_status = table[2],
-                order_id = table[3],
+                order_id = table[1],
+                table_capacity= table[2],
+                table_status = table[3],
                 date_added = table[4],
                 ))
     return tables
@@ -123,10 +123,10 @@ async def update_table(request: Request):
     max_id = res.fetchone()[0]
 
     query: str = '''
-    insert into orders(order_id,table_number,name,date_added)
-    values(?,?,?,?);
+    insert into orders(order_id,name,date_added)
+    values(?,?,?);
     '''
-    db.cursor.execute(query, (max_id + 1,table_number,customer_name,datetime.datetime.now()))
+    db.cursor.execute(query, (max_id + 1,customer_name,datetime.datetime.now()))
 
     query: str = '''
     UPDATE tables
