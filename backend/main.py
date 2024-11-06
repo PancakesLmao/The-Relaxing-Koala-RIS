@@ -26,7 +26,7 @@ app.add_middleware(
 
 @app.get("/", response_class=RedirectResponse)
 async def redirect_fastapi():
-    return "/docs"
+    return "/redoc"
 
 # include the routers here
 app.include_router(customer_router, prefix="/customer")
