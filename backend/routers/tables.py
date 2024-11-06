@@ -28,7 +28,7 @@ def check_table_exists(table_number: str) -> bool:
         return False
     return True
 
-@router.get("/get-tables/" ,status_code=200)
+@router.get("/get-tables" ,status_code=200)
 async def get_tables() -> list[Table]:
     tables: list[Table] = []
     query: str = '''
