@@ -45,7 +45,7 @@ class AddStaffReq(BaseModel):
     first_name: str
     last_name: str
     role: str
-@router.post("/add-staff", status_code=201)
+@router.put("/add-staff", status_code=201, responses={404:{},409:{}})
 async def add_staff(request: AddStaffReq):
     first_name = request.first_name
     last_name = request.last_name
@@ -74,7 +74,7 @@ async def add_staff(request: AddStaffReq):
 
 class RemoveStaffReq(BaseModel):
     staff_id: str
-@router.delete("/remove-staff", status_code=204)
+@router.delete("/remove-staff", status_code=204, responses={404: {}})
 async def remove_staff(request: RemoveStaffReq):
     staff_id = request.staff_id
 
@@ -95,7 +95,7 @@ class EditStaffReq(BaseModel):
     changed_first_name: str
     changed_last_name: str
     changed_role: str
-@router.patch("/edit-staff", status_code=204)
+@router.patch("/edit-staff", status_code=204, responses={404:{}})
 async def edit_staff(request: EditStaffReq):
     staff_id = request.staff_id
     changed_first_name = request.changed_first_name
