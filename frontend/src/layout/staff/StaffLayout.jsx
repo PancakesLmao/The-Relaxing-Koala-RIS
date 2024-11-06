@@ -1,3 +1,4 @@
+import "../../css/staff/staff.css"
 import { Outlet } from "react-router-dom";
 import { setCookie, getCookie, deleteCookie } from "../../js/staff/Methods.js";
 import Navbar from "../../components/staff/Navbar";
@@ -11,7 +12,7 @@ export default function StaffLayout() {
                 <Navbar />
             </div>
             
-            <div className="ml-[5.8vw] w-full h-[100vh]">
+            <div className="ml-[5.8vw] w-full">
                 <Outlet />
             </div>
         </div>
