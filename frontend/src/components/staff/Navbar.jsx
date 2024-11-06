@@ -1,6 +1,5 @@
-import "../../css/staff/staff.css"
 import logo from "../../assets/staff-logo.png"
-import { NavLink, useLocation } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 
 export default function Navbar() {
     const navItems = [
@@ -36,8 +35,6 @@ export default function Navbar() {
         }
     ]
 
-    const test = useLocation();
-    console.log(test.pathname)
 
     return(
         <nav className="flex flex-col justify-between h-[100%]">

@@ -1,13 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from db import Db
+from .db import Db
 
-from routers.index import router as index_router
-from routers.customer import router as customer_router
-from routers.kitchen import router as kitchen_router
-from routers.staff import router as staff_router
-from routers.tables import router as tables_router
-from routers.orders import router as orders_router
+from .routers.index import router as index_router
+from .routers.customer import router as customer_router
+from .routers.kitchen import router as kitchen_router
+from .routers.staff import router as staff_router
+from .routers.tables import router as tables_router
+from .routers.orders import router as orders_router
 
 origins = [
         "http://127.0.0.1:3000",

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request, HTTPException
-from db import Db
+from ..db import Db
 from pydantic import BaseModel
 import datetime
 
