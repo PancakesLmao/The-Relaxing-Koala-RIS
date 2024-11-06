@@ -68,7 +68,7 @@ async def get_single_table(table_number):
 
 def init_tables():
     if tables == []:
-        for i in range(10):
+        for i in range(12):
             table = Table(table_number=i,
                           table_capacity=random.choice([2,4,6]),
                           table_status="UNOCCUPIED",
