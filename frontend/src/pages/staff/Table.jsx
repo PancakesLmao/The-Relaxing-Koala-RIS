@@ -9,10 +9,10 @@ export default function Table() {
             </div>
             <div className="h-[0.2vw] w-[100%] bg-gunmetal"></div>
             <div className="flex">
-                <div className>
+                <div className="">
                     Table
                 </div>
-                <div>
+                <div className="">
                     Table Info
                 </div>
             </div>

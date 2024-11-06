@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
-from db import Db
+from ..db import Db
 import datetime
 import random
 

@@ -1,6 +1,6 @@
 from typing import Annotated
 from fastapi import APIRouter, Form, HTTPException
-from db import Db
+from ..db import Db
 from pydantic import BaseModel
 import datetime
 
