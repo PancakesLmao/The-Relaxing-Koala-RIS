@@ -10,10 +10,9 @@ db = Db("db.sqlite")
 
 class Table(BaseModel):
     table_number: int
-    table_number: int
-    table_capacity: int
-    table_status: str | None
     order_id: str | None 
+    table_capacity: int
+    table_status: str
     date_added: str
 
 tables: list[Table] = []
@@ -39,9 +38,9 @@ async def get_tables() -> list[Table]:
     for table in res.fetchall():
         tables.append(Table(
                 table_number= table[0],
-                table_capacity= table[1],
-                table_status = table[2],
-                order_id = table[3],
+                order_id = table[1],
+                table_capacity= table[2],
+                table_status = table[3],
                 date_added = table[4],
                 ))
     return tables
@@ -59,9 +58,16 @@ async def get_single_table(request: Request):
     select * from tables
     where table_number = ?;
     '''
-    response = db.cursor.execute(query, table_number)
+    response = db.cursor.execute(query, table_number).fetchone()
+    response = Table(
+            table_number=response[0],
+            order_id=response[1],
+            table_capacity=response[2],
+            table_status=response[3],
+            date_added=response[4],
+            )
 
-    return response.fetchone()
+    return response
 
 def init_tables():
     if tables == []:
@@ -123,10 +129,10 @@ async def update_table(request: Request):
     max_id = res.fetchone()[0]
 
     query: str = '''
-    insert into orders(order_id,table_number,name,date_added)
-    values(?,?,?,?);
+    insert into orders(order_id,name,date_added)
+    values(?,?,?);
     '''
-    db.cursor.execute(query, (max_id + 1,table_number,customer_name,datetime.datetime.now()))
+    db.cursor.execute(query, (max_id + 1,customer_name,datetime.datetime.now()))
 
     query: str = '''
     UPDATE tables
