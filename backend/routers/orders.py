@@ -84,11 +84,8 @@ def check_if_menu_item_exists(menu_item_id: str):
         raise HTTPException(status_code=404, detail=err)
     return True
 
-@router.get("/get-order", status_code=200)
-async def get_order(request: Request):
-    body = await request.json()
-    order_id = body["order_id"]
-
+@router.get("/get-order/{order_id}", status_code=200)
+async def get_order(order_id):
     check_if_order_exists(order_id)
 
     query: str = '''
@@ -105,11 +102,8 @@ async def get_order(request: Request):
             )
     return order
 
-@router.get("/get-order-items-from-id", status_code=200)
-async def get_order_items(request: Request):
-    body = await request.json()
-    order_id = body["order_id"]
-
+@router.get("/get-order-items-from-id/{order_id}", status_code=200)
+async def get_order_items(order_id):
     check_if_order_exists(order_id)
 
     query: str = '''

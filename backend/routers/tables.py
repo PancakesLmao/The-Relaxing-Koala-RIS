@@ -28,7 +28,7 @@ def check_table_exists(table_number: str) -> bool:
         return False
     return True
 
-@router.get("/get-tables" ,status_code=200)
+@router.get("/get-tables/" ,status_code=200)
 async def get_tables() -> list[Table]:
     tables: list[Table] = []
     query: str = '''
@@ -45,11 +45,8 @@ async def get_tables() -> list[Table]:
                 ))
     return tables
 
-@router.get("/get-single-table", status_code=200)
-async def get_single_table(request: Request):
-    body = await request.json()
-    table_number = str(body["table_number"])
-
+@router.get("/get-single-table/{table_number}", status_code=200)
+async def get_single_table(table_number):
     if not check_table_exists(table_number):
         err: str = f'This table does not exists: {table_number}'
         raise HTTPException(status_code=404, detail=err)
