@@ -10,10 +10,9 @@ db = Db("db.sqlite")
 
 class Table(BaseModel):
     table_number: int
-    table_number: int
-    table_capacity: int
-    table_status: str | None
     order_id: str | None 
+    table_capacity: int
+    table_status: str
     date_added: str
 
 tables: list[Table] = []
@@ -59,9 +58,16 @@ async def get_single_table(request: Request):
     select * from tables
     where table_number = ?;
     '''
-    response = db.cursor.execute(query, table_number)
+    response = db.cursor.execute(query, table_number).fetchone()
+    response = Table(
+            table_number=response[0],
+            order_id=response[1],
+            table_capacity=response[2],
+            table_status=response[3],
+            date_added=response[4],
+            )
 
-    return response.fetchone()
+    return response
 
 def init_tables():
     if tables == []:
