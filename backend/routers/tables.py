@@ -116,7 +116,7 @@ async def update_table(request: AddOrderReq):
     select table_status from tables
     where table_number=?;
     '''
-    res = db.cursor.execute(query,table_number)
+    res = db.cursor.execute(query,(table_number))
     if res.fetchone()[0] == "OCCUPIED":
         err: str = f'This table is already occupied, {table_number}'
         raise HTTPException(status_code=409, detail=err)
