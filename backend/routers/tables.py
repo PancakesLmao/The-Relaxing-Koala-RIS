@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from ..db import Db
 import datetime
@@ -45,7 +45,7 @@ async def get_tables() -> list[Table]:
                 ))
     return tables
 
-@router.get("/get-single-table/{table_number}", status_code=200)
+@router.get("/get-single-table/{table_number}", status_code=200, response_model=Table)
 async def get_single_table(table_number):
     if not check_table_exists(table_number):
         err: str = f'This table does not exists: {table_number}'

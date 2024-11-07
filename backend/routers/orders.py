@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request, HTTPException
+from fastapi import APIRouter, HTTPException
 from ..db import Db
 from pydantic import BaseModel
 import datetime
@@ -84,7 +84,7 @@ def check_if_menu_item_exists(menu_item_id: str):
         raise HTTPException(status_code=404, detail=err)
     return True
 
-@router.get("/get-all-orders", status_code=200)
+@router.get("/get-all-orders", status_code=200, response_model=list[Order])
 async def get_orders():
     orders: list[Order] = []
     query: str = '''
@@ -99,7 +99,7 @@ async def get_orders():
             date_added=order[3],
             ))
     return orders
-@router.get("/get-order/{order_id}", status_code=200)
+@router.get("/get-order/{order_id}", status_code=200, response_model=Order)
 async def get_order(order_id):
     check_if_order_exists(order_id)
     order: Order
@@ -119,7 +119,7 @@ async def get_order(order_id):
 
     return order
 
-@router.get("/get-order-items-from-id/{order_id}", status_code=200)
+@router.get("/get-order-items-from-id/{order_id}", status_code=200, response_model=OrderItems)
 async def get_order_items(order_id):
     check_if_order_exists(order_id)
 
