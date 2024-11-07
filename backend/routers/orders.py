@@ -84,9 +84,25 @@ def check_if_menu_item_exists(menu_item_id: str):
         raise HTTPException(status_code=404, detail=err)
     return True
 
+@router.get("/get-all-orders", status_code=200)
+async def get_orders():
+    orders: list[Order] = []
+    query: str = '''
+    select * from orders;
+    '''
+    res = db.cursor.execute(query)
+    for order in res:
+        orders.append(Order(
+            order_id=order[0],
+            name=order[1],
+            status=order[2],
+            date_added=order[3],
+            ))
+    return orders
 @router.get("/get-order/{order_id}", status_code=200)
 async def get_order(order_id):
     check_if_order_exists(order_id)
+    order: Order
 
     query: str = '''
     select * from orders
@@ -94,12 +110,13 @@ async def get_order(order_id):
     '''
     response = db.cursor.execute(query, order_id)
     response = response.fetchone()
-    order: Order = Order(
+    order = Order(
             order_id=response[0],
             name=response[1],
             status=response[2],
             date_added=response[3],
             )
+
     return order
 
 @router.get("/get-order-items-from-id/{order_id}", status_code=200)
