@@ -119,7 +119,7 @@ async def get_order(order_id):
 
     return order
 
-@router.get("/get-order-items-from-id/{order_id}", status_code=200, response_model=OrderItems)
+@router.get("/get-order-items-from-id/{order_id}", status_code=200, response_model=list[OrderItems])
 async def get_order_items(order_id):
     check_if_order_exists(order_id)
 
