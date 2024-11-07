@@ -67,7 +67,7 @@ def check_if_order_exists(order_id: str):
     select * from orders
     where order_id = ?;
     '''
-    res = db.cursor.execute(query, order_id)
+    res = db.cursor.execute(query, [order_id])
     if res.fetchone() == None:
         err: str = f'This order does not exists: {order_id}'
         raise HTTPException(status_code=404, detail=err)
@@ -78,7 +78,7 @@ def check_if_menu_item_exists(menu_item_id: str):
     select * from menu_items
     where menu_item_id = ?;
     '''
-    res = db.cursor.execute(query,menu_item_id)
+    res = db.cursor.execute(query,[menu_item_id])
     if res.fetchone() == None:
         err: str = f"This menu item does not exists: {menu_item_id}"
         raise HTTPException(status_code=404, detail=err)
@@ -108,7 +108,7 @@ async def get_order(order_id):
     select * from orders
     where order_id=?;
     '''
-    response = db.cursor.execute(query, order_id)
+    response = db.cursor.execute(query, [order_id])
     response = response.fetchone()
     order = Order(
             order_id=response[0],
@@ -127,7 +127,7 @@ async def get_order_items(order_id):
     select * from order_items
     where order_id = ?;
     ''' 
-    result = db.cursor.execute(query, order_id).fetchall()
+    result = db.cursor.execute(query, [order_id]).fetchall()
     order_items = []
     menu_item_ids = []
     for item in result:
@@ -194,7 +194,7 @@ async def add_order_item(request: AddOrderItemReq):
     select * from menu_items
     where menu_item_id = ?;
     '''
-    res = db.cursor.execute(query,menu_item_id)
+    res = db.cursor.execute(query,[menu_item_id])
     if res.fetchone() == None:
         err: str = f"This menu item does not exists: {menu_item_id}"
         raise HTTPException(status_code=404, detail=err)

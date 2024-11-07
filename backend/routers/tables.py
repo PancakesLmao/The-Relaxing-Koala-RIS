@@ -55,7 +55,7 @@ async def get_single_table(table_number):
     select * from tables
     where table_number = ?;
     '''
-    response = db.cursor.execute(query, table_number).fetchone()
+    response = db.cursor.execute(query, [table_number]).fetchone()
     response = Table(
             table_number=response[0],
             order_id=response[1],
@@ -116,7 +116,7 @@ async def update_table(request: AddOrderReq):
     select table_status from tables
     where table_number=?;
     '''
-    res = db.cursor.execute(query,(table_number))
+    res = db.cursor.execute(query,[table_number])
     if res.fetchone()[0] == "OCCUPIED":
         err: str = f'This table is already occupied, {table_number}'
         raise HTTPException(status_code=409, detail=err)
