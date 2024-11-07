@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from ..db import Db
 import datetime
@@ -28,7 +28,7 @@ def check_table_exists(table_number: str) -> bool:
         return False
     return True
 
-@router.get("/get-tables/" ,status_code=200)
+@router.get("/get-tables" ,status_code=200)
 async def get_tables() -> list[Table]:
     tables: list[Table] = []
     query: str = '''
@@ -45,7 +45,7 @@ async def get_tables() -> list[Table]:
                 ))
     return tables
 
-@router.get("/get-single-table/{table_number}", status_code=200)
+@router.get("/get-single-table/{table_number}", status_code=200, response_model=Table)
 async def get_single_table(table_number):
     if not check_table_exists(table_number):
         err: str = f'This table does not exists: {table_number}'
@@ -68,7 +68,7 @@ async def get_single_table(table_number):
 
 def init_tables():
     if tables == []:
-        for i in range(10):
+        for i in range(12):
             table = Table(table_number=i,
                           table_capacity=random.choice([2,4,6]),
                           table_status="UNOCCUPIED",
@@ -100,11 +100,13 @@ def init_tables():
     return
 init_tables()
 
-@router.patch("/add-order", status_code=204)
-async def update_table(request: Request):
-    body = await request.json()
-    table_number = body["table_number"]
-    customer_name = body["customer_name"]
+class AddOrderReq(BaseModel):
+    table_number: str
+    customer_name: str
+@router.patch("/add-order", status_code=204, responses={404:{},409:{}})
+async def update_table(request: AddOrderReq):
+    table_number = request.table_number
+    customer_name = request.customer_name
 
     if not check_table_exists(table_number):
         err: str = f'This table does not exists: {table_number}'

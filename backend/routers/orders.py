@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request, HTTPException
+from fastapi import APIRouter, HTTPException
 from ..db import Db
 from pydantic import BaseModel
 import datetime
@@ -84,9 +84,25 @@ def check_if_menu_item_exists(menu_item_id: str):
         raise HTTPException(status_code=404, detail=err)
     return True
 
-@router.get("/get-order/{order_id}", status_code=200)
+@router.get("/get-all-orders", status_code=200, response_model=list[Order])
+async def get_orders():
+    orders: list[Order] = []
+    query: str = '''
+    select * from orders;
+    '''
+    res = db.cursor.execute(query)
+    for order in res:
+        orders.append(Order(
+            order_id=order[0],
+            name=order[1],
+            status=order[2],
+            date_added=order[3],
+            ))
+    return orders
+@router.get("/get-order/{order_id}", status_code=200, response_model=Order)
 async def get_order(order_id):
     check_if_order_exists(order_id)
+    order: Order
 
     query: str = '''
     select * from orders
@@ -94,15 +110,16 @@ async def get_order(order_id):
     '''
     response = db.cursor.execute(query, order_id)
     response = response.fetchone()
-    order: Order = Order(
+    order = Order(
             order_id=response[0],
             name=response[1],
             status=response[2],
             date_added=response[3],
             )
+
     return order
 
-@router.get("/get-order-items-from-id/{order_id}", status_code=200)
+@router.get("/get-order-items-from-id/{order_id}", status_code=200, response_model=OrderItems)
 async def get_order_items(order_id):
     check_if_order_exists(order_id)
 
@@ -139,11 +156,11 @@ async def get_order_items(order_id):
         order_items[i].set(res[0],res[1]) 
     return order_items
 
-@router.delete("/remove-order-item", status_code=204)
-async def remove_order_item(request:Request):
-    body = await request.json()
-    order_item_id = body["order_item_id"]
-
+class RemoveOrderItemReq(BaseModel):
+    order_item_id: str
+@router.delete("/remove-order-item", status_code=204, responses={404: {}})
+async def remove_order_item(request: RemoveOrderItemReq):
+    order_item_id = request.order_item_id
     query: str = '''
     select * from order_items where order_item_id=?;
     '''
@@ -160,13 +177,18 @@ async def remove_order_item(request:Request):
     db.connection.commit()
     
     return
-@router.put("/add-order-item", status_code=204)
-async def add_order_item(request: Request):
-    body = await request.json()
-    order_id = body["order_id"]
-    note = body["note"]
-    menu_item_id = body["menu_item_id"]
-    quantity = body["quantity"]
+
+class AddOrderItemReq(BaseModel):
+    order_id: str
+    note: str
+    menu_item_id: str
+    quantity: str
+@router.put("/add-order-item", status_code=204, responses= {404: {}})
+async def add_order_item(request: AddOrderItemReq):
+    order_id = request.order_id
+    note = request.note
+    menu_item_id = request.menu_item_id
+    quantity = request.quantity
 
     query: str = '''
     select * from menu_items

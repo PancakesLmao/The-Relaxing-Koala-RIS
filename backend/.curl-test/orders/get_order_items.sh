@@ -7,5 +7,4 @@ server_address=$(cat ../server_address)
 curl --no-progress-meter \
 	--header "Content-Type: application/json" \
 	--request GET \
-	--data '{"order_id":"'$1'"}' \
-	$server_address/orders/get-order-items-from-id
+	$server_address/orders/get-order-items-from-id/$1
