@@ -67,7 +67,7 @@ async def add_staff(request: AddStaffReq):
     insert into staff(staff_id,first_name, last_name, role, date_added)
     values(?,?,?,?,?);
     '''
-    db.cursor.execute(query, (max_id + 1,first_name,last_name,role,datetime.datetime.now()))
+    db.cursor.execute(query, (max_id + 1,first_name,last_name,role,datetime.datetime.now().isoformat()))
     db.connection.commit()
     return
 

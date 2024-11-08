@@ -73,7 +73,7 @@ def init_tables():
                           table_capacity=random.choice([2,4,6]),
                           table_status="UNOCCUPIED",
                           order_id=None,
-                          date_added=str(datetime.datetime.now())
+                          date_added=datetime.datetime.now().isoformat()
                           )
             tables.append(table)
     query: str = '''
