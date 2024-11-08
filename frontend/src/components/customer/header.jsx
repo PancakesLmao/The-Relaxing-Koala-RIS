@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import "../../css/customer/header.css";
+import "../../css/customer/koalaHeader.css";
 import HeaderBehavior from "../../js/customer/header";
 import Sidebar from "./sidebar";
 import logo from "../../assets/logo.png";

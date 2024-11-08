@@ -1,13 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from db import Db
+from .db import Db
+from fastapi.responses import RedirectResponse
 
-from routers.index import router as index_router
-from routers.customer import router as customer_router
-from routers.kitchen import router as kitchen_router
-from routers.staff import router as staff_router
-from routers.tables import router as tables_router
-from routers.waiter import router as waiter_router
+from .routers.customer import router as customer_router
+from .routers.kitchen import router as kitchen_router
+from .routers.staff import router as staff_router
+from .routers.tables import router as tables_router
+from .routers.orders import router as orders_router
+from .routers.invoices import router as invoice_router
 
 origins = [
         "http://127.0.0.1:3000",
@@ -24,10 +25,14 @@ app.add_middleware(
         allow_headers=["*"],
         )
 
+@app.get("/", response_class=RedirectResponse)
+async def redirect_fastapi():
+    return "/docs"
+
 # include the routers here
-app.include_router(index_router)
 app.include_router(customer_router, prefix="/customer")
+app.include_router(invoice_router, prefix="/invoices")
 app.include_router(kitchen_router, prefix="/kitchen")
 app.include_router(staff_router, prefix="/staff")
 app.include_router(tables_router, prefix="/tables")
-app.include_router(waiter_router, prefix="/waiter")
+app.include_router(orders_router, prefix="/orders")

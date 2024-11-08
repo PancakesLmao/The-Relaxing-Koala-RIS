@@ -1,20 +1,21 @@
-import "../../css/customer/home.css";
+import "../../css/customer/koalaHome.css";
 import video from "../../assets/3769033-hd_1920_1080.mp4";
 //
 export default function Home() {
   return (
     <>
-      <div className="video-container">
-        <div className="relative video-bg">
-          <video
-            autoPlay
-            muted
-            loop
-            src={video}
-            className="object-cover"
-          ></video>
+      <div className="video-container relative">
+        <div className="overlay2"></div>
+          <div className="relative video-bg">
+            <video
+              autoPlay
+              muted
+              loop
+              src={video}
+              className="object-cover"
+            ></video>
+          </div>
         </div>
-      </div>
       <div className="content">
         <h1>WELCOME TO OUR RESTAURANT</h1>
         <p>
