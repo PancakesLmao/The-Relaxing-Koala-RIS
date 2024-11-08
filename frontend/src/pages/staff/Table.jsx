@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react"
-import SingleTable from "../../components/staff/SingleTable";
+import { useEffect, useState } from "react"
+import SingleTableUnoccupied from "../../components/staff/SingleTableUnoccupied";
+import SingleTableOccupied from "../../components/staff/SingleTableOccupied";
 import TableSvg from "../../assets/table.svg";
 import OccupiedTableSvg from "../../assets/table-occupied.svg";
 
@@ -10,9 +11,8 @@ export default function Table() {
 
     useEffect(() => {
         if (fetchTables) {
-            fetch("http://127.0.0.1:8000/tables/get-tables/").then(
+            fetch("http://127.0.0.1:8000/tables/get-tables").then(
                 response => {
-                    console.log(response.status, response.statusText);
                     if (response.ok) {
                         return response.json()
                     }
@@ -20,8 +20,7 @@ export default function Table() {
                     return Promise.reject()
                 }
             ).then((data) => {
-                setTables([...data, ...data, ...data])
-                // let items = {...tables}
+                setTables(data)
                 
             }).catch((response) => {
                 response.json().then((data) => {
@@ -32,7 +31,7 @@ export default function Table() {
             )
         }
     }, [fetchTables, setFetchTables])
-
+    
 
     return (
         <div className="pl-[1vw]">
@@ -61,8 +60,7 @@ export default function Table() {
                                         )
                                     } else if (table.table_status === "OCCUPIED") {
                                         return (
-                                            <div>
-                                                {/* change svg */}
+                                            <div className={`cursor-pointer ${selectedTable !== null ? selectedTable.table_number === table.table_number ? "border-[0.2vw] border-solid border-gunmetal" : "" : ""}`} onClick={() => setSelectedTable(table)}>
                                                 <img src={OccupiedTableSvg} alt="table" className="rotate-90 w-[11vw] h-[11vw]" onClick={() => setSelectedTable(table)}></img>
                                                 <div className="absolute font-medium text-honeydew text-[1.3vw] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
                                                     <p>Table {table.table_number}</p>
@@ -77,17 +75,28 @@ export default function Table() {
                     ))}
 
                 </div>
-                {/* <div className="w-[0.2vw] bg-gunmetal"></div> */}
+
                 <div className="w-[27vw] h-[90vh] overflow-y-auto box-border border-l-[0.2vw] border-solid border-gunmetal">
-                    {console.log(selectedTable)}
-                    {selectedTable == null ? 
-                        <></>
-                        :
-                        <SingleTable table={selectedTable}/>  
+                    {
+                        (() => {
+                            if (selectedTable == null) {
+                                return
+                            }
+
+                            if (selectedTable.table_status === "UNOCCUPIED") {
+                                return <SingleTableUnoccupied selectedTable={selectedTable} setFetchTables={setFetchTables} setSelectedTable={setSelectedTable}/>
+                            }
+                            
+                            if (selectedTable.table_status === "OCCUPIED") {
+                                return (
+                                    <SingleTableOccupied selectedTable={selectedTable} setSelectedTable={setSelectedTable}/>
+                                ) 
+                            }
+                        })()
                     }
                                 
-                </div>
-            </div>
+                </div>                
+            </div>         
         </div>
     )
 }
