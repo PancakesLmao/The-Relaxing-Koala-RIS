@@ -34,7 +34,7 @@ class AddInoviceReq(BaseModel):
 async def add_invoice(request: AddInoviceReq):
     order_id = request.order_id
     checks.check_if_order_exists(str(order_id))
-    checks.check_invoice_exists(str(order_id))
+    checks.check_if_invoice_exists(str(order_id))
     
     query: str = '''
     select ifnull(max(invoice_id),0) from invoices;
@@ -49,6 +49,7 @@ async def add_invoice(request: AddInoviceReq):
     db.connection.commit()
     
     return
+
 
 @router.get("/get-single-invoice/{order_id}", status_code=200, responses={404: {}})
 async def get_single_invoice(order_id) -> InvoiceResponse:
