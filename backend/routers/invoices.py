@@ -50,55 +50,6 @@ async def add_invoice(request: AddInoviceReq):
     
     return
 
-class AddReceiptReq(BaseModel):
-    invoice_id: int
-    order_id: int
-    total: float
-    total_after_tax: float
-    payment_method: str
-    amount_given: float
-@router.put("/add-receipt", status_code=204, responses={404:{},409:{}})
-async def add_receipt(request: AddReceiptReq):
-    query: str = '''
-    select * from invoices
-    where invoice_id =?;
-    '''
-    res = db.cursor.execute(query, [request.invoice_id]).fetchone()
-    if res == None:
-        err: str = f"This invoice does not exists: {request.invoice_id}"
-        raise HTTPException(status_code=404, detail=err)
-
-    query: str ='''
-    select * from receipts
-    where invoice_id=?;
-    '''
-    res = db.cursor.execute(query, [request.invoice_id]).fetchone()
-    if res != None:
-        err: str = f"This receipt already exists"
-        raise HTTPException(status_code=409, detail=err)
-
-    change = request.total_after_tax - request.amount_given
-    query: str = '''
-    select ifnull(max(invoice_id),0) from invoices;
-    '''
-    max_id = db.cursor.execute(query).fetchone()[0]
-    query: str = '''
-    insert into receipts
-    values(?,?,?,?,?,?,?,?,?);
-    '''
-    db.cursor.execute(query, (
-        max_id + 1,
-        request.order_id,
-        request.invoice_id,
-        request.total,
-        request.total_after_tax,
-        request.payment_method,
-        request.amount_given,
-        change,
-        datetime.datetime.now().isoformat()
-        ))
-    db.connection.commit()
-    return
 
 @router.get("/get-single-invoice/{order_id}", status_code=200, responses={404: {}})
 async def get_single_invoice(order_id) -> InvoiceResponse:
