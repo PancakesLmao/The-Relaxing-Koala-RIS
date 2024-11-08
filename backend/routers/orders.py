@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from ..db import Db
+from .. import checks
 from pydantic import BaseModel
 import datetime
 
@@ -8,10 +9,10 @@ router = APIRouter()
 db = Db("db.sqlite")
 
 class OrderItems(BaseModel):
-    order_item_id: int
+    order_item_id: int | None
     order_id: int 
     menu_item_id: int
-    status: str
+    status: str = "PENDING"
     quantity: int
     name: str | None
     price: float | None
@@ -45,7 +46,7 @@ def test_init_menu_items():
                              item_name="lol",
                              price=10.69,
                              image_name="no",
-                             date_added=str(datetime.datetime.now())
+                             date_added=datetime.datetime.now().isoformat()
                              )
         query: str = '''
         insert into menu_items(menu_item_id,item_name,price,image_name,date_added)
@@ -62,27 +63,7 @@ def test_init_menu_items():
                           )
     db.connection.commit()
 test_init_menu_items()
-def check_if_order_exists(order_id: str):
-    query: str = '''
-    select * from orders
-    where order_id = ?;
-    '''
-    res = db.cursor.execute(query, [order_id])
-    if res.fetchone() == None:
-        err: str = f'This order does not exists: {order_id}'
-        raise HTTPException(status_code=404, detail=err)
-    return True
 
-def check_if_menu_item_exists(menu_item_id: str):
-    query: str = '''
-    select * from menu_items
-    where menu_item_id = ?;
-    '''
-    res = db.cursor.execute(query,[menu_item_id])
-    if res.fetchone() == None:
-        err: str = f"This menu item does not exists: {menu_item_id}"
-        raise HTTPException(status_code=404, detail=err)
-    return True
 
 @router.get("/get-all-orders", status_code=200, response_model=list[Order])
 async def get_orders():
@@ -101,7 +82,7 @@ async def get_orders():
     return orders
 @router.get("/get-order/{order_id}", status_code=200, response_model=Order)
 async def get_order(order_id):
-    check_if_order_exists(order_id)
+    checks.check_if_order_exists(order_id)
     order: Order
 
     query: str = '''
@@ -121,7 +102,7 @@ async def get_order(order_id):
 
 @router.get("/get-order-items-from-id/{order_id}", status_code=200, response_model=list[OrderItems])
 async def get_order_items(order_id):
-    check_if_order_exists(order_id)
+    checks.check_if_order_exists(order_id)
 
     query: str = '''
     select * from order_items
@@ -151,7 +132,7 @@ async def get_order_items(order_id):
         select item_name, price from menu_items
         where menu_item_id = ?;
         '''
-        check_if_menu_item_exists(str(menu_item_ids[i]))
+        checks.check_if_menu_item_exists(str(menu_item_ids[i]))
         res = db.cursor.execute(query, str(menu_item_ids[i])).fetchone()
         order_items[i].set(res[0],res[1]) 
     return order_items
@@ -183,31 +164,47 @@ class AddOrderItemReq(BaseModel):
     note: str
     menu_item_id: str
     quantity: str
-@router.put("/add-order-item", status_code=204, responses= {404: {}})
-async def add_order_item(request: AddOrderItemReq):
-    order_id = request.order_id
-    note = request.note
-    menu_item_id = request.menu_item_id
-    quantity = request.quantity
+@router.put("/add-order-items", status_code=204, responses= {404: {}})
+async def add_order_item(request:list[AddOrderItemReq]):
+    order_items = []
+    for order_item in request:
+        order_items.append(OrderItems(
+            order_item_id=None,
+            name=None,
+            price=None,
+            order_id= int(order_item.order_id),
+            note=order_item.note,
+            menu_item_id= int(order_item.menu_item_id),
+            quantity= int(order_item.quantity),
+            date_added= datetime.datetime.now().isoformat()
+            ))
+    for order_item in order_items:
 
-    query: str = '''
-    select * from menu_items
-    where menu_item_id = ?;
-    '''
-    res = db.cursor.execute(query,[menu_item_id])
-    if res.fetchone() == None:
-        err: str = f"This menu item does not exists: {menu_item_id}"
-        raise HTTPException(status_code=404, detail=err)
+        query: str = '''
+        select * from menu_items
+        where menu_item_id = ?;
+        '''
+        res = db.cursor.execute(query,[order_item.menu_item_id])
+        if res.fetchone() == None:
+            err: str = f"This menu item does not exists: {order_item.menu_item_id}"
+            raise HTTPException(status_code=404, detail=err)
 
-    check_if_order_exists(order_id)
-    query: str = '''
-    select ifnull(max(order_item_id),0) from order_items;
-    '''
-    max_id = db.cursor.execute(query).fetchone()[0]
-    query: str = '''
-    insert into order_items(order_item_id,order_id,note,menu_item_id,quantity,date_added)
-    values(?,?,?,?,?,?);
-    '''
-    db.cursor.execute(query,(max_id + 1, order_id,note,menu_item_id,quantity,datetime.datetime.now()))
+        checks.check_if_order_exists(order_item.order_id)
+        query: str = '''
+        select ifnull(max(order_item_id),0) from order_items;
+        '''
+        max_id = db.cursor.execute(query).fetchone()[0]
+        query: str = '''
+        insert into order_items(order_item_id,order_id,note,menu_item_id,quantity,date_added)
+        values(?,?,?,?,?,?);
+        '''
+        db.cursor.execute(query,(
+            max_id + 1,
+            order_item.order_id,
+            order_item.note,
+            order_item.menu_item_id,
+            order_item.quantity,
+            order_item.date_added))
+
     db.connection.commit()
     return
