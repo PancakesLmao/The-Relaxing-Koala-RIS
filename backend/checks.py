@@ -24,7 +24,7 @@ def check_if_menu_item_exists(menu_item_id: str):
         raise HTTPException(status_code=404, detail=err)
     return True
 
-def check_invoice_exists(order_id: str):
+def check_if_invoice_exists(order_id: str):
     query: str = '''
     select * from invoices
     where order_id = ?;
@@ -32,5 +32,5 @@ def check_invoice_exists(order_id: str):
     res = db.cursor.execute(query, [order_id])
     if res.fetchone() != None:
         err: str = f'This order already has an invoice: {order_id}'
-        raise HTTPException(status_code=409, detail=err)
+        raise HTTPException(status_code=404, detail=err)
     return True
