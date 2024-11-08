@@ -15,7 +15,7 @@ export default function TableOrderList({orderId}) {
                 return Promise.reject()
             }
         ).then((data) => {
-            setOrderItems([...data, ...data, ...data]);
+            setOrderItems(data);
         }).catch((response) => {
             console.error(response)
         })
