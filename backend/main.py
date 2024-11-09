@@ -3,8 +3,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from .db import Db
 from fastapi.responses import RedirectResponse
 
-from .routers.customer import router as customer_router
-from .routers.kitchen import router as kitchen_router
 from .routers.staff import router as staff_router
 from .routers.tables import router as tables_router
 from .routers.orders import router as orders_router
@@ -32,10 +30,8 @@ async def redirect_fastapi():
     return "/docs"
 
 # include the routers here
-app.include_router(customer_router, prefix="/customer")
 app.include_router(receipt_router, prefix="/receipts")
 app.include_router(invoice_router, prefix="/invoices")
-app.include_router(kitchen_router, prefix="/kitchen")
 app.include_router(menu_router, prefix="/menus")
 app.include_router(staff_router, prefix="/staff")
 app.include_router(tables_router, prefix="/tables")
