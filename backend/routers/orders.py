@@ -34,6 +34,7 @@ class Order(BaseModel):
     order_id: int
     name: str
     status: str
+    order_type: str
     date_added: str
 
 @router.get("/get-all-orders", status_code=200, response_model=list[Order])
@@ -48,7 +49,8 @@ async def get_orders():
             order_id=order[0],
             name=order[1],
             status=order[2],
-            date_added=order[3],
+            order_type=order[3],
+            date_added=order[4],
             ))
     return orders
 
@@ -67,7 +69,8 @@ async def get_order(order_id):
             order_id=response[0],
             name=response[1],
             status=response[2],
-            date_added=response[3],
+            order_type=response[3],
+            date_added=response[4],
             )
 
     return order
@@ -194,7 +197,8 @@ async def get_pending_orders() -> list[Order]:
             order_id=order[0],
             name=order[1],
             status=order[2],
-            date_added=order[3],
+            order_type=order[3],
+            date_added=order[4],
             ))
     return response
 
