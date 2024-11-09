@@ -89,7 +89,7 @@ export default function Table() {
                             
                             if (selectedTable.table_status === "OCCUPIED") {
                                 return (
-                                    <SingleTableOccupied selectedTable={selectedTable} setSelectedTable={setSelectedTable}/>
+                                    <SingleTableOccupied selectedTable={selectedTable} setSelectedTable={setSelectedTable} setFetchTables={setFetchTables}/>
                                 ) 
                             }
                         })()

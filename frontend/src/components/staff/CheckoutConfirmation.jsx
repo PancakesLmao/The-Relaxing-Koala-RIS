@@ -1,7 +1,7 @@
 import { useRef } from "react"
 import ReceiptDisplay from "./ReceiptDisplay"
 
-export default function CheckoutConfirmation({selectedTable, invoice, setCheckoutModal, setSelectedTable}) {
+export default function CheckoutConfirmation({selectedTable, invoice, setCheckoutModal, setSelectedTable, setFetchTables}) {
     const paymentMethod = useRef("")
     const amount = useRef(0)
 
@@ -11,15 +11,26 @@ export default function CheckoutConfirmation({selectedTable, invoice, setCheckou
         const newReceipt = {
             invoice_id: invoice.invoice_id,
             order_id: invoice.order_id,
-            total_price: invoice.total,
+            total: invoice.total,
             total_after_tax: invoice.total + Number((invoice.total * 0.1).toFixed(2)),
             payment_method: paymentMethod.current.value,
-            amount: Number(amount.current.value),
+            amount_given: Number(amount.current.value),
             table_number: selectedTable.table_number
         }
 
-        console.log(newReceipt)
-
+        fetch("http://127.0.0.1:8000/receipts/check-out", {
+            method: "PUT",
+            headers: {
+                'Content-Type': "application/json"
+            },
+            body: JSON.stringify(newReceipt)
+        }).then((response) => {
+            if (response.status === 204) {
+                setCheckoutModal(false)
+                setSelectedTable(null)
+                setFetchTables(true)
+            }
+        })
     }
     return (
         <div className="bg-white absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] 
@@ -55,8 +66,6 @@ export default function CheckoutConfirmation({selectedTable, invoice, setCheckou
             <button className="sticky bottom-0 left-0 bg-red w-[100%] text-[1.5vw] font-medium text-white h-[3.1vw] text-center"
                 onClick={(e) => {
                     checkoutHandler(e)
-                    setCheckoutModal(false)
-                    setSelectedTable(null)
                 }}>
                 Proceed to Check-out
             </button>

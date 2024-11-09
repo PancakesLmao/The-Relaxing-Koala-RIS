@@ -27,7 +27,7 @@ export default function TableOrderList({orderId}) {
                 <div key={index + 1} className="bg-antiflash-white flex justify-between items-center py-[1vw] px-[2vw]">
                     <div>
                         <p className="text-[1.3vw]">{index + 1}. {orderItem.name}</p>
-                        <p className="font-normal">Price: {orderItem.price}</p>
+                        <p className="font-normal">Price: {orderItem.price} A$</p>
                     </div>
                     <p className="font-normal text-[1.5vw]">x{orderItem.quantity}</p>
                 </div>

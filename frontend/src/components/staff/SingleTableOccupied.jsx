@@ -2,14 +2,13 @@ import { useEffect, useState } from "react";
 import TableOrderList from "./TableOrderList";
 import CheckoutConfirmation from "./CheckoutConfirmation";
 
-export default function SingleTableOccupied({selectedTable, setSelectedTable}) {
+export default function SingleTableOccupied({selectedTable, setSelectedTable, setFetchTables}) {
     const [orderInfor, setOrderInfor] = useState({})
     const [invoice, setInvoice] = useState(null)
     const [checkoutModal, setCheckoutModal] = useState(false)
     const [fetchOrder, setFetchOrder] = useState(true)
 
     useEffect(() => {
-        console.log("AMM")
         fetch(`http://127.0.0.1:8000/orders/get-order/${selectedTable.order_id}`).then(
             response => {
                 if (response.status === 200) {
@@ -72,7 +71,7 @@ export default function SingleTableOccupied({selectedTable, setSelectedTable}) {
                         <div className="text-red">Invoice Created!</div>
                     )}               
                     <div className="mt-[0.7vw] flex">
-                        <TableOrderList orderId={selectedTable.order_id}/>
+                        <TableOrderList orderId={orderInfor.order_id}/>
                     </div>
                 </div>
             </div>
@@ -94,7 +93,7 @@ export default function SingleTableOccupied({selectedTable, setSelectedTable}) {
             {checkoutModal && (
                 <div className="check-out-modal">
                     <div className="w-screen h-screen top-0 left-0 bottom-0 right-0 fixed staff-overlay">
-                        <CheckoutConfirmation selectedTable={selectedTable} invoice={invoice} setCheckoutModal={setCheckoutModal} setSelectedTable={setSelectedTable} />
+                        <CheckoutConfirmation selectedTable={selectedTable} invoice={invoice} setCheckoutModal={setCheckoutModal} setSelectedTable={setSelectedTable} setFetchTables={setFetchTables}/>
                     </div>
                 </div>
             )}     
