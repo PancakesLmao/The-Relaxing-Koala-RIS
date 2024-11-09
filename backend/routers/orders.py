@@ -36,18 +36,6 @@ class Order(BaseModel):
     status: str
     date_added: str
 
-@router.patch("/change-order-status/{order_id}",status_code=204)
-async def change_order_status(order_id : int):
-    checks.check_if_order_exists(str(order_id))
-    query: str = '''
-    update orders
-    set status="DONE"
-    where order_id=?;
-    '''
-    db.cursor.execute(query, [order_id])
-    db.connection.commit()
-    return
-
 @router.get("/get-all-orders", status_code=200, response_model=list[Order])
 async def get_orders():
     orders: list[Order] = []

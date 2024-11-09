@@ -17,15 +17,16 @@ class Receipt(BaseModel):
     change: float
     date_added: str
 
-class AddReceiptReq(BaseModel):
+class CheckOutReq(BaseModel):
     invoice_id: int
     order_id: int
+    table_number: int
     total: float
     total_after_tax: float
     payment_method: str
     amount_given: float
-@router.put("/add-receipt", status_code=204, responses={404:{},409:{}})
-async def add_receipt(request: AddReceiptReq):
+@router.put("/check-out", status_code=204, responses={404:{},409:{}})
+async def check_out(request: CheckOutReq):
     query: str = '''
     select * from invoices
     where invoice_id =?;
@@ -43,6 +44,38 @@ async def add_receipt(request: AddReceiptReq):
     if res != None:
         err: str = f"This receipt already exists"
         raise HTTPException(status_code=409, detail=err)
+    
+    query: str ='''
+    select * from orders
+    where order_id=? AND status='PENDING';
+    '''
+    res = db.cursor.execute(query, [request.order_id]).fetchone()
+    if res == None:
+        err: str = f"This Order is already done"
+        raise HTTPException(status_code=409, detail=err)
+
+    query: str ='''
+    select order_id from tables
+    where order_id=? AND table_number=?;
+    '''
+    res = db.cursor.execute(query, (request.order_id, request.table_number)).fetchone()
+    if res == None:
+        err: str = f"This table doesn't have that order: order:{request.order_id} table: {request.table_number}"
+        raise HTTPException(status_code=409, detail=err)
+
+    query: str = '''
+    update orders
+    set status="COMPLETE"
+    where order_id=?;
+    '''
+    db.cursor.execute(query, [request.order_id])
+
+    query: str = '''
+    update tables
+    set table_status='UNOCCUPIED', order_id=NULL
+    where table_number=?
+    '''
+    db.cursor.execute(query, [request.table_number])
 
     change = request.total_after_tax - request.amount_given
     query: str = '''

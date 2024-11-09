@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from ..db import Db
-import re
 import datetime
 
 db = Db("db.sqlite")
