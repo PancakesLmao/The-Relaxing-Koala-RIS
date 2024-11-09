@@ -17,10 +17,11 @@ class MenuItem(BaseModel):
 menu_items: list[MenuItem] = []
 
 def to_snake_case(string: str) -> str:
-    new = string.split(" ")
-    s1 = new[0].lower()
-    s2 = new[1].lower()
-    return "_".join([s1,s2])
+    new = []
+    for s in string.split(" "):
+        new.append(s.lower())
+    
+    return "_".join(new)
 
 def init_menu_items():
     items = {
