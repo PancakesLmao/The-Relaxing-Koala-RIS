@@ -36,34 +36,6 @@ class Order(BaseModel):
     status: str
     date_added: str
 
-def test_init_menu_items():
-    query: str = '''
-    delete from menu_items;
-    '''
-    db.cursor.execute(query)
-    for i in range(10):
-        menu_item = MenuItem(menu_item_id=i,
-                             item_name="lol",
-                             price=10.69,
-                             image_name="no",
-                             date_added=datetime.datetime.now().isoformat()
-                             )
-        query: str = '''
-        insert into menu_items(menu_item_id,item_name,price,image_name,date_added)
-        values(?,?,?,?,?);
-        '''
-        db.cursor.execute(query,
-                          (
-                              menu_item.menu_item_id,
-                              menu_item.item_name,
-                              menu_item.price,
-                              menu_item.image_name,
-                              menu_item.date_added
-                              )
-                          )
-    db.connection.commit()
-test_init_menu_items()
-
 @router.patch("/change-order-status/{order_id}",status_code=204)
 async def change_order_status(order_id : int):
     checks.check_if_order_exists(str(order_id))
