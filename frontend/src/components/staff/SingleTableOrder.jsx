@@ -6,7 +6,7 @@ export default function SingleTableOrder() {
     return (
         <div className="relative text-center font-medium">
             <div className="p-[2vw]">
-                <i class="ri-arrow-left-line text-gunmetal text-[3vw] absolute top-0 left-0 leading-[1]"></i>
+                <i className="ri-arrow-left-line text-gunmetal text-[3vw] absolute top-0 left-0 leading-[1]"></i>
                 <h1 className="text-[2vw]">Table No. </h1>
                 <div className="m-auto h-[0.25vw] w-[60%] bg-gunmetal"></div>
                 <h2 className="text-[1.7vw] mt-[2vw]">Order Detail</h2>
