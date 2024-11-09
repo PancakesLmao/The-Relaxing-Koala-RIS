@@ -74,6 +74,26 @@ async def get_reservation_from_name(customer_name: str) -> list[Reservation]:
             ))
     return response
 
+@router.get("/get-reservations-from-phone/{customer_phone}",status_code=200)
+async def get_reservation_from_phone(customer_phone: str) -> list[Reservation]:
+    response: list[Reservation] = []
+    query: str = '''
+    select * from reservations 
+    where phone=?;
+    '''
+    res = db.cursor.execute(query, [customer_phone]).fetchall()
+    for reservation in res: 
+        response.append(Reservation(
+            reservation_id=reservation[0],
+            table_number=reservation[1],
+            customer_name=reservation[2],
+            customer_phone=reservation[3],
+            date_reserved=reservation[4],
+            notes=reservation[5],
+            date_added=reservation[6]
+            ))
+    return response
+
 class AddReservationReq(BaseModel):
     customer_name: str
     customer_phone: str
