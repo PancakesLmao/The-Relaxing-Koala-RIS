@@ -7,7 +7,7 @@ export default function AddOrderItem({selectedMenuItem, setAddItemModal}) {
     const notes = useRef("");
     const {addOrder} = useNewOrderContext();
 
-    function handleAddOrder() {
+    function handleAddOrder(event) {
         const newOrderItem = {
             menu_item: selectedMenuItem.item,
             quantity: quantity,

@@ -37,7 +37,7 @@ export default function Menu() {
             <div className="flex">
                 <NewOrdersContextProvider>
                     <div className="flex-1 h-[90vh] overflow-y-auto">
-                        <DisplayMenu />
+                        <DisplayMenu selectedTable={selectedTable}/>
                     </div>                   
                     <div className="w-[27vw] h-[90vh] overflow-y-auto box-border border-l-[0.2vw] border-solid border-gunmetal">
                         {

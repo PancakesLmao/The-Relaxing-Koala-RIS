@@ -57,7 +57,7 @@ export default function ReceiptDisplay({receipt}) {
                                     <div className="flex flex-row gap-[1.7vw] text-center">
                                         <p className="w-[6vw]">{(order_item.quantity)}</p>
                                         <p className="w-[6vw]">{(order_item.price)} A$</p>
-                                        <p className="w-[6vw]">{(order_item.quantity * order_item.price)} A$</p>
+                                        <p className="w-[6vw]">{Number((order_item.quantity * order_item.price).toFixed(2))} A$</p>
                                     </div>
                                 </div>
                                 <div className="w-[100%] h-[0.1vw] bg-gunmetal"></div>

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
 
 
-export default function MenuOrderList({orderId}) {
+export default function MenuOrderList({orderId, fetchOrderItems, setFetchOrderItems}) {
     const [orderItems, setOrderItems] = useState([])
 
     useEffect(() => {
-        if (orderId) {
+        if (orderId && fetchOrderItems) {
             fetch(`http://127.0.0.1:8000/orders/get-order-items-from-id/${orderId}`).then(
                 response => {
                     if (response.status === 200) {
@@ -18,14 +18,39 @@ export default function MenuOrderList({orderId}) {
                 setOrderItems(data)
             }).catch(response => {
                 response.json().then(data => console.error(data))
+            }).finally(() => {
+                setFetchOrderItems(false)
             })
         }   
-    }, [orderId])
+    }, [orderId, fetchOrderItems, setFetchOrderItems])
+
+    function deleteItemHandler(item) {
+        if (item === null) {
+            return
+        }
+
+        fetch("http://127.0.0.1:8000/orders/remove-order-item", {
+            method: "DELETE",
+            headers: {
+                'Content-Type': "application/json"
+            },
+            body: JSON.stringify({
+                order_item_id: item.order_item_id,
+            })
+        }).then(
+            response => {
+                if (response.status === 204) {
+                    console.log("Success")
+                    setFetchOrderItems(true)
+                }
+            }
+        )
+    }
 
     return (
         <div className="border-box w-[100%] flex flex-col gap-[1vw] mt-[1vw]">
             {orderItems.map((item, index) => (
-                <div className="bg-antiflash-white flex gap-[1.5vw] items-center py-[1vw] px-[1.2vw]">
+                <div key={index} className="bg-antiflash-white flex gap-[1.5vw] items-center py-[1vw] px-[1.2vw]">
                     <div className="flex-1">
                         <div className="text-left">
                             <p className="text-[1.3vw]">{index + 1}. {item.name} x{item.quantity}</p>
@@ -49,7 +74,8 @@ export default function MenuOrderList({orderId}) {
                                 }
                             })()
                         }
-                        <i className="ri-close-line leading-[1] text-[2.3vw] text-white bg-red p-[0.1vw] rounded-[0.5vw] cursor-pointer"></i>
+                        <i className="ri-close-line leading-[1] text-[2.3vw] text-white bg-red p-[0.1vw] rounded-[0.5vw] cursor-pointer"
+                            onClick={() => deleteItemHandler(item)}></i>
                     </div>
                 </div>
             ))}           
