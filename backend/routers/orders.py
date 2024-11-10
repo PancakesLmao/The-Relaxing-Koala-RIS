@@ -108,7 +108,7 @@ async def get_order_items(order_id):
         where menu_item_id = ?;
         '''
         checks.check_if_menu_item_exists(str(menu_item_ids[i]))
-        res = db.cursor.execute(query, str(menu_item_ids[i])).fetchone()
+        res = db.cursor.execute(query, [menu_item_ids[i]]).fetchone()
         order_items[i].set(res[0],res[1]) 
     return order_items
 
