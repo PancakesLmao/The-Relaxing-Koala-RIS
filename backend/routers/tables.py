@@ -38,7 +38,7 @@ async def get_tables() -> list[Table]:
     for table in res.fetchall():
         tables.append(Table(
                 table_number= table[0],
-                order_id = str(table[1]),
+                order_id = table[1],
                 table_capacity= table[2],
                 table_status = table[3],
                 date_added = table[4],
