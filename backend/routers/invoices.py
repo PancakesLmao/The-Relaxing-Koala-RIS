@@ -105,7 +105,6 @@ async def get_single_invoice(order_id) -> InvoiceResponse:
         '''
         res = db.cursor.execute(query, [id]).fetchone()
         response.total += res[2] * quantity
-        print(response.total)
     response.total_after_tax = response.total * (1 + TAX)
 
     return response

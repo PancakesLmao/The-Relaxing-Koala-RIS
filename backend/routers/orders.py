@@ -101,7 +101,6 @@ async def get_order_items(order_id):
         menu_item_ids.append(item[2])
         order_items.append(order_item)
 
-    print(order_items)
     for i in range(len(menu_item_ids)):
         query: str = '''
         select item_name, price from menu_items
