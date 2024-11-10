@@ -113,7 +113,7 @@ async def get_order_items(order_id):
     return order_items
 
 class RemoveOrderItemReq(BaseModel):
-    order_item_id: str
+    order_item_id: int
 @router.delete("/remove-order-item", status_code=204, responses={404: {}})
 async def remove_order_item(request: RemoveOrderItemReq):
     order_item_id = request.order_item_id
@@ -129,16 +129,16 @@ async def remove_order_item(request: RemoveOrderItemReq):
     delete from order_items
     where order_item_id=?
     '''
-    db.cursor.execute(query, (order_item_id))
+    db.cursor.execute(query, [order_item_id])
     db.connection.commit()
     
     return
 
 class AddOrderItemReq(BaseModel):
-    order_id: str
+    order_id: int
     note: str
-    menu_item_id: str
-    quantity: str
+    menu_item_id: int
+    quantity: int
 @router.put("/add-order-items", status_code=204, responses= {404: {}})
 async def add_order_item(request:list[AddOrderItemReq]):
     order_items = []
@@ -147,10 +147,10 @@ async def add_order_item(request:list[AddOrderItemReq]):
             order_item_id=None,
             name=None,
             price=None,
-            order_id= int(order_item.order_id),
+            order_id= order_item.order_id,
             note=order_item.note,
-            menu_item_id= int(order_item.menu_item_id),
-            quantity= int(order_item.quantity),
+            menu_item_id= order_item.menu_item_id,
+            quantity= order_item.quantity,
             date_added= datetime.datetime.now().isoformat()
             ))
     for order_item in order_items:
