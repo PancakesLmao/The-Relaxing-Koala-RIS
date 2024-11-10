@@ -153,12 +153,12 @@ async def add_staff(request: AddStaffReq):
     return
 
 class RemoveStaffReq(BaseModel):
-    staff_id: str
+    staff_id: int
 @router.delete("/remove-staff", status_code=204, responses={404: {}})
 async def remove_staff(request: RemoveStaffReq):
     staff_id = request.staff_id
 
-    if not staff_check_exists(staff_id):
+    if not staff_check_exists(str(staff_id)):
         err: str = f"cannot find this employee: {staff_id}"
         raise HTTPException(status_code=404, detail=err)
 
@@ -166,12 +166,12 @@ async def remove_staff(request: RemoveStaffReq):
     DELETE FROM staff 
     WHERE staff_id=?;
     '''
-    db.cursor.execute(query, staff_id)
+    db.cursor.execute(query, [staff_id])
     db.connection.commit()
     return
 
 class EditStaffReq(BaseModel):
-    staff_id: str
+    staff_id: int
     changed_first_name: str
     changed_last_name: str
     changed_role: str
@@ -182,7 +182,7 @@ async def edit_staff(request: EditStaffReq):
     changed_last_name = request.changed_last_name
     changed_role = request.changed_role
 
-    if not staff_check_exists(staff_id):
+    if not staff_check_exists(str(staff_id)):
         err: str = f"cannot find this employee: {staff_id}"
         raise HTTPException(status_code=404, detail=err)
 

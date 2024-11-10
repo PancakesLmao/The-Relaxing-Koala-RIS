@@ -10,7 +10,7 @@ db = Db("db.sqlite")
 
 class Table(BaseModel):
     table_number: int
-    order_id: str | None 
+    order_id: int | None 
     table_capacity: int
     table_status: str
     date_added: str
