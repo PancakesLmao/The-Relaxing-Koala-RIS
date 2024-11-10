@@ -2,16 +2,64 @@ from fastapi import APIRouter, HTTPException
 from ..db import Db
 from pydantic import BaseModel
 import datetime
+from hashlib import sha256
 
 class Staff(BaseModel):
     staff_id: int
     first_name: str
     last_name: str
     role:str
+    password_hash: str | None
     date_added:str
 
 router = APIRouter()
 db = Db("db.sqlite")
+staffs: list[Staff] = []
+
+def init_menu_items():
+    users = {
+            'Le Phan' : sha256('phantom'.encode('utf-8')).hexdigest(),
+            'Quoc An': sha256('possay'.encode('utf-8')).hexdigest(),
+            'Bui Thao': sha256('woah'.encode('utf-8')).hexdigest(),
+            'Nguyen Thinh': sha256('cringe uwu'.encode('utf-8')).hexdigest(),
+            }
+    if staffs == []:
+        for name,password in users.items():
+            staff = Staff(
+                    staff_id=list(users).index(name),
+                    first_name=name.split(" ")[0],
+                    last_name=name.split(" ")[1],
+                    password_hash=password,
+                    role="admin",
+                    date_added=datetime.datetime.now().isoformat()
+                    )
+            staffs.append(staff)
+            
+    query: str = '''
+    delete from staff;
+    '''
+    db.cursor.execute(query)
+    db.connection.commit()
+
+    for staff in staffs:
+        query = '''
+        insert into staff
+        values
+        (?,?,?,?,?,?);
+        '''
+        db.cursor.execute(query, (
+            staff.staff_id,
+            staff.first_name,
+            staff.last_name,
+            staff.role,
+            staff.password_hash,
+            staff.date_added,
+                                  )
+                          )
+    db.connection.commit()
+
+    return
+init_menu_items()
 
 def staff_check_exists(staff_id:str) -> bool:
     query: str = '''
@@ -22,6 +70,38 @@ def staff_check_exists(staff_id:str) -> bool:
     if res.fetchone() == None:
         return False
     return True
+
+class LoginReq(BaseModel):
+    first_name: str
+    last_name: str
+    password: str
+class LoginRes(BaseModel):
+    first_name: str
+    last_name: str
+    role: str
+@router.post("/login", status_code=200)
+async def staff_login(request: LoginReq) -> LoginRes:
+    response: LoginRes
+    query: str = '''
+    select * from staff
+    where first_name=? and last_name=?;
+    '''
+    res = db.cursor.execute(query, (request.first_name, request.last_name)).fetchone()
+    if res == None: 
+        err: str = f"This staff does not exists: {request.first_name} {request.last_name}"
+        raise HTTPException(status_code=404, detail=err)
+
+    password_hash_inDB = res[4]
+    if sha256(request.password.encode('utf-8')).hexdigest() != password_hash_inDB:
+        err: str = f"Wrong Password!!!"
+        raise HTTPException(status_code=409, detail=err)
+    response = LoginRes(
+            first_name=res[1],
+            last_name=res[2],
+            role=res[3],
+            )
+    
+    return response
 
 @router.get("/get-staffs", status_code=200)
 async def all_staff() -> list[Staff]:
@@ -36,6 +116,7 @@ async def all_staff() -> list[Staff]:
             first_name = staff[1],
             last_name = staff[2],
             role = staff[3],
+            password_hash=None,
             date_added = staff[4]
             ))
     return response

@@ -34,6 +34,7 @@ class Db:
                 order_id INTEGER PRIMARY KEY NOT NULL,
                 name TEXT NOT NULL,
                 status text not null default PENDING,
+                type text NOT NULL DEFAULT DINE_IN,
                 date_added TEXT NOT NULL
                 ) 
         '''
