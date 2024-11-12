@@ -34,6 +34,7 @@ class Db:
                 order_id INTEGER PRIMARY KEY NOT NULL,
                 name TEXT NOT NULL,
                 status text not null default PENDING,
+                type text NOT NULL DEFAULT DINE_IN,
                 date_added TEXT NOT NULL
                 ) 
         '''
@@ -95,6 +96,7 @@ class Db:
         query : str = '''
         CREATE TABLE IF NOT EXISTS receipts (
                 receipt_id INTEGER PRIMARY KEY NOT NULL,
+                order_id INTEGER,
                 invoice_id INTEGER,
                 total_price REAL NOT NULL,
                 total_after_tax REAL NOT NULL,
@@ -102,7 +104,8 @@ class Db:
                 amount_given REAL NOT NULL DEFAULT 0.0,
                 change REAL DEFAULT 0.0,
                 date_added TEXT NOT NULL,
-                FOREIGN KEY(invoice_id) REFERENCES invoices(invoice_id)
+                FOREIGN KEY(invoice_id) REFERENCES invoices(invoice_id),
+                FOREIGN KEY(order_id) REFERENCES orders(order_id)
                 ) 
         '''
         self.cursor.execute(query)
