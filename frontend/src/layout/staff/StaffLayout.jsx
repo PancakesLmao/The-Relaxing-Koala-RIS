@@ -8,11 +8,11 @@ export default function StaffLayout() {
     
     return (
         <div className="flex flex-row">
-            <div className="fixed h-[100vh] w-[5.8vw] bg-gunmetal">
+            <div className="fixed h-[100vh] w-[5.5vw] bg-gunmetal">
                 <Navbar />
             </div>
             
-            <div className="ml-[5.8vw] w-full">
+            <div className="ml-[5.5vw] w-full">
                 <Outlet />
             </div>
         </div>
