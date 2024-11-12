@@ -100,6 +100,24 @@ async def get_reservation_from_phone(customer_phone: str) -> list[Reservation]:
             ))
     return response
 
+@router.delete("/remove-reservation/{reservation_id}", status_code=200)
+async def remove_reservation(reservation_id: int):
+    query: str ='''
+    select * from reservations
+    where reservation_id=?;
+    '''
+    res = db.cursor.execute(query, [reservation_id]).fetchone()
+    if res == None:
+        err: str = f"There are no reservations with this id: {reservation_id}"
+        raise HTTPException(status_code=404, detail=err)
+    query: str = '''
+    delete from reservations
+    where reservation_id=?;
+    '''
+    db.cursor.execute(query, [reservation_id])
+    db.connection.commit()
+    return
+
 class AddReservationReq(BaseModel):
     customer_name: str
     customer_phone: str
