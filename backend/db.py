@@ -126,7 +126,7 @@ class Db:
         '''
         self.cursor.execute(query)
 
-        # choosing not to enable the foreign key checks cus r*t*rded this, it works so don't touch it
+        # choosing not to enable the foreign key checks cus r*t*rded shit, it works so don't touch it
         #query : str = '''
         #pragma foreign_keys = ON;
         #'''
