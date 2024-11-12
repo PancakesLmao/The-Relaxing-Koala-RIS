@@ -109,18 +109,17 @@ class Db:
                 ) 
         '''
         self.cursor.execute(query)
-
+        
         # create reservations 
         query : str = '''
         CREATE TABLE IF NOT EXISTS reservations (
                 reservation_id INTEGER PRIMARY KEY NOT NULL,
-                table_number INTEGER,
+                number_of_people INTEGER NOT NULL,
                 name TEXT NOT NULL,
                 phone TEXT NOT NULL,
                 date_reserved TEXT NOT NULL,
                 notes TEXT,
-                date_added TEXT NOT NULL,
-                FOREIGN KEY(table_number) REFERENCES tables(table_number)
+                date_added TEXT NOT NULL
                 ) 
         '''
         self.cursor.execute(query)
