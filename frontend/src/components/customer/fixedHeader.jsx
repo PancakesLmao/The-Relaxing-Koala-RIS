@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import { useHeaderBehaviour } from "../../js/customer/headerBehaviour";
 import "../../css/customer/koalaHeader.css";
 import Sidebar from "./sidebar";
@@ -13,6 +14,29 @@ export default function FixedHeader() {
     setIsSidebarOpen((prev) => !prev);
   };
 
+  const navItems = [
+    {
+      name: "Home",
+      path: "/",
+    },
+    {
+      name: "About",
+      path: "about",
+    },
+    {
+      name: "Menu",
+      path: "menu",
+    },
+    {
+      name: "Reservation",
+      path: "reservation",
+    },
+    {
+      name: "Contact",
+      path: "#contact",
+    },
+  ];
+
   return (
     <>
       <header ref={headerRef} className={"header-fixed"}>
@@ -21,29 +45,23 @@ export default function FixedHeader() {
             <div className="bg-header flex justify-between items-center w-full h-full">
               {/* Logo */}
               <div className="flex">
-                <a href="#">
+                <NavLink to="/">
                   <img ref={logoRef} src={logo} alt="Logo" className="logo" />
-                </a>
+                </NavLink>
               </div>
               {/* Menu */}
               <div className="wrap-menu h-full px-5-xl px-0-sm ">
                 <nav className="menu flex justify-center items-center h-full">
                   <ul className="main-menu flex justify-center items-center">
-                    <li className="trans-0-4">
-                      <a href="#">Home</a>
-                    </li>
-                    <li className="trans-0-4">
-                      <a href="#">About</a>
-                    </li>
-                    <li className="trans-0-4">
-                      <a href="#">Menu</a>
-                    </li>
-                    <li className="trans-0-4">
-                      <a href="#">Reservation</a>
-                    </li>
-                    <li className="trans-0-4">
-                      <a href="#">Contact</a>
-                    </li>
+                    {navItems.map((item, index) => (
+                      <li key={index} className="trans-0-4">
+                        {item.path.startsWith("/") ? (
+                          <NavLink to={item.path}>{item.name}</NavLink>
+                        ) : (
+                          <a href={item.path}>{item.name}</a>
+                        )}
+                      </li>
+                    ))}
                   </ul>
                 </nav>
               </div>

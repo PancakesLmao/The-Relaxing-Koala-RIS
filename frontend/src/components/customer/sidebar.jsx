@@ -1,7 +1,26 @@
 // src/components/Sidebar.js
+import { NavLink } from "react-router-dom";
 import imageAssets from "../../assets/image-assets.json";
 
 export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
+  const navItems = [
+    {
+      name: "Home",
+      path: "/",
+    },
+    {
+      name: "About",
+      path: "about",
+    },
+    {
+      name: "Menu",
+      path: "menu",
+    },
+    {
+      name: "Contact",
+      path: "#contact",
+    },
+  ];
   return (
     <>
       {/* Overlay */}
@@ -18,27 +37,25 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
           ></button>
         </div>
         <ul className="menu-sidebar">
+          {/* Menu */}
+          {navItems.map((item, index) => (
+            <li key={index} className="text-center mb-5">
+              {item.path.startsWith("/") ? (
+                <NavLink to={item.path}>{item.name}</NavLink>
+              ) : (
+                <a href={item.path}>{item.name}</a>
+              )}
+            </li>
+          ))}
           <li className="text-center mb-5">
-            <a href="#">Home</a>
-          </li>
-          <li className="text-center mb-5">
-            <a href="#">About</a>
-          </li>
-          <li className="text-center mb-5">
-            <a href="#">Menu</a>
-          </li>
-          <li className="text-center mb-5">
-            <a href="#">Contact</a>
-          </li>
-          <li className="text-center mb-5">
-            <a>
+            <NavLink to="/customer/reservation">
               <button
                 type="button"
-                class="text-white bg-green-700 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                class="text-white bg-green-700 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-[#4a614c] dark:hover:bg-[#28472a] dark:focus:ring-[#28472a] trans-0-4"
               >
                 Make Reservation
               </button>
-            </a>
+            </NavLink>
           </li>
         </ul>
 

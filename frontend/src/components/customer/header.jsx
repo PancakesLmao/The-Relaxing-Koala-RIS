@@ -17,11 +17,11 @@ export default function Header() {
   const navItems = [
     {
       name: "Home",
-      path: ""
+      path: "/"
     },
     {
       name: "About",
-      path: "#about"
+      path: "about"
     },
     {
       name: "Menu",
@@ -29,7 +29,7 @@ export default function Header() {
     },
     {
       name: "Reservation",
-      path: "/customer/reservation"
+      path: "reservation"
     },
     {
       name: "Contact",
@@ -45,29 +45,23 @@ export default function Header() {
             <div className="bg-header flex justify-between items-center w-full h-full">
               {/* Logo */}
               <div className="flex">
-                <a href="#">
+                <NavLink to="/">
                   <img ref={logoRef} src={logo} alt="Logo" className="logo" />
-                </a>
+                </NavLink>
               </div>
               {/* Menu */}
               <div className="wrap-menu h-full px-5-xl px-0-sm ">
                 <nav className="menu flex justify-center items-center h-full">
                   <ul className="main-menu flex justify-center items-center">
-                    <li className="trans-0-4">
-                      <a href="#">Home</a>
-                    </li>
-                    <li className="trans-0-4">
-                      <a href="#">About</a>
-                    </li>
-                    <li className="trans-0-4">
-                      <a href="#">Menu</a>
-                    </li>
-                    <li className="trans-0-4">
-                      <NavLink to="/reservation">Reservation</NavLink>
-                    </li>
-                    <li className="trans-0-4">
-                      <a href="#contact">Contact</a>
-                    </li>
+                    {navItems.map((item, index) => (
+                      <li key={index} className="trans-0-4">
+                        {item.path.startsWith("/") ? (
+                          <NavLink to={item.path}>{item.name}</NavLink>
+                        ) : (
+                          <a href={item.path}>{item.name}</a>
+                        )}
+                      </li>
+                    ))}
                   </ul>
                 </nav>
               </div>

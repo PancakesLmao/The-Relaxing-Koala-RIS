@@ -1,4 +1,5 @@
 import FixedHeader from "../../components/customer/fixedHeader";
+import "../../assets/image-assets.json";
 export default function CustomerReservation() {
   return (
     <>
