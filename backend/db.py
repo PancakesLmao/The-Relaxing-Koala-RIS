@@ -109,12 +109,13 @@ class Db:
                 ) 
         '''
         self.cursor.execute(query)
-
+        
         # create reservations 
         query : str = '''
         CREATE TABLE IF NOT EXISTS reservations (
                 reservation_id INTEGER PRIMARY KEY NOT NULL,
-                table_number INTEGER,
+                table_number integer not null,
+                number_of_people INTEGER NOT NULL,
                 name TEXT NOT NULL,
                 phone TEXT NOT NULL,
                 date_reserved TEXT NOT NULL,
@@ -124,3 +125,9 @@ class Db:
                 ) 
         '''
         self.cursor.execute(query)
+
+        # choosing not to enable the foreign key checks cus r*t*rded shit, it works so don't touch it
+        #query : str = '''
+        #pragma foreign_keys = ON;
+        #'''
+        #self.cursor.execute(query)
