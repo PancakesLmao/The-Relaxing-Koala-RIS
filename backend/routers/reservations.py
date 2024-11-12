@@ -9,6 +9,7 @@ db = Db("db.sqlite")
 
 class Reservation(BaseModel):
     reservation_id: int
+    table_number: int
     number_of_people: int
     customer_name: str
     customer_phone: str
@@ -26,12 +27,13 @@ async def get_all_reservations() -> list[Reservation]:
     for reservation in res: 
         response.append(Reservation(
             reservation_id=reservation[0],
-            number_of_people=reservation[1],
-            customer_name=reservation[2],
-            customer_phone=reservation[3],
-            date_reserved=reservation[4],
-            notes=reservation[5],
-            date_added=reservation[6]
+            table_number=reservation[1],
+            number_of_people=reservation[2],
+            customer_name=reservation[3],
+            customer_phone=reservation[4],
+            date_reserved=reservation[5],
+            notes=reservation[6],
+            date_added=reservation[7]
             ))
     return response
 
@@ -46,12 +48,13 @@ async def get_reservation_from_table(table_number: int) -> list[Reservation]:
     for reservation in res: 
         response.append(Reservation(
             reservation_id=reservation[0],
-            number_of_people=reservation[1],
-            customer_name=reservation[2],
-            customer_phone=reservation[3],
-            date_reserved=reservation[4],
-            notes=reservation[5],
-            date_added=reservation[6]
+            table_number=reservation[1],
+            number_of_people=reservation[2],
+            customer_name=reservation[3],
+            customer_phone=reservation[4],
+            date_reserved=reservation[5],
+            notes=reservation[6],
+            date_added=reservation[7]
             ))
     return response
 
@@ -66,12 +69,13 @@ async def get_reservation_from_name(customer_name: str) -> list[Reservation]:
     for reservation in res: 
         response.append(Reservation(
             reservation_id=reservation[0],
-            number_of_people=reservation[1],
-            customer_name=reservation[2],
-            customer_phone=reservation[3],
-            date_reserved=reservation[4],
-            notes=reservation[5],
-            date_added=reservation[6]
+            table_number=reservation[1],
+            number_of_people=reservation[2],
+            customer_name=reservation[3],
+            customer_phone=reservation[4],
+            date_reserved=reservation[5],
+            notes=reservation[6],
+            date_added=reservation[7]
             ))
     return response
 
@@ -86,12 +90,13 @@ async def get_reservation_from_phone(customer_phone: str) -> list[Reservation]:
     for reservation in res: 
         response.append(Reservation(
             reservation_id=reservation[0],
-            number_of_people=reservation[1],
-            customer_name=reservation[2],
-            customer_phone=reservation[3],
-            date_reserved=reservation[4],
-            notes=reservation[5],
-            date_added=reservation[6]
+            table_number=reservation[1],
+            number_of_people=reservation[2],
+            customer_name=reservation[3],
+            customer_phone=reservation[4],
+            date_reserved=reservation[5],
+            notes=reservation[6],
+            date_added=reservation[7]
             ))
     return response
 
@@ -103,8 +108,8 @@ class AddReservationReq(BaseModel):
     date_reserved: str
 @router.put("/add-reservation",status_code=204)
 async def add_reservation(request: AddReservationReq):
-    if request.number_of_people > 12:
-        err: str = f"You cannot book for more than 12 person at a time"
+    if request.number_of_people > 6:
+        err: str = f"You cannot book for more than 6 person at a time"
         raise HTTPException(status_code=409,detail=err)
     query: str = '''
     select * from reservations
@@ -115,26 +120,7 @@ async def add_reservation(request: AddReservationReq):
         err: str = f"This table and time has already been reserved: table: {request.number_of_people} time: {request.date_reserved}"
         raise HTTPException(status_code=409, detail=err)
 
-    query: str = '''
-    select ifnull(max(invoice_id),0) from invoices;
-    '''
-    max_id = db.cursor.execute(query).fetchone()[0]
-
-    query: str = '''
-    insert into reservations
-    values(?,?,?,?,?,?,?)
-    '''
-    db.cursor.execute(query, (
-        max_id + 1,
-        request.number_of_people,
-        request.customer_name,
-        request.customer_phone,
-        request.date_reserved,
-        request.notes,
-        datetime.datetime.now().isoformat()
-        ))
     tables = []
-    table_number = []
     if request.number_of_people == 4:
         query: str = '''
         select table_number tables
@@ -146,7 +132,7 @@ async def add_reservation(request: AddReservationReq):
             raise HTTPException(status_code=409, detail=err)
         for table in res:
             tables.append(table)
-        table_number.append(random.choice(tables))
+        table_number = random.choice(tables)
 
     if request.number_of_people <= 6: 
         query: str = '''
@@ -160,28 +146,33 @@ async def add_reservation(request: AddReservationReq):
         for table in res:
             tables.append(table)
         table_number = random.choice(tables)
-    else:
-        query: str = '''
-        select table_number from tables
-        where table_capacity=6 and table_status='UNOCCUPIED';
-        '''
-        res = db.cursor.execute(query).fetchall()
-        if res == None: 
-            err: str = f"No tables are available for your reservation"
-            raise HTTPException(status_code=409, detail=err)
-        for table in res:
-            tables.append(table)
-        table_number = random.sample(tables, 2)
-        
+
     query: str = '''
     update tables
     set table_status='RESERVED'
-    where table_number=? or table_number=?;
+    where table_number=?;
     '''
-    if len(table_number) ==1:
-        db.cursor.execute(query, [table_number[0]])
-    else:
-        db.cursor.execute(query, (str(table_number[0][0]), str(table_number[1][0])))
+    db.cursor.execute(query, [table_number[0]])
+    
+    query: str = '''
+    select ifnull(max(invoice_id),0) from invoices;
+    '''
+    max_id = db.cursor.execute(query).fetchone()[0]
+
+    query: str = '''
+    insert into reservations
+    values(?,?,?,?,?,?,?,?)
+    '''
+    db.cursor.execute(query, (
+        max_id + 1,
+        request.number_of_people,
+        table_number[0],
+        request.customer_name,
+        request.customer_phone,
+        request.date_reserved,
+        request.notes,
+        datetime.datetime.now().isoformat()
+        ))
 
     db.connection.commit()
     return

@@ -12,7 +12,7 @@ curl --no-progress-meter\
 		"customer_name":"'$1'",
 		"customer_phone":"'$2'",
 		"notes":"'$3'",
-		"number_of_person":"'$4'",
+		"number_of_people":"'$4'",
 		"date_reserved":"'$5'"
 	}
 	' \
