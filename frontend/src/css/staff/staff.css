@@ -42,3 +42,8 @@
 .staff-overlay {
     background: rgba(49, 49, 49, 0.7);
 }
+
+.staff-history-navitems.active button {
+    background: #243642ff;
+    color: #e2f1e7ff
+}
