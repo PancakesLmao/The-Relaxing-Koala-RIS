@@ -111,15 +111,6 @@ async def add_reservation(request: AddReservationReq):
     if request.number_of_people > 6:
         err: str = f"You cannot book for more than 6 person at a time"
         raise HTTPException(status_code=409,detail=err)
-    query: str = '''
-    select * from reservations
-    where number_of_people=? and date_reserved = ?;
-    '''
-    res = db.cursor.execute(query, (request.number_of_people, request.date_reserved)).fetchone()
-    if res != None:
-        err: str = f"This table and time has already been reserved: table: {request.number_of_people} time: {request.date_reserved}"
-        raise HTTPException(status_code=409, detail=err)
-
     tables = []
     if request.number_of_people == 4:
         query: str = '''
