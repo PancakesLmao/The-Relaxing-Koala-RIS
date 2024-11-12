@@ -155,7 +155,7 @@ async def add_reservation(request: AddReservationReq):
     db.cursor.execute(query, [table_number[0]])
     
     query: str = '''
-    select ifnull(max(invoice_id),0) from invoices;
+    select ifnull(max(reservations),0) from reservations;
     '''
     max_id = db.cursor.execute(query).fetchone()[0]
 
