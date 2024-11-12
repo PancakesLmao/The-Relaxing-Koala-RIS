@@ -1,9 +1,11 @@
 import "../../css/customer/koalaHome.css";
 import video from "../../assets/3769033-hd_1920_1080.mp4";
+import Header from "../../components/customer/header";
 //
 export default function Home() {
   return (
     <>
+      <Header />
       <div className="video-container relative">
         <div className="overlay2"></div>
           <div className="relative video-bg">

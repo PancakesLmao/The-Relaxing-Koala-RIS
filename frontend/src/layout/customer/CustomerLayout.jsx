@@ -29,12 +29,9 @@ function App() {
 export default function CustomerLayout() {
   return (
     <div>
-      <Header />
       {/* <div>Customer Page</div> */}
-
       {/* Content */}
       <Outlet />
-
       <Footer />
     </div>
   );
