@@ -14,17 +14,24 @@ export default function CustomerReservation() {
   const onSubmit = (e) => {
     e.preventDefault();
 
+    // // debug lines
+    // console.log("fullName:", fullName.current.value);
+    // console.log("phone:", phone.current.value);
+    // console.log("numPeople:", numPeople.current.value);
+    // console.log("date:", date.current.value);
+    // console.log("time:", time.current.value);
+    // console.log("datetime",`${date.current.value}T${time.current.value}`);
+    // console.log("note:", note.current.value);
+  
     const formData = {
-      // Change fieldname
       customer_name: fullName.current.value,
       customer_phone: phone.current.value,
       notes: note.current.value,
-      number_of_people: parseInt(numPeople.current.value, 10),
-      date_reserved: `${date.current.value}T${time.current.value}`.toString(),
+      number_of_people: parseInt(numPeople.current.value),
+      date_reserved: (`${date.current.value}T${time.current.value}`).toString(),
     };
+    console.log("Form Data:", formData);
     handleSubmit(formData);
-    // debug lines
-    console.log(formData);
   };
   return (
     <>
@@ -49,7 +56,7 @@ export default function CustomerReservation() {
                   required
                 />
                 <label
-                  htmlFor="fullname"
+                  for="floating_email"
                   class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#28472a] peer-focus:dark:text-[#28472a] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                 >
                   Full name
@@ -60,16 +67,16 @@ export default function CustomerReservation() {
               <div class="grid md:grid-cols-2 md:gap-6">
                 <div class="relative z-0 w-full mb-5 group">
                   <input
-                    ref={phone}
                     type="text"
                     pattern="[0-9]{3}[0-9]{3}[0-9]{4}"
+                    ref={phone}
                     id="phone"
                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-dark dark:border-[#28472a] dark:focus:border-[#28472a] focus:outline-none focus:ring-0 focus:border-[#28472a] peer"
                     placeholder=" "
                     required
                   />
                   <label
-                    htmlFor="phone"
+                    for="phone"
                     class="peer-focus:font-medium absolute text-sm text-[#28472a] dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#28472a] peer-focus:dark:text-[#28472a] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                   >
                     Contact number
@@ -78,15 +85,15 @@ export default function CustomerReservation() {
                 {/* Number of people */}
                 <div class="relative z-0 w-full mb-5 group">
                   <input
-                    ref={numPeople}
                     type="number"
+                    ref={numPeople}
                     id="num_people"
                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-dark dark:border-[#28472a] dark:focus:border-[#28472a] focus:outline-none focus:ring-0 focus:border-[#28472a] peer"
                     placeholder=" "
                     required
                   />
                   <label
-                    htmlFor="num_people"
+                    for="num_people"
                     class="peer-focus:font-medium absolute text-sm text-[#28472a] dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#28472a] peer-focus:dark:text-[#28472a] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                   >
                     Number of people
@@ -97,16 +104,16 @@ export default function CustomerReservation() {
               <div class="grid md:grid-cols-2 md:gap-6">
                 <div class="relative z-0 w-full mb-5 group">
                   <input
-                    datepicker="true"
-                    ref={date}
+                    datepicker
                     type="date"
+                    ref={date}
                     id="date"
                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-dark dark:border-[#28472a] dark:focus:border-[#28472a] focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                     placeholder=" "
                     required
                   />
                   <label
-                    htmlFor="date"
+                    for="date"
                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#28472a] peer-focus:dark:text-[#28472a] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                   >
                     Date
@@ -115,15 +122,15 @@ export default function CustomerReservation() {
                 {/* Time */}
                 <div class="relative z-0 w-full mb-5 group">
                   <input
-                    ref={time}
                     type="time"
+                    ref={time}
                     id="time"
                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-dark dark:border-[#28472a] dark:focus:border-[#28472a] focus:outline-none focus:ring-0 focus:border-[#28472a] peer"
                     placeholder=" "
                     required
                   />
                   <label
-                    htmlFor="time"
+                    for="time"
                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#28472a] peer-focus:dark:text-[#28472a] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                   >
                     Time
@@ -134,8 +141,8 @@ export default function CustomerReservation() {
               <div class="relative z-0 w-full mb-5 group">
                 <label className="">Special note (optional)</label>
                 <textarea
-                  ref={note}
                   id="note"
+                  ref={note}
                   className="block py-2.5 px-1 w-full text-sm text-gray-900 bg-transparent border-2 border-gray-300 appearance-none dark:border-gray-600 dark:focus:border-[#28472a] focus:outline-none focus:ring-0 focus:border-[#28472a] peer"
                   placeholder="Tell us if you have any special request (e.g. baby seats, etc.)"
                   rows={5}
