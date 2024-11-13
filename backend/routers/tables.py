@@ -131,7 +131,7 @@ async def update_table(request: AddOrderReq):
     insert into orders(order_id,name,date_added)
     values(?,?,?);
     '''
-    db.cursor.execute(query, (max_id + 1,customer_name,datetime.datetime.now()))
+    db.cursor.execute(query, (max_id + 1,customer_name,datetime.datetime.now().isoformat()))
 
     query: str = '''
     UPDATE tables
