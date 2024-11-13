@@ -134,7 +134,7 @@ async def add_reservation(request: AddReservationReq):
     tables = []
     if request.number_of_people == 4:
         query: str = '''
-        select table_number tables
+        select table_number from tables
         where table_status='UNOCCUPIED';
         '''
         res = db.cursor.execute(query).fetchall()
