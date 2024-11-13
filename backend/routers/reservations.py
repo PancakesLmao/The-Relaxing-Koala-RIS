@@ -132,15 +132,15 @@ async def add_reservation(request: AddReservationReq):
         err: str = f"You cannot book for more than 6 person at a time"
         raise HTTPException(status_code=409,detail=err)
     tables = []
-    if request.number_of_people == 4:
+    if request.number_of_people <= 4:
         query: str = '''
-        select table_number tables
+        select table_number from tables
         where table_status='UNOCCUPIED';
         '''
         res = db.cursor.execute(query).fetchall()
-        if res == None: 
+        if res == []: 
             err: str = f"No tables are available for your reservation"
-            raise HTTPException(status_code=409, detail=err)
+            raise HTTPException(status_code=404, detail=err)
         for table in res:
             tables.append(table)
         table_number = random.choice(tables)
@@ -151,11 +151,12 @@ async def add_reservation(request: AddReservationReq):
         where table_capacity=6 and table_status='UNOCCUPIED';
         '''
         res = db.cursor.execute(query).fetchall()
-        if res == None: 
+        if res == []: 
             err: str = f"No tables are available for your reservation"
-            raise HTTPException(status_code=409, detail=err)
+            raise HTTPException(status_code=404, detail=err)
         for table in res:
-            tables.append(table)
+            tables.append(table[0])
+
         table_number = random.choice(tables)
 
     query: str = '''
@@ -163,7 +164,7 @@ async def add_reservation(request: AddReservationReq):
     set table_status='RESERVED'
     where table_number=?;
     '''
-    db.cursor.execute(query, [table_number[0]])
+    db.cursor.execute(query, [table_number])
     
     query: str = '''
     select ifnull(max(reservation_id),0) from reservations;
@@ -176,8 +177,8 @@ async def add_reservation(request: AddReservationReq):
     '''
     db.cursor.execute(query, (
         max_id + 1,
+        table_number,
         request.number_of_people,
-        table_number[0],
         request.customer_name,
         request.customer_phone,
         request.date_reserved,

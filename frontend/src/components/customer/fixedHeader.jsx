@@ -1,12 +1,12 @@
 import { useState } from "react";
-import {NavLink} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useHeaderBehaviour } from "../../js/customer/headerBehaviour";
 import "../../css/customer/koalaHeader.css";
 import Sidebar from "./sidebar";
 import logo from "../../assets/logo.png";
 
 // Header component
-export default function Header() {
+export default function FixedHeader() {
   const { headerRef, logoRef, isScrolled } = useHeaderBehaviour(logo);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -17,29 +17,29 @@ export default function Header() {
   const navItems = [
     {
       name: "Home",
-      path: "/"
+      path: "/",
     },
     {
       name: "About",
-      path: "about"
+      path: "about",
     },
     {
       name: "Menu",
-      path: "menu"
+      path: "menu",
     },
     {
       name: "Reservation",
-      path: "reservation"
+      path: "reservation",
     },
     {
       name: "Contact",
-      path: "#contact"
-    }
-  ]
+      path: "#contact",
+    },
+  ];
 
   return (
     <>
-      <header ref={headerRef} className={isScrolled ? "header-fixed" : ""}>
+      <header ref={headerRef} className={"header-fixed"}>
         <div className="wrap-header trans-0-4">
           <div className="container h-full px-7">
             <div className="bg-header flex justify-between items-center w-full h-full">

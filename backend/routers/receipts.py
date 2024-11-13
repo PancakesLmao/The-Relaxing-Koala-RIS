@@ -77,7 +77,7 @@ async def check_out(request: CheckOutReq):
     '''
     db.cursor.execute(query, [request.table_number])
 
-    change = request.total_after_tax - request.amount_given
+    change = request.amount_given - request.total_after_tax
     query: str = '''
     select ifnull(max(invoice_id),0) from invoices;
     '''

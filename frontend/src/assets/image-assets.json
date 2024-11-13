@@ -2,5 +2,6 @@
     "image-name": "link to image",
     "twitterIcon": "https://cdn.jsdelivr.net/gh/gauravghongde/social-icons@master/SVG/Black/Twitter_black.svg",
     "facebookIcon": "https://cdn.jsdelivr.net/gh/gauravghongde/social-icons@master/SVG/Black/Facebook_black.svg",
-    "instagramIcon": "https://cdn.jsdelivr.net/gh/gauravghongde/social-icons@master/SVG/Black/Instagram_black.svg"
+    "instagramIcon": "https://cdn.jsdelivr.net/gh/gauravghongde/social-icons@master/SVG/Black/Instagram_black.svg",
+    "reservationBg": ""
 }
