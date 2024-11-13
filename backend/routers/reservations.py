@@ -174,10 +174,11 @@ async def add_reservation(request: AddReservationReq):
     insert into reservations
     values(?,?,?,?,?,?,?,?)
     '''
+    print([table_number])
     db.cursor.execute(query, (
         max_id + 1,
-        request.number_of_people,
         table_number[0],
+        request.number_of_people,
         request.customer_name,
         request.customer_phone,
         request.date_reserved,
