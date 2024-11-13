@@ -16,13 +16,22 @@ export default function Reservation() {
                 }
             ).then(data => {
                 setReservations(data)
+            }).finally(() => {
+                setFetchReserv(false)
             })
         }
     }, [fetchReserv])
 
     function searchReservation(event) {
         event.preventDefault()
-        fetch(`http://127.0.0.1:8000/reservations/get-reservations-from-${selectedOption}/${searchValue.current.value}`).then(
+        if (!searchValue.current.value || searchValue.current.value === ".") {
+            setFetchReserv(true)
+            return
+        }
+
+        let encodedURI = `http://127.0.0.1:8000/reservations/get-reservations-from-${selectedOption}/` + encodeURIComponent(searchValue.current.value)
+        console.log(encodedURI)
+        fetch(encodedURI).then(
             response => {
                 if (response.status === 200) {
                     return response.json()
@@ -37,20 +46,42 @@ export default function Reservation() {
         })
     }
 
-    // function deleteReservation() {
-        
-    // }
+    function deleteReservation(reservation) {
+        fetch(`http://127.0.0.1:8000/reservations/remove-reservation/${reservation.reservation_id}`, {
+            method: 'DELETE'
+        }).then(
+            response => {
+                if (response.status === 200) {
+                    setFetchReserv(true)
+                }
+            }
+        ).catch(() => {
+            setFetchReserv(true)
+        })
+    }
 
     function checkInReservation(reservation) {
+        console.log({
+            table_number: reservation.table_number,
+            customer_name: reservation.customer_name
+        })
         fetch("http://127.0.0.1:8000/tables/add-order", {
             method: 'PATCH',
             headers: {
-                'Context-Type': 'application/json'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                table_number: reservation.table_number,
+                table_number: `${reservation.table_number}`,
                 customer_name: reservation.customer_name
             })
+        }).then(
+            response => {
+                if (response.status === 204) {
+                    deleteReservation(reservation)
+                }
+            }
+        ).catch(() => {
+            setFetchReserv(true)
         })
     }
 
@@ -109,7 +140,8 @@ export default function Reservation() {
                             <p className="w-[4vw] text-center">{reservation.table_number}</p>
                         </div>
                         <div className="flex items-center gap-[2.5vw]">
-                            <i className="ri-close-line leading-[1] text-[2.5vw] p-[0.2vw] bg-red text-white rounded-[0.5vw] cursor-pointer"></i>
+                            <i className="ri-close-line leading-[1] text-[2.5vw] p-[0.2vw] bg-red text-white rounded-[0.5vw] cursor-pointer"
+                                onClick={() => deleteReservation(reservation)}></i>
                             <i className="ri-check-line leading-[1] text-[2.5vw] p-[0.2vw] bg-lime-green text-white rounded-[0.5vw] cursor-pointer" 
                                 onClick={() => checkInReservation(reservation)}></i>
                         </div>            
