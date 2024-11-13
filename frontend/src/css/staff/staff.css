@@ -47,3 +47,12 @@
     background: #243642ff;
     color: #e2f1e7ff
 }
+
+.staff-chevron {
+    transition: transform 0.3s ease;
+}
+
+.staff-chevron-open {
+    transform: rotate(180deg);
+}
+

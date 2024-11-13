@@ -54,8 +54,11 @@ export default function Reservation() {
                 if (response.status === 200) {
                     setFetchReserv(true)
                 }
+
+                return Promise.reject()
             }
-        ).catch(() => {
+        ).catch((response) => {
+            console.log(response)
             setFetchReserv(true)
         })
     }
@@ -78,7 +81,10 @@ export default function Reservation() {
             response => {
                 if (response.status === 204) {
                     deleteReservation(reservation)
+                    return
                 }
+
+                return Promise.reject()
             }
         ).catch(() => {
             setFetchReserv(true)
@@ -100,15 +106,15 @@ export default function Reservation() {
                     <div className="flex gap-[5vw] text-[1.7vw]">
                         <div className="flex items-center gap-[0.3vw]">
                             <input type="radio" name="search-type" value="name" className="w-[1.3vw] h-[1.3vw]" defaultChecked={selectedOption === "name"} onChange={() => setSelectedOption("name")}/>
-                            <label htmlFor="name" onClick={() => setSelectedOption("name")}>Customer's Name</label>
+                            <label htmlFor="name">Customer's Name</label>
                         </div>
                         <div className="flex items-center gap-[0.3vw]">
                             <input type="radio" name="search-type" value="phone" className="w-[1.3vw] h-[1.3vw]" defaultChecked={selectedOption === "phone"} onChange={() => setSelectedOption("phone")}/>
-                            <label htmlFor="phone" onClick={() => setSelectedOption("phone")}>Phone Number</label>
+                            <label htmlFor="phone">Phone Number</label>
                         </div>
                         <div className="flex items-center gap-[0.3vw]">
                             <input type="radio" name="search-type" value="table" className="w-[1.3vw] h-[1.3vw]" defaultChecked={selectedOption === "table"} onChange={() => setSelectedOption("table")}/>
-                            <label htmlFor="table" onClick={() => setSelectedOption("table")}>Table</label>
+                            <label htmlFor="table">Table</label>
                         </div>                        
                     </div>
                 </div>
@@ -130,7 +136,7 @@ export default function Reservation() {
             </div>
             {reservations.map((reservation, index) => (
                 <div key={index} className="bg-antiflash-white w-[100%] flex flex-col border-[0.1vw] border-silver mb-[1.5vw]">
-                    <div className="flex justify-between mx-[2vw] py-[1.3vw]">
+                    <div className="flex justify-between mx-[2vw] py-[1.1vw]">
                         <div className="flex gap-[2.5vw] font-light text-[1.5vw] items-center">
                             <p className="w-[2vw]">{reservation.reservation_id}</p>
                             <p className="w-[18vw]">{reservation.customer_name}</p>
