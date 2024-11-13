@@ -132,7 +132,7 @@ async def add_reservation(request: AddReservationReq):
         err: str = f"You cannot book for more than 6 person at a time"
         raise HTTPException(status_code=409,detail=err)
     tables = []
-    if request.number_of_people == 4:
+    if request.number_of_people <= 4:
         query: str = '''
         select table_number from tables
         where table_status='UNOCCUPIED';
