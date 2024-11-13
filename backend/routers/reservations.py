@@ -60,10 +60,11 @@ async def get_reservation_from_table(table_number: int) -> list[Reservation]:
 
 @router.get("/get-reservations-from-name/{customer_name}",status_code=200)
 async def get_reservation_from_name(customer_name: str) -> list[Reservation]:
+    customer_name = f"%{customer_name}%"
     response: list[Reservation] = []
     query: str = '''
     select * from reservations 
-    where name=?;
+    where name like ?;
     '''
     res = db.cursor.execute(query, [customer_name]).fetchall()
     for reservation in res: 
@@ -81,10 +82,11 @@ async def get_reservation_from_name(customer_name: str) -> list[Reservation]:
 
 @router.get("/get-reservations-from-phone/{customer_phone}",status_code=200)
 async def get_reservation_from_phone(customer_phone: str) -> list[Reservation]:
+    customer_phone = f"%{customer_phone}%"
     response: list[Reservation] = []
     query: str = '''
     select * from reservations 
-    where phone=?;
+    where phone like ?;
     '''
     res = db.cursor.execute(query, [customer_phone]).fetchall()
     for reservation in res: 
