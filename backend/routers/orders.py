@@ -201,6 +201,78 @@ async def add_order_item(request:list[AddOrderItemReq]):
     db.connection.commit()
     return
 
+@router.get("/get-orders-from-date/{order_date}",status_code=200)
+async def get_orders_from_date(order_date: str) -> list[Order]:
+    response : list[Order] = []
+    query: str = '''
+    select * from orders
+    where date_added=?;
+    '''
+    res = db.cursor.execute(query, [order_date]).fetchall()
+    for order in res:
+        response.append(Order(
+            order_id=order[0],
+            name=order[1],
+            status=order[2],
+            order_type=order[3],
+            date_added=order[4],
+            ))
+    return response
+
+@router.get("/get-orders-from-name/{order_name}",status_code=200)
+async def get_orders_from_name(order_name: str) -> list[Order]:
+    response : list[Order] = []
+    query: str = '''
+    select * from orders
+    where name=?;
+    '''
+    res = db.cursor.execute(query, [order_name]).fetchall()
+    for order in res:
+        response.append(Order(
+            order_id=order[0],
+            name=order[1],
+            status=order[2],
+            order_type=order[3],
+            date_added=order[4],
+            ))
+    return response
+
+@router.get("/get-orders-from-status/{order_status}",status_code=200)
+async def get_orders_from_status(order_status: str) -> list[Order]:
+    response : list[Order] = []
+    query: str = '''
+    select * from orders
+    where status=?;
+    '''
+    res = db.cursor.execute(query, [order_status]).fetchall()
+    for order in res:
+        response.append(Order(
+            order_id=order[0],
+            name=order[1],
+            status=order[2],
+            order_type=order[3],
+            date_added=order[4],
+            ))
+    return response
+
+@router.get("/get-orders-from-type/{order_type}",status_code=200)
+async def get_orders_from_type(order_type: str) -> list[Order]:
+    response : list[Order] = []
+    query: str = '''
+    select * from orders
+    where type=?;
+    '''
+    res = db.cursor.execute(query, [order_type]).fetchall()
+    for order in res:
+        response.append(Order(
+            order_id=order[0],
+            name=order[1],
+            status=order[2],
+            order_type=order[3],
+            date_added=order[4],
+            ))
+    return response
+
 @router.get("/get-pending-orders", status_code=200)
 async def get_pending_orders() -> list[Order]:
     response = []
