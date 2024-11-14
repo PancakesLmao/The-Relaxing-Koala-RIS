@@ -25,9 +25,34 @@ export default function OrderHistory() {
         }
     }, [fetchOrder])
 
+    function searchOrder(event) {
+        event.preventDefault()
+        
+        if (!searchValue.current.value || searchValue.current.value === ".") {
+            setFetchOrder(true)
+            return
+        }
+
+        let encodedURI = `http://127.0.0.1:8000/orders/get-orders-from-${selectedOption}/` + encodeURIComponent(searchValue.current.value)
+        console.log(encodedURI)
+        fetch(encodedURI).then(
+            response => {
+                if (response.status === 200) {
+                    return response.json()
+                }
+
+                return Response.reject()
+            }
+        ).then(data => {
+            setOrders(data)
+        }).catch(() => {
+            setOrders([])
+        })
+    }
+
     return (
         <div>
-            <form>
+            <form onSubmit={(event) => searchOrder(event)}>
                 <div className="flex font-medium items-center gap-[5vw] py-[0.6vw]">
                     <p className="text-[1.8vw]">Search By:</p>
                     <div className="flex gap-[5vw] text-[1.7vw]">
