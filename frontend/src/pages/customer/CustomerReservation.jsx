@@ -1,6 +1,6 @@
-import React, {useRef} from "react";
+import React, { useRef } from "react";
 import FixedHeader from "../../components/customer/fixedHeader";
-import handleSubmit from "../../js/customer/handleSubmit"
+import { handleSubmit } from "../../js/customer/handleSubmit";
 import "../../assets/image-assets.json";
 
 export default function CustomerReservation() {
@@ -11,27 +11,39 @@ export default function CustomerReservation() {
   const time = useRef();
   const note = useRef();
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
-    // // debug lines
-    // console.log("fullName:", fullName.current.value);
-    // console.log("phone:", phone.current.value);
-    // console.log("numPeople:", numPeople.current.value);
-    // console.log("date:", date.current.value);
-    // console.log("time:", time.current.value);
-    // console.log("datetime",`${date.current.value}T${time.current.value}`);
-    // console.log("note:", note.current.value);
-  
     const formData = {
       customer_name: fullName.current.value,
       customer_phone: phone.current.value,
       notes: note.current.value,
       number_of_people: parseInt(numPeople.current.value),
-      date_reserved: (`${date.current.value}T${time.current.value}`).toString(),
+      date_reserved: `${date.current.value}T${time.current.value}`.toString(),
     };
-    console.log("Form Data:", formData);
-    handleSubmit(formData);
+    // debug line
+    console.table(formData);
+
+    // handleSubmit(formData).then((response) => {
+    //   if (response &&response.ok) {
+    //     alert("Reservation submitted successfully");
+    //     e.currentTarget.reset();
+    //   } else {
+    //     alert("Failed to submit reservation");
+    //     e.currentTarget.reset();
+    //   }
+    // });
+    try {
+      const response = await handleSubmit(formData);
+      if (response && response.ok) {
+        alert("Reservation submitted successfully");
+        e.currentTarget.reset();
+      } else {
+        alert("Failed to submit reservation");
+      }
+    } catch (error) {
+      console.log("Error: ", error);
+    }
   };
   return (
     <>
@@ -56,7 +68,7 @@ export default function CustomerReservation() {
                   required
                 />
                 <label
-                  for="floating_email"
+                  htmlFor="fullname"
                   class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-[#28472a] peer-focus:dark:text-[#28472a] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                 >
                   Full name
@@ -76,7 +88,7 @@ export default function CustomerReservation() {
                     required
                   />
                   <label
-                    for="phone"
+                    htmlFor="phone"
                     class="peer-focus:font-medium absolute text-sm text-[#28472a] dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#28472a] peer-focus:dark:text-[#28472a] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                   >
                     Contact number
@@ -93,7 +105,7 @@ export default function CustomerReservation() {
                     required
                   />
                   <label
-                    for="num_people"
+                    htmlFor="num_people"
                     class="peer-focus:font-medium absolute text-sm text-[#28472a] dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#28472a] peer-focus:dark:text-[#28472a] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                   >
                     Number of people
@@ -104,7 +116,6 @@ export default function CustomerReservation() {
               <div class="grid md:grid-cols-2 md:gap-6">
                 <div class="relative z-0 w-full mb-5 group">
                   <input
-                    datepicker
                     type="date"
                     ref={date}
                     id="date"
@@ -113,7 +124,7 @@ export default function CustomerReservation() {
                     required
                   />
                   <label
-                    for="date"
+                    htmlFor="date"
                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#28472a] peer-focus:dark:text-[#28472a] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                   >
                     Date
@@ -130,7 +141,7 @@ export default function CustomerReservation() {
                     required
                   />
                   <label
-                    for="time"
+                    htmlFor="time"
                     class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-[#28472a] peer-focus:dark:text-[#28472a] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
                   >
                     Time
