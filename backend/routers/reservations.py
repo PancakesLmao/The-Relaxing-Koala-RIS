@@ -164,6 +164,7 @@ async def add_reservation(request: AddReservationReq):
     set table_status='RESERVED'
     where table_number=?;
     '''
+    print(type(table_number))
     db.cursor.execute(query, [table_number])
     
     query: str = '''

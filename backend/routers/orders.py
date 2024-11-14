@@ -37,6 +37,24 @@ class Order(BaseModel):
     order_type: str
     date_added: str
 
+@router.patch("/change-order-item-status/{order_item_id}",status_code=204)
+async def change_order_item_status(order_item_id: int):
+    query: str = '''
+    select * from order_items
+    where order_item_id=?;
+    '''
+    res = db.cursor.execute(query, [order_item_id]).fetchone()
+    if res == None:
+        err: str = f"This order item does not exist: {order_item_id}"
+        raise HTTPException(status_code=404, detail=err)
+    query: str = '''
+    update order_items
+    set status='COMPLETED'
+    where order_item_id=?;
+    '''
+    db.cursor.execute(query, [order_item_id])
+    db.connection.commit()
+    return
 @router.get("/get-all-orders", status_code=200, response_model=list[Order])
 async def get_orders():
     orders: list[Order] = []
