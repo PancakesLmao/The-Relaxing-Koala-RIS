@@ -12,7 +12,7 @@ export default function StaffLayout() {
                 <Navbar />
             </div>
             
-            <div className="ml-[5.5vw] w-full">
+            <div className="ml-[5.5vw] w-[94.5vw]">
                 <Outlet />
             </div>
         </div>

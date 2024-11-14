@@ -32,6 +32,11 @@ export default function Navbar() {
             name: "Manager",
             icon: "group",
             path: "manager"
+        },
+        {
+            name: "Delivery",
+            icon: "takeout_dining",
+            path: "delivery"
         }
     ]
 
