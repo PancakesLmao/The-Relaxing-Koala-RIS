@@ -163,7 +163,7 @@ async def add_reservation(request: AddReservationReq):
             err: str = f"No tables are available for your reservation"
             raise HTTPException(status_code=404, detail=err)
         for table in res:
-            tables.append(table)
+            tables.append(table[0])
         table_number = random.choice(tables)
 
     if request.number_of_people <= 6: 
