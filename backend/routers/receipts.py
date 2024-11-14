@@ -166,7 +166,7 @@ async def get_receipts_from_date(date: str) -> list[Receipt]:
             ))
     return response
 
-@router.get("/get-receipts-from-date/{payment_method}",status_code=200)
+@router.get("/get-receipts-from-method/{payment_method}",status_code=200)
 async def get_receipts_from_payment_method(payment_method: str) -> list[Receipt]:
     payment_method = f"%{payment_method}%"
     response : list[Receipt] = []
