@@ -219,14 +219,14 @@ async def get_pending_orders() -> list[Order]:
             ))
     return response
 
-@router.get("/get-pending-order-items", status_code=200)
-async def get_pending_order_items() -> list[OrderItem]:
+@router.get("/get-pending-order-items/{order_id}", status_code=200)
+async def get_pending_order_items(order_id: int) -> list[OrderItem]:
     response: list[OrderItem] = []
     query: str ='''
     select * from order_items
-    where status= 'PENDING';
+    where status='PENDING' and order_id=?;
     '''
-    res = db.cursor.execute(query)
+    res = db.cursor.execute(query, [order_id])
     menu_item_ids = []
     for order_item in res:
         menu_item_ids.append(order_item[2])
