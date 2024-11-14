@@ -37,6 +37,24 @@ class Order(BaseModel):
     order_type: str
     date_added: str
 
+@router.patch("/change-order-item-status/{order_item_id}",status_code=204)
+async def change_order_item_status(order_item_id: int):
+    query: str = '''
+    select * from order_items
+    where order_item_id=?;
+    '''
+    res = db.cursor.execute(query, [order_item_id]).fetchone()
+    if res == None:
+        err: str = f"This order item does not exist: {order_item_id}"
+        raise HTTPException(status_code=404, detail=err)
+    query: str = '''
+    update order_items
+    set status='COMPLETED'
+    where order_item_id=?;
+    '''
+    db.cursor.execute(query, [order_item_id])
+    db.connection.commit()
+    return
 @router.get("/get-all-orders", status_code=200, response_model=list[Order])
 async def get_orders():
     orders: list[Order] = []
@@ -183,6 +201,78 @@ async def add_order_item(request:list[AddOrderItemReq]):
     db.connection.commit()
     return
 
+@router.get("/get-orders-from-date/{order_date}",status_code=200)
+async def get_orders_from_date(order_date: str) -> list[Order]:
+    response : list[Order] = []
+    query: str = '''
+    select * from orders
+    where date_added=?;
+    '''
+    res = db.cursor.execute(query, [order_date]).fetchall()
+    for order in res:
+        response.append(Order(
+            order_id=order[0],
+            name=order[1],
+            status=order[2],
+            order_type=order[3],
+            date_added=order[4],
+            ))
+    return response
+
+@router.get("/get-orders-from-name/{order_name}",status_code=200)
+async def get_orders_from_name(order_name: str) -> list[Order]:
+    response : list[Order] = []
+    query: str = '''
+    select * from orders
+    where name=?;
+    '''
+    res = db.cursor.execute(query, [order_name]).fetchall()
+    for order in res:
+        response.append(Order(
+            order_id=order[0],
+            name=order[1],
+            status=order[2],
+            order_type=order[3],
+            date_added=order[4],
+            ))
+    return response
+
+@router.get("/get-orders-from-status/{order_status}",status_code=200)
+async def get_orders_from_status(order_status: str) -> list[Order]:
+    response : list[Order] = []
+    query: str = '''
+    select * from orders
+    where status=?;
+    '''
+    res = db.cursor.execute(query, [order_status]).fetchall()
+    for order in res:
+        response.append(Order(
+            order_id=order[0],
+            name=order[1],
+            status=order[2],
+            order_type=order[3],
+            date_added=order[4],
+            ))
+    return response
+
+@router.get("/get-orders-from-type/{order_type}",status_code=200)
+async def get_orders_from_type(order_type: str) -> list[Order]:
+    response : list[Order] = []
+    query: str = '''
+    select * from orders
+    where type=?;
+    '''
+    res = db.cursor.execute(query, [order_type]).fetchall()
+    for order in res:
+        response.append(Order(
+            order_id=order[0],
+            name=order[1],
+            status=order[2],
+            order_type=order[3],
+            date_added=order[4],
+            ))
+    return response
+
 @router.get("/get-pending-orders", status_code=200)
 async def get_pending_orders() -> list[Order]:
     response = []
@@ -201,14 +291,14 @@ async def get_pending_orders() -> list[Order]:
             ))
     return response
 
-@router.get("/get-pending-order-items", status_code=200)
-async def get_pending_order_items() -> list[OrderItem]:
+@router.get("/get-pending-order-items/{order_id}", status_code=200)
+async def get_pending_order_items(order_id: int) -> list[OrderItem]:
     response: list[OrderItem] = []
     query: str ='''
     select * from order_items
-    where status= 'PENDING';
+    where status='PENDING' and order_id=?;
     '''
-    res = db.cursor.execute(query)
+    res = db.cursor.execute(query, [order_id])
     menu_item_ids = []
     for order_item in res:
         menu_item_ids.append(order_item[2])
