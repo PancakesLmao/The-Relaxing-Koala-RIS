@@ -65,7 +65,7 @@ async def check_out(request: CheckOutReq):
 
     query: str = '''
     update orders
-    set status="COMPLETE"
+    set status="COMPLETED"
     where order_id=?;
     '''
     db.cursor.execute(query, [request.order_id])
