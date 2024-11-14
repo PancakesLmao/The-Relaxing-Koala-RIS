@@ -203,10 +203,11 @@ async def add_order_item(request:list[AddOrderItemReq]):
 
 @router.get("/get-orders-from-date/{order_date}",status_code=200)
 async def get_orders_from_date(order_date: str) -> list[Order]:
+    order_date = f"%{order_date}%"
     response : list[Order] = []
     query: str = '''
     select * from orders
-    where date_added=?;
+    where date_added like ?;
     '''
     res = db.cursor.execute(query, [order_date]).fetchall()
     for order in res:
@@ -221,10 +222,11 @@ async def get_orders_from_date(order_date: str) -> list[Order]:
 
 @router.get("/get-orders-from-name/{order_name}",status_code=200)
 async def get_orders_from_name(order_name: str) -> list[Order]:
+    order_name = f"%{order_name}%"
     response : list[Order] = []
     query: str = '''
     select * from orders
-    where name=?;
+    where name like ?;
     '''
     res = db.cursor.execute(query, [order_name]).fetchall()
     for order in res:
@@ -239,10 +241,11 @@ async def get_orders_from_name(order_name: str) -> list[Order]:
 
 @router.get("/get-orders-from-status/{order_status}",status_code=200)
 async def get_orders_from_status(order_status: str) -> list[Order]:
+    order_status = f"%{order_status}%"
     response : list[Order] = []
     query: str = '''
     select * from orders
-    where status=?;
+    where status like ?
     '''
     res = db.cursor.execute(query, [order_status]).fetchall()
     for order in res:
@@ -257,10 +260,11 @@ async def get_orders_from_status(order_status: str) -> list[Order]:
 
 @router.get("/get-orders-from-type/{order_type}",status_code=200)
 async def get_orders_from_type(order_type: str) -> list[Order]:
+    order_type = f"%{order_type}%"
     response : list[Order] = []
     query: str = '''
     select * from orders
-    where type=?;
+    where type like ?
     '''
     res = db.cursor.execute(query, [order_type]).fetchall()
     for order in res:

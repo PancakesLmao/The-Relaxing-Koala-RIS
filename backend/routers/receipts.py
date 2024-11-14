@@ -120,3 +120,71 @@ async def get_all_receipts() -> list[Receipt]:
             date_added=receipt[8],
             ))
     return response
+
+@router.get("/get-receipts-from-name/{name}",status_code=200)
+async def get_receipts_from_name(name: str) -> list[Receipt]:
+    name = f"%{name}%"
+    response : list[Receipt] = []
+    query: str = '''
+    select receipts.* from orders inner join receipts on orders.name like ?
+    '''
+    res = db.cursor.execute(query, [name]).fetchall()
+    for receipts in res:
+        response.append(Receipt(
+            receipt_id=receipts[0],
+            order_id=receipts[1],
+            invoice_id=receipts[2],
+            total=receipts[3],
+            total_after_tax=receipts[4],
+            payment_method=receipts[5],
+            amount_given=receipts[6],
+            change=receipts[7],
+            date_added=receipts[8],
+            ))
+    return response
+
+@router.get("/get-receipts-from-date/{date}",status_code=200)
+async def get_receipts_from_date(date: str) -> list[Receipt]:
+    date = f"%{date}%"
+    response : list[Receipt] = []
+    query: str = '''
+    select * from receipts
+    where date_added like ?
+    '''
+    res = db.cursor.execute(query, [date]).fetchall()
+    for receipts in res:
+        response.append(Receipt(
+            receipt_id=receipts[0],
+            order_id=receipts[1],
+            invoice_id=receipts[2],
+            total=receipts[3],
+            total_after_tax=receipts[4],
+            payment_method=receipts[5],
+            amount_given=receipts[6],
+            change=receipts[7],
+            date_added=receipts[8],
+            ))
+    return response
+
+@router.get("/get-receipts-from-date/{payment_method}",status_code=200)
+async def get_receipts_from_payment_method(payment_method: str) -> list[Receipt]:
+    payment_method = f"%{payment_method}%"
+    response : list[Receipt] = []
+    query: str = '''
+    select * from receipts
+    where payment_method like ?
+    '''
+    res = db.cursor.execute(query, [payment_method]).fetchall()
+    for receipts in res:
+        response.append(Receipt(
+            receipt_id=receipts[0],
+            order_id=receipts[1],
+            invoice_id=receipts[2],
+            total=receipts[3],
+            total_after_tax=receipts[4],
+            payment_method=receipts[5],
+            amount_given=receipts[6],
+            change=receipts[7],
+            date_added=receipts[8],
+            ))
+    return response
