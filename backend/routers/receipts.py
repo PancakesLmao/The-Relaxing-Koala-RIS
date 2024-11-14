@@ -126,7 +126,7 @@ async def get_receipts_from_name(name: str) -> list[Receipt]:
     name = f"%{name}%"
     response : list[Receipt] = []
     query: str = '''
-    select receipts.* from orders inner join receipts on orders.name like ?
+    select receipts.* from orders inner join receipts on receipts.order_id=orders.order_id and orders.name like ?
     '''
     res = db.cursor.execute(query, [name]).fetchall()
     for receipts in res:
