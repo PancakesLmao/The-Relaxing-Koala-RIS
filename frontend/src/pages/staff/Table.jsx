@@ -4,6 +4,7 @@ import SingleTableOccupied from "../../components/staff/SingleTableOccupied";
 import TableSvg from "../../assets/table.svg";
 import OccupiedTableSvg from "../../assets/table-occupied.svg";
 import ReservedTableSvg from "../../assets/table-reserved.svg"
+import SingleTableReserved from "../../components/staff/SingleTableReserved";
 
 export default function Table() {
     const [tables, setTables] = useState([]);
@@ -99,15 +100,12 @@ export default function Table() {
                             }
                             
                             if (selectedTable.table_status === "OCCUPIED") {
-                                return (
-                                    <SingleTableOccupied selectedTable={selectedTable} setSelectedTable={setSelectedTable} setFetchTables={setFetchTables}/>
-                                ) 
+                                return <SingleTableOccupied selectedTable={selectedTable} setSelectedTable={setSelectedTable} setFetchTables={setFetchTables}/>
+ 
                             }
 
-                            if (selectedTable.table_status === "OCCUPIED") {
-                                return (
-                                    <div>Hj</div>
-                                ) 
+                            if (selectedTable.table_status === "RESERVED") {
+                                return <SingleTableReserved selectedTable={selectedTable} setFetchTables={setFetchTables} setSelectedTable={setSelectedTable}/> 
                             } 
                         })()
                     }

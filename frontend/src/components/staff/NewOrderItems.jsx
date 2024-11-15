@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNewOrderContext } from "../../context/customer/NewOrderContext";
+import { useNewOrderContext } from "../../context/staff/NewOrderContext";
 import EditOrderItem from "./EditOrderItem";
 
 

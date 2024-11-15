@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import DisplayMenu from "../../components/staff/DisplayMenu";
 import SingleTableOrder from "../../components/staff/SingleTableOrder";
-import NewOrdersContextProvider from "../../context/customer/NewOrderContext";
+import NewOrdersContextProvider from "../../context/staff/NewOrderContext";
 import TableList from "../../components/staff/TableList";
 
 

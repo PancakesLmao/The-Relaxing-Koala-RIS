@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import { formatDateTime } from "../../js/staff/Methods";
 
 export default function Reservation() {
     const [selectedOption, setSelectedOption] = useState("name");
@@ -142,7 +143,7 @@ export default function Reservation() {
                             <p className="w-[18vw]">{reservation.customer_name}</p>
                             <p className="w-[9vw]">{reservation.customer_phone}</p>
                             <p className="w-[6vw] text-center">{reservation.number_of_people}</p>
-                            <p className="w-[15vw]">{reservation.date_reserved}</p>
+                            <p className="w-[15vw]">{formatDateTime(reservation.date_reserved)}</p>
                             <p className="w-[4vw] text-center">{reservation.table_number}</p>
                         </div>
                         <div className="flex items-center gap-[2.5vw]">
