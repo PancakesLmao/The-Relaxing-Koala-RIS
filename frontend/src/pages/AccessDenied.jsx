@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 
-export default function Error() {
+export default function AccessDenied() {
   return (
     <>
       <div className="bg-[#b0dbb2] flex flex-col items-center justify-center min-h-screen">
@@ -21,11 +21,11 @@ export default function Error() {
               />
             </svg>
             <h5 class="ml-3 text-slate-800 text-xl font-semibold">
-              Error 404
+              Access Denied
             </h5>
           </div>
           <p class="block text-slate-600 leading-normal font-light mb-4">
-            The requested page could not be found
+            You do not have permission to enter this page
           </p>
           <div>
             <NavLink
