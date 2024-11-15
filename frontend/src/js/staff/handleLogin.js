@@ -15,10 +15,9 @@ export async function handleLogin(formData) {
     if (response.ok) {
       const data = await response.json();
 
-      const role = data.role;
-      setCookie(role, "manager", 1);
-      console.log("logged as:", role);
-      
+      setCookie("role", data.role, 1);
+      setCookie("name", `${data.first_name} ${data.last_name}`)
+           
       return data;
     } else {
       console.error("Failed to login");
