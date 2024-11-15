@@ -1,23 +1,43 @@
-// src/js/customer/handleSubmit.js
-export default function handleSubmit(formData) {
-  console.log(formData);
+const FORMAPI = "http://127.0.0.1:8000/reservations/add-reservation";
 
-  // Example of sending form data to the server using fetch
-  fetch("http://127.0.0.1:8000/reservations/add-reservation", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(formData),
-  })
-    .then((response) => {
-      if (response.ok) {
-        console.log("Reservation submitted successfully");
-      } else {
-        console.error("Failed to submit reservation");
-      }
-    })
-    .catch((error) => {
-      console.error("Error submitting reservation:", error);
+export async function handleSubmit(formData) {
+  try {
+    const response = await fetch(FORMAPI, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
     });
+
+    if (response.ok) {
+      console.log("Reservation submitted successfully");
+      return response;
+    } else {
+      console.error("Failed to submit reservation");
+      return response;
+    }
+  } catch (error) {
+    console.error("Error: ", error);
+  }
+
+  // return fetch(FORMAPI, {
+  //   method: "PUT",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify(formData),
+  // })
+  //   .then((response) => {
+  //     if (response.ok) {
+  //       console.log("Reservation submitted successfully");
+  //       return response;
+  //     } else {
+  //       console.error("Failed to submit reservation");
+  //       return response;
+  //     }
+  //   })
+  //   .catch((error) => {
+  //     console.error("Error: ", error);
+  //   });
 }
