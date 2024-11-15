@@ -24,8 +24,6 @@ export default function Login() {
     e.preventDefault();
     setError(null);
     setLoading(true);
-    //   debug line
-    console.table(formData);
 
     const result = await handleLogin(formData);
     if (result) {

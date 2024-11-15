@@ -13,7 +13,6 @@ export function getCookie(cookie_name) {
     if (cookie !== undefined) {
         return cookie.split("=")[1];
     }
-
     return ""
 }
 

@@ -19,7 +19,7 @@ export default function Dashboard() {
           </button>
         </div>
         <div>
-          <canvas ref={chartRef} id="myChart" width={400} height={200}></canvas>
+          <canvas ref={chartRef} id="myChart" width={300} height={150}></canvas>
         </div>
       </div>
     </>
