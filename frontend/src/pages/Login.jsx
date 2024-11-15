@@ -23,7 +23,7 @@ export default function Login() {
   const onSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-      setLoading(true);
+    setLoading(true);
     //   debug line
     console.table(formData);
 
@@ -122,7 +122,7 @@ export default function Login() {
                   type="submit"
                   className="w-auto text-white focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-[#558d57] hover:bg-[#28472a] focus:ring-[#28472a] transition ease-in-out delay-70"
                 >
-                  Submit
+                  Login
                 </button>
               ) : (
                 <button
