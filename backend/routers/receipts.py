@@ -17,6 +17,72 @@ class Receipt(BaseModel):
     change: float
     date_added: str
 
+class OnlineCheckOutReq(BaseModel):
+    invoice_id: int
+    order_id: int
+    total: float
+    total_after_tax: float
+    payment_method: str
+    amount_given: float
+@router.put("/online-check-out", status_code=204, responses={404:{},409:{}})
+async def online_check_out(request: OnlineCheckOutReq):
+    query: str = '''
+    select * from invoices
+    where invoice_id =?;
+    '''
+    res = db.cursor.execute(query, [request.invoice_id]).fetchone()
+    if res == None:
+        err: str = f"This invoice does not exists: {request.invoice_id}"
+        raise HTTPException(status_code=404, detail=err)
+
+    query: str ='''
+    select * from receipts
+    where invoice_id=?;
+    '''
+    res = db.cursor.execute(query, [request.invoice_id]).fetchone()
+    if res != None:
+        err: str = f"This receipt already exists"
+        raise HTTPException(status_code=409, detail=err)
+    
+    query: str ='''
+    select * from orders
+    where order_id=? AND status='PENDING';
+    '''
+    res = db.cursor.execute(query, [request.order_id]).fetchone()
+    if res == None:
+        err: str = f"This Order is already done"
+        raise HTTPException(status_code=409, detail=err)
+
+    query: str = '''
+    update orders
+    set status="COMPLETED"
+    where order_id=?;
+    '''
+    db.cursor.execute(query, [request.order_id])
+
+    change = request.amount_given - request.total_after_tax
+    query: str = '''
+    select ifnull(max(invoice_id),0) from invoices;
+    '''
+    max_id = db.cursor.execute(query).fetchone()[0]
+    query: str = '''
+    insert into receipts
+    values(?,?,?,?,?,?,?,?,?);
+    '''
+    db.cursor.execute(query, (
+        max_id + 1,
+        request.order_id,
+        request.invoice_id,
+        request.total,
+        request.total_after_tax,
+        request.payment_method,
+        request.amount_given,
+        change,
+        datetime.datetime.now().isoformat()
+        ))
+    db.connection.commit()
+    return
+
 class CheckOutReq(BaseModel):
     invoice_id: int
     order_id: int
