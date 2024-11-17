@@ -8,6 +8,8 @@ import {
   RouterProvider
 } from 'react-router-dom'
 import './index.css';
+import { verifyUser } from './js/staff/Methods';
+
 
 //import layout
 import CustomerLayout from './layout/customer/CustomerLayout';
@@ -31,6 +33,7 @@ import Home from './pages/customer/Home';
 import CustomerMenu from './pages/customer/CustomerMenu';
 import CustomerReservation from './pages/customer/CustomerReservation';
 import Login from './pages/Login';
+import Delivery from './pages/staff/Delivery';
 
 
 const router = createBrowserRouter(
@@ -66,6 +69,8 @@ const router = createBrowserRouter(
           <Route path="menu-management" element={<MenuManage />} />
           <Route path="staff-management" element={<StaffManage />} />
         </Route>
+
+        <Route path="delivery" element={<Delivery />} />
       </Route>
 
       <Route path="*" element={<Error />}></Route>

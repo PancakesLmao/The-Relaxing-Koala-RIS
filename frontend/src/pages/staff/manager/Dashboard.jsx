@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import ChartData from "../../../components/manager/chartData";
 
+
 export default function Dashboard() {
   const chartRef = useRef(null);
 

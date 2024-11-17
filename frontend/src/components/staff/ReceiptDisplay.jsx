@@ -79,7 +79,7 @@ export default function ReceiptDisplay({receipt}) {
                     <div className="w-[100%] h-[0.2vw] bg-gunmetal"></div>
                     <div className="flex justify-between text-[1.4vw] mt-[0.7vw]">
                         <p className="">Grand Total:</p>
-                        <p className="font-normal">{receipt.total + Number((receipt.total * 0.1).toFixed(2))} A$</p>
+                        <p className="font-normal">{Number((receipt.total + Number((receipt.total * 0.1).toFixed(2))).toFixed(2))} A$</p>
                     </div>
                 </div>
             </div>          

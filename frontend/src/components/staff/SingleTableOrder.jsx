@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import MenuOrderList from "./MenuOrderList";
 import NewOrderItems from "./NewOrderItems";
-import { useNewOrderContext } from "../../context/customer/NewOrderContext";
+import { useNewOrderContext } from "../../context/staff/NewOrderContext";
 
 
 export default function SingleTableOrder({selectedTable, setSelectedTable}) {

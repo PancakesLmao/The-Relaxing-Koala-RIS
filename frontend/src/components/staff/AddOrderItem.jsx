@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { useNewOrderContext } from "../../context/customer/NewOrderContext"
+import { useNewOrderContext } from "../../context/staff/NewOrderContext"
 
 
 export default function AddOrderItem({selectedMenuItem, setAddItemModal}) {
