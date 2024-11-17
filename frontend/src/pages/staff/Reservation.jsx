@@ -65,10 +65,6 @@ export default function Reservation() {
     }
 
     function checkInReservation(reservation) {
-        console.log({
-            table_number: reservation.table_number,
-            customer_name: reservation.customer_name
-        })
         fetch("http://127.0.0.1:8000/tables/add-order", {
             method: 'PATCH',
             headers: {

@@ -12,7 +12,7 @@ export default function StaffLayout() {
         const cookie = getCookie("name")
     
         if (!cookie) {
-            kick("./staff-login")
+            kick("../staff-login")
         }
     }, [kick])
     return (
