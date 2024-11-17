@@ -18,19 +18,22 @@ staffs: list[Staff] = []
 
 def init_menu_items():
     users = {
-            'Le Phan' : sha256('phantom'.encode('utf-8')).hexdigest(),
-            'Quoc An': sha256('possay'.encode('utf-8')).hexdigest(),
-            'Bui Thao': sha256('woah'.encode('utf-8')).hexdigest(),
-            'Nguyen Thinh': sha256('cringe uwu'.encode('utf-8')).hexdigest(),
+            'Le Phan' : [sha256('phantom'.encode('utf-8')).hexdigest(), "admin"],
+            'Quoc An': [sha256('possay'.encode('utf-8')).hexdigest(), "admin"],
+            'Bui Thao': [sha256('woah'.encode('utf-8')).hexdigest(), "admin"],
+            'Nguyen Thinh': [sha256('cringe uwu'.encode('utf-8')).hexdigest(), "admin"],
+            'Hatsune Miku': [sha256('popipo'.encode('utf-8')).hexdigest(), "chef"],
+            'Nelo Angelo': [sha256('POWER'.encode('utf-8')).hexdigest(), "cashier"],
+            'Minto Fantome': [sha256('doki_love:D'.encode('utf-8')).hexdigest(), "waiter"],
             }
     if staffs == []:
-        for name,password in users.items():
+        for name,data in users.items():
             staff = Staff(
                     staff_id=list(users).index(name),
                     first_name=name.split(" ")[0],
                     last_name=name.split(" ")[1],
-                    password_hash=password,
-                    role="admin",
+                    password_hash=data[0],
+                    role=data[1],
                     date_added=datetime.datetime.now().isoformat()
                     )
             staffs.append(staff)

@@ -37,6 +37,36 @@ class Order(BaseModel):
     order_type: str
     date_added: str
 
+class CountRes(BaseModel):
+    menu_item_id: int 
+    name: str
+    count: int
+@router.get("/get-menu-item-count-from-date/{date}")
+async def get_menu_item_count_from_date(date: str) -> list[CountRes]:
+    date = f"%{date}%"
+    response: list[CountRes] = []
+    
+    items: dict[int, CountRes] = {}
+    query: str = '''
+    select order_items.menu_item_id, menu_items.item_name, order_items.quantity from order_items
+    inner join menu_items on order_items.menu_item_id=menu_items.menu_item_id and order_items.date_added like ?;
+    '''
+    res = db.cursor.execute(query, [date]).fetchall()
+    if res == []:
+        return []
+    for item in res:
+        if item[0] in items:
+            items[item[0]].count += item[2]
+        else:
+            items[item[0]] = CountRes(
+                    menu_item_id=item[0],
+                    name=item[1],
+                    count=item[2],
+                    )
+    for key in items:
+        response.append(items[key])
+    return response
+
 @router.patch("/change-order-item-status/{order_item_id}",status_code=204)
 async def change_order_item_status(order_item_id: int):
     query: str = '''
