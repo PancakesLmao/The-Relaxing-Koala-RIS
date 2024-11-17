@@ -8,6 +8,8 @@ import {
   RouterProvider
 } from 'react-router-dom'
 import './index.css';
+import { verifyUser } from './js/staff/Methods';
+
 
 //import layout
 import CustomerLayout from './layout/customer/CustomerLayout';

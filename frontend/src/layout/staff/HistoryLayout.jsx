@@ -1,4 +1,6 @@
 import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { getCookie } from "../../js/staff/Methods";
+
 
 export default function HistoryLayout() {
     const location = useLocation().pathname.split('/').reverse()[0]
@@ -22,7 +24,13 @@ export default function HistoryLayout() {
                         </button>
                     </NavLink>
                 </div>
-                <i className="material-symbols-outlined text-[4vw] act-circ">account_circle</i>
+                <div className="flex gap-[1vw] items-center">
+                    <div className="flex flex-col font-medium text-right text-[1.2vw]">
+                        <p>{getCookie("name")}</p>
+                        <p>{getCookie("role")}</p>
+                    </div>
+                    <i className="material-symbols-outlined text-[4vw] act-circ">account_circle</i>
+                </div> 
             </div>
             <div className="h-[0.2vw] w-[100%] bg-gunmetal"></div>
             <Outlet />

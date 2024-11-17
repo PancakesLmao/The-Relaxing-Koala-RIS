@@ -32,3 +32,17 @@ export function formatDateTime(date_time) {
 
     return `${date} ${time}`
 }
+
+// export function verifyUser() {
+//     const cookie = getCookie("name")
+//     const role = getCookie("role")
+
+//     if (!cookie) {
+//         redirect("../../")
+//         return
+//     }
+
+//     if (!role) {
+//         redirect("../staff-login")
+//     }
+// }

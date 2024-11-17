@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import { formatDateTime } from "../../js/staff/Methods";
+import { formatDateTime, getCookie } from "../../js/staff/Methods";
 
 export default function Reservation() {
     const [selectedOption, setSelectedOption] = useState("name");
@@ -98,7 +98,13 @@ export default function Reservation() {
                 <div className="text-[2.4vw] font-medium pt-[0.6vw]">
                     Reservation
                 </div>
-                <i className="material-symbols-outlined text-[4vw] act-circ">account_circle</i>
+                <div className="flex gap-[1vw] items-center">
+                    <div className="flex flex-col font-medium text-right text-[1.2vw]">
+                        <p>{getCookie("name")}</p>
+                        <p>{getCookie("role")}</p>
+                    </div>
+                    <i className="material-symbols-outlined text-[4vw] act-circ">account_circle</i>
+                </div> 
             </div>
             <div className="h-[0.2vw] w-[100%] bg-gunmetal"></div>
             <form onSubmit={(event) => searchReservation(event)}>

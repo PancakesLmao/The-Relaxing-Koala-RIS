@@ -1,9 +1,20 @@
 import "../../css/staff/staff.css"
-import { Outlet } from "react-router-dom";
-import { setCookie, getCookie, deleteCookie } from "../../js/staff/Methods.js";
+import { Outlet, useNavigate } from "react-router-dom";
+
 import Navbar from "../../components/staff/Navbar";
+import { useEffect } from "react";
+import { getCookie } from "../../js/staff/Methods";
+
 
 export default function StaffLayout() {
+    const kick = useNavigate()
+    useEffect(() => {
+        const cookie = getCookie("name")
+    
+        if (!cookie) {
+            kick("./staff-login")
+        }
+    }, [kick])
     return (
         <div className="flex flex-row">
             <div className="fixed h-[100vh] w-[5.5vw] bg-gunmetal">
