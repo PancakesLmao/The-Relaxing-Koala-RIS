@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { printDoc } from "../../../js/staff/printDoc.js";
 import Skeleton from "react-loading-skeleton";
 import { Doughnut } from "react-chartjs-2";
-import { pieData } from "./chartData.js";
+import { pieData, pieOptions } from "./chartData.js";
 import loadPieChart from "./chartData.js";
 // ---------TEST SKELETON------------
 import StatisticsData from "./testLoadData.js";
@@ -11,6 +11,7 @@ import StatisticsData from "./testLoadData.js";
 export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [TableData, setTableData] = useState([]);
+  const [chartData, setChartData] = useState(pieData);
 
   // Simulate data fetching
   useEffect(() => {
@@ -21,9 +22,15 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const tableData = await loadPieChart();
-      console.log(tableData);
-      setTableData(tableData);
+      const pieChartData = await loadPieChart();
+      setTableData(
+        pieChartData.labels.map((name, index) => ({
+          menu_item_id: index + 1,
+          name,
+          count: pieChartData.datasets[0].data[index],
+        }))
+      );
+      setChartData(pieChartData);
     };
     fetchData();
   }, []);
@@ -32,7 +39,10 @@ export default function Dashboard() {
     <>
       <div className="py-3">
         <div className="flex justify-end">
-          <button className="text-white focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 bg-green-800 hover:bg-gunmetal focus:ring-green-800 transition-all" onClick={printDoc}>
+          <button
+            className="text-white focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 bg-green-800 hover:bg-gunmetal focus:ring-green-800 transition-all"
+            onClick={printDoc}
+          >
             Print today's report
           </button>
         </div>
@@ -80,9 +90,10 @@ export default function Dashboard() {
         </div>
         {/* Table & Pie chart */}
         <div className="w-full px-6 py-6 mx-auto">
-          <div className="flex flex-row">
-            <div className="basis-3/5 overflow-x-auto">
+          <div className="flex sm:flex-col justify-center lg:flex-row">
+            <div className="w-full lg:basis-3/5 px-3">
               <table className="w-full text-sm text-left rtl:text-right ">
+                <caption className="text-lg font-semibold text-dark mb-4">Today's Most Popular Dishes</caption>
                 <thead className="uppercase bg-gray-300">
                   <tr>
                     <th scope="col" className="px-6 py-3">
@@ -112,10 +123,11 @@ export default function Dashboard() {
                 </tbody>
               </table>
             </div>
-            <div className="basis-2/5">
-              <Doughnut data={pieData}/>
+            <div className="w-full lg:basis-2/5 px-3 mt-6 lg:mt-0 sm:px-6">
+              <Doughnut data={chartData} options={pieOptions} />
             </div>
           </div>
+          {/*  */}
         </div>
       </div>
     </>
