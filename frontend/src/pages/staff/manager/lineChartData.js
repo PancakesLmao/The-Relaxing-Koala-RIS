@@ -75,7 +75,7 @@ export default async function loadLineChart() {
 
     const datasets = [
       {
-        label: "Dataset",
+        label: "Total Earning over days (dollars)",
         data: [totalPreviousEarning, totalYesterdaysEarning, totalCurrentEarning],
         borderColor: "rgb(255, 99, 132)",
         backgroundColor: "rgba(255, 99, 132, 0.5)",
@@ -100,11 +100,11 @@ export const lineOptions = {
   responsive: true,
   plugins: {
     legend: {
-      position: "top",
+      position: "bottom",
     },
     title: {
       display: true,
-      text: "Line Chart of total earning from the last 2 days",
+      text: "Line Chart of total earning from the last 3 days",
     },
   },
 };

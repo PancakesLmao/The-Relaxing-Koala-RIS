@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { printDoc } from "../../../js/staff/printDoc.js";
 import Skeleton from "react-loading-skeleton";
 import { Doughnut, Line } from "react-chartjs-2";
@@ -14,6 +14,8 @@ export default function Dashboard() {
   const [chartData, setChartData] = useState(pieData);
   const [TabData, setTabData] = useState([]);
   const [lineChartData, setLineChartData] = useState(lineData);
+  const username = "Manager";
+  const lineChartRef = useRef(null);
 
   useEffect(() => {
     setTimeout(() => {
@@ -56,7 +58,9 @@ export default function Dashboard() {
         <div className="flex justify-end">
           <button
             className="text-white focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 bg-green-800 hover:bg-gunmetal focus:ring-green-800 transition-all"
-            onClick={printDoc}
+            onClick={() =>
+              printDoc(username, TableData, TabData, lineChartRef)
+            }
           >
             Print today's report
           </button>
@@ -146,8 +150,13 @@ export default function Dashboard() {
         </div>
         {/* Line Chart */}
         <div className="line-chart w-[70rem] px-6 py-6 mx-auto">
-          <div className="flex flex-wrap -mx-3">
-            <Line data={lineChartData} options={lineOptions} />
+          <div className="flex flex-col -mx-3">
+            <p className="text-center text-lg font-semibold text-dark mb-4">
+              Overview Restaurant's Earning over days
+            </p>
+            <div ref={lineChartRef}>
+              <Line data={lineChartData} options={lineOptions} />
+            </div>
           </div>
         </div>
       </div>
