@@ -5,13 +5,14 @@ import { Doughnut } from "react-chartjs-2";
 import { pieData, pieOptions } from "./chartData.js";
 import loadPieChart from "./chartData.js";
 // ---------TEST SKELETON------------
-import StatisticsData from "./testLoadData.js";
+import loadTabData from "./tabData.js";
 // ----------------------------------
 
 export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [TableData, setTableData] = useState([]);
   const [chartData, setChartData] = useState(pieData);
+  const [TabData, setTabData] = useState([]);
 
   // Simulate data fetching
   useEffect(() => {
@@ -31,6 +32,9 @@ export default function Dashboard() {
         }))
       );
       setChartData(pieChartData);
+      // 
+      const tabData = await loadTabData();
+      setTabData(tabData)
     };
     fetchData();
   }, []);
@@ -49,7 +53,7 @@ export default function Dashboard() {
         {/* Wrapper */}
         <div className="w-full px-6 py-6 mx-auto">
           <div className="flex flex-wrap -mx-3">
-            {StatisticsData.map((item, index) => (
+            {TabData.map((item, index) => (
               <div
                 key={index}
                 className="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4"

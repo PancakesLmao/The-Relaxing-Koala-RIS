@@ -35,7 +35,7 @@ export default async function loadPieChart() {
       labels,
       datasets: [
         {
-          label: "Today's Popular Dishes",
+          label: "Number of Dishes",
           data: counts,
           backgroundColor: backgroundColors,
           hoverOffset: 4,
