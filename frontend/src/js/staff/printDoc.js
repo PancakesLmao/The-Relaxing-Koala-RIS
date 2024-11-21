@@ -35,7 +35,7 @@ export const printDoc = async (username, tableData, tabData, lineChartRef) => {
     );
   });
   // Add table data
-  doc.text("Most popular dishes of the day:", 10, 40);
+  doc.text("Overview Restaurant's Earning over days", 10, 40);
   tableData.forEach((item, index) => {
     doc.text(
       `${item.menu_item_id}. ${item.name}: ${item.count}`,
