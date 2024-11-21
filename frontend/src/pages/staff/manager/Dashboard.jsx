@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { printDoc } from "../../../js/staff/printDoc.js";
 import Skeleton from "react-loading-skeleton";
-import { Doughnut } from "react-chartjs-2";
+import { Doughnut, Line } from "react-chartjs-2";
 import { pieData, pieOptions } from "./chartData.js";
 import loadPieChart from "./chartData.js";
-// ---------TEST SKELETON------------
 import loadTabData from "./tabData.js";
-// ----------------------------------
+import loadLineChart from "./lineChartData.js";
+import { lineData, lineOptions } from "./lineChartData.js";
 
 export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [TableData, setTableData] = useState([]);
   const [chartData, setChartData] = useState(pieData);
   const [TabData, setTabData] = useState([]);
+  const [lineChartData, setLineChartData] = useState(lineData);
 
-  // Simulate data fetching
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
@@ -23,19 +23,30 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const pieChartData = await loadPieChart();
-      setTableData(
-        pieChartData.labels.map((name, index) => ({
-          menu_item_id: index + 1,
-          name,
-          count: pieChartData.datasets[0].data[index],
-        }))
-      );
-      setChartData(pieChartData);
-      // 
-      const tabData = await loadTabData();
-      setTabData(tabData)
+      try {
+        // Load Pie Chart Data
+        const pieChartData = await loadPieChart();
+        setTableData(
+          pieChartData.labels.map((name, index) => ({
+            menu_item_id: index + 1,
+            name,
+            count: pieChartData.datasets[0].data[index],
+          }))
+        );
+        setChartData(pieChartData);
+
+        // Load Line Chart Data
+        const lineChartData = await loadLineChart();
+        setLineChartData(lineChartData);
+
+        // Load Tab Data
+        const tabData = await loadTabData();
+        setTabData(tabData);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
     };
+
     fetchData();
   }, []);
 
@@ -51,7 +62,7 @@ export default function Dashboard() {
           </button>
         </div>
         {/* Wrapper */}
-        <div className="w-full px-6 py-6 mx-auto">
+        <div className="tab-data w-full px-6 py-6 mx-auto">
           <div className="flex flex-wrap -mx-3">
             {TabData.map((item, index) => (
               <div
@@ -89,15 +100,16 @@ export default function Dashboard() {
                 </div>
               </div>
             ))}
-            {/* End of statistics */}
           </div>
         </div>
         {/* Table & Pie chart */}
-        <div className="w-full px-6 py-6 mx-auto">
+        <div className="chart-table w-full px-6 py-6 mx-auto">
           <div className="flex sm:flex-col justify-center lg:flex-row">
             <div className="w-full lg:basis-3/5 px-3">
-              <table className="w-full text-sm text-left rtl:text-right ">
-                <caption className="text-lg font-semibold text-dark mb-4">Today's Most Popular Dishes</caption>
+              <table className="w-full text-sm text-left rtl:text-right">
+                <caption className="text-lg font-semibold text-dark mb-4">
+                  Today's Most Popular Dishes
+                </caption>
                 <thead className="uppercase bg-gray-300">
                   <tr>
                     <th scope="col" className="px-6 py-3">
@@ -131,7 +143,12 @@ export default function Dashboard() {
               <Doughnut data={chartData} options={pieOptions} />
             </div>
           </div>
-          {/*  */}
+        </div>
+        {/* Line Chart */}
+        <div className="line-chart w-[70rem] px-6 py-6 mx-auto">
+          <div className="flex flex-wrap -mx-3">
+            <Line data={lineChartData} options={lineOptions} />
+          </div>
         </div>
       </div>
     </>
