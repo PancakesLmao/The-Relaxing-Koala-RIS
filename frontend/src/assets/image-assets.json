@@ -3,5 +3,8 @@
     "twitterIcon": "https://cdn.jsdelivr.net/gh/gauravghongde/social-icons@master/SVG/Black/Twitter_black.svg",
     "facebookIcon": "https://cdn.jsdelivr.net/gh/gauravghongde/social-icons@master/SVG/Black/Facebook_black.svg",
     "instagramIcon": "https://cdn.jsdelivr.net/gh/gauravghongde/social-icons@master/SVG/Black/Instagram_black.svg",
-    "reservationBg": ""
+    "reservationBg": "https://cdn.jsdelivr.net/gh/RantoPhantom/swe30003-asm3-gr-4/frontend/src/assets/image_13686634.png",
+    "logo": "https://cdn.jsdelivr.net/gh/RantoPhantom/swe30003-asm3-gr-4/frontend/src/assets/logo.png",
+    "homeVideo": "https://cdn.jsdelivr.net/gh/RantoPhantom/swe30003-asm3-gr-4/frontend/src/assets/3769033-hd_1920_1080.mp4",
+    "wild_forest_mushroom_arancini": "https://cdn.jsdelivr.net/gh/RantoPhantom/swe30003-asm3-gr-4/frontend/src/assets/wild_forest_mushroom_arancini.jpg"
 }
