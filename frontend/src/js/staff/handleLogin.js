@@ -14,10 +14,10 @@ export async function handleLogin(formData) {
 
     if (response.ok) {
       const data = await response.json();
-      console.log("Login successful");
 
-      const token = data.token;
-        setCookie("authToken", token, 1);
+      setCookie("role", data.role, 1);
+      setCookie("name", `${data.first_name} ${data.last_name}`)
+           
       return data;
     } else {
       console.error("Failed to login");

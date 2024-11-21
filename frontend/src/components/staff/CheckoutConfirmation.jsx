@@ -12,7 +12,7 @@ export default function CheckoutConfirmation({selectedTable, invoice, setCheckou
             invoice_id: invoice.invoice_id,
             order_id: invoice.order_id,
             total: invoice.total,
-            total_after_tax: invoice.total + Number((invoice.total * 0.1).toFixed(2)),
+            total_after_tax: Number((invoice.total + Number((invoice.total * 0.1).toFixed(2))).toFixed(2)),
             payment_method: paymentMethod.current.value,
             amount_given: Number(amount.current.value),
             table_number: selectedTable.table_number
@@ -55,7 +55,7 @@ export default function CheckoutConfirmation({selectedTable, invoice, setCheckou
                     <form className="flex flex-col">
                         <label className="text-[1.2vw]" htmlFor="payment">Payment Method</label>
                         <select className="w-[17vw] border-[0.2vw] border-gray-400 font-normal" name="payment" id="payment" ref={paymentMethod}>
-                            <option value="cash">Cash</option>
+                            <option value="Cash">Cash</option>
                             <option value="Credit Card">Credit Card</option>
                         </select>
                         <label className="mt-[1.5vw] text-[1.2vw]"htmlFor="amount">Paid Amount:</label>
