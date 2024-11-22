@@ -41,9 +41,16 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
           {navItems.map((item, index) => (
             <li key={index} className="text-center mb-5">
               {item.path.startsWith("/") ? (
-                <NavLink to={item.path}>{item.name}</NavLink>
+                <NavLink
+                  to={item.path}
+                  style={{ fontFamily: "Mireille-Regular" }}
+                >
+                  {item.name}
+                </NavLink>
               ) : (
-                <a href={item.path}>{item.name}</a>
+                <a href={item.path} style={{ fontFamily: "Mireille-Regular" }}>
+                  {item.name}
+                </a>
               )}
             </li>
           ))}
@@ -52,6 +59,7 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
               <button
                 type="button"
                 class="text-white bg-green-700 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-[#4a614c] dark:hover:bg-[#28472a] dark:focus:ring-[#28472a] trans-0-4"
+                style={{ fontFamily: "Mireille-Regular" }}
               >
                 Make Reservation
               </button>

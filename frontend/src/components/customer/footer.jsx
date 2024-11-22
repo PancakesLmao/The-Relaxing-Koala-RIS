@@ -12,7 +12,10 @@ export default function Footer() {
         <div class="mx-auto w-full max-w-screen-xl">
           <div class="grid gap-8 px-4 py-6 lg:py-8 md:grid-cols-2 sm:grid-cols-1">
             <div>
-              <h2 class="font-semibold text-gray-900 uppercase dark:text-white text-2xl">
+              <h2
+                class="font-semibold text-gray-900 uppercase dark:text-white text-2xl"
+                style={{ fontFamily: "Mireille-Bold" }}
+              >
                 Contact us
               </h2>
               <hr className="my-2 w-[250px]"></hr>
