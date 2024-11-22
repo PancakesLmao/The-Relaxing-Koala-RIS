@@ -56,9 +56,19 @@ export default function FixedHeader() {
                     {navItems.map((item, index) => (
                       <li key={index} className="trans-0-4">
                         {item.path.startsWith("/") ? (
-                          <NavLink to={item.path}>{item.name}</NavLink>
+                          <NavLink
+                            to={item.path}
+                            style={{ fontFamily: "Mireille-Regular" }}
+                          >
+                            {item.name}
+                          </NavLink>
                         ) : (
-                          <a href={item.path}>{item.name}</a>
+                          <a
+                            href={item.path}
+                            style={{ fontFamily: "Mireille-Regular" }}
+                          >
+                            {item.name}
+                          </a>
                         )}
                       </li>
                     ))}
