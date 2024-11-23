@@ -80,6 +80,27 @@ async def add_online_order(request: AddOnlineOrderReq):
     await add_order_item(orders)
     return
 
+class RemoveOrderReq(BaseModel):
+    order_id: int
+@router.delete("/remove-order", status_code=204, responses={404: {}})
+async def remove_order(request: RemoveOrderReq):
+    order_id = request.order_id
+    query: str = '''
+    select * from orders where order_id=?;
+    '''
+    res = db.cursor.execute(query, [order_id]).fetchone()
+    if res == None:
+        err: str = f'This order does not exists: {order_id}'
+        raise HTTPException(status_code=404, detail=err)
+
+    query: str = '''
+    delete from order_items
+    where order_item_id=?
+    '''
+    db.cursor.execute(query, [order_id])
+    db.connection.commit()
+    
+    return
 @router.get("/get-menu-item-count-from-date/{date}")
 async def get_menu_item_count_from_date(date: str) -> list[CountRes]:
     date = f"%{date}%"
