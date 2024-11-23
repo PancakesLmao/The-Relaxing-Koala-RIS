@@ -68,11 +68,26 @@ async def add_online_order(request: AddOnlineOrderReq):
         'ONLINE',
         datetime.datetime.now().isoformat()
         ))
+
+    order_id = max_id + 1
+    checks.check_if_invoice_exists(str(order_id))
+    
+    query: str = '''
+    select ifnull(max(invoice_id),0) from invoices;
+    '''
+    max_invoice_id = db.cursor.execute(query).fetchone()[0]
+
+    query: str ='''
+    insert into invoices(invoice_id, order_id, date_added)
+    values(?,?,?);
+    '''
+    db.cursor.execute(query, (max_invoice_id + 1, order_id, datetime.datetime.now().isoformat()))
+    
     db.connection.commit()
     orders = []
     for order_item in request.orders:
         orders.append(AddOrderItemReq(
-            order_id=max_id + 1,
+            order_id=order_id,
             menu_item_id=order_item.menu_item_id,
             quantity=order_item.quantity,
             note=order_item.note
