@@ -113,6 +113,18 @@ async def remove_order(request: RemoveOrderReq):
     where order_id=?
     '''
     db.cursor.execute(query, [order_id])
+
+    query: str = '''
+    delete from order_items
+    where order_id=?
+    '''
+    db.cursor.execute(query, [order_id])
+
+    query: str = '''
+    delete from invoices
+    where order_id=?
+    '''
+    db.cursor.execute(query, [order_id])
     db.connection.commit()
     
     return
