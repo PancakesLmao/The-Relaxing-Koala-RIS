@@ -94,8 +94,8 @@ async def remove_order(request: RemoveOrderReq):
         raise HTTPException(status_code=404, detail=err)
 
     query: str = '''
-    delete from order_items
-    where order_item_id=?
+    delete from orders
+    where order_id=?
     '''
     db.cursor.execute(query, [order_id])
     db.connection.commit()
