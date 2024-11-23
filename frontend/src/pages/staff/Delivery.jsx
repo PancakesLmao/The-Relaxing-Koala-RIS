@@ -1,13 +1,13 @@
-import { Outlet } from "react-router-dom";
 import { getCookie } from "../../js/staff/Methods";
 
-export default function ManagerLayout() {
-  
+
+export default function Delivery() {
+ 
     return (
         <div className="pl-[1vw]">
             <div className="flex pt-[1.2vw] justify-between h-[10vh]">
                 <div className="text-[2.4vw] font-medium pt-[0.6vw]">
-                    Manager
+                    Delivery Order Management
                 </div>
                 <div className="flex gap-[1vw] items-center">
                     <div className="flex flex-col font-medium text-right text-[1.2vw]">
@@ -17,9 +17,7 @@ export default function ManagerLayout() {
                     <i className="material-symbols-outlined text-[4vw] act-circ">account_circle</i>
                 </div> 
             </div>
-            <div className="h-[0.2vw] w-[100%] bg-gunmetal"></div>
-            <Outlet />
-                    
+            <div className="h-[0.2vw] w-[100%] bg-gunmetal"></div>                    
         </div>
     )
 }

@@ -2,6 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  @font-face {
+    font-family: 'Mireille-Bold';
+    src: url(./fonts/Demo-Mireille/Fontspring-DEMO-mireille-black.otf);
+  }
+  @font-face {
+    font-family: 'Mireille-Regular';
+    src: url(./fonts/Demo-Mireille/Fontspring-DEMO-mireille-regular.otf);
+  }
+  @font-face {
+    font-family: 'Mireille-Thin';
+    src: url(./fonts/Demo-Mireille/Fontspring-DEMO-mireille-thin.otf);
+  }
+  @font-face {
+    font-family: 'Mireille-Monoline';
+    src: url(./fonts/Demo-Mireille/Fontspring-DEMO-mireille-monoline.otf);
+  }
+  @font-face {
+    font-family: 'Mireille-Light';
+    src: url(./fonts/Demo-Mireille/Fontspring-DEMO-mireille-light.otf);
+  }
+}
 
 body {
   margin: 0;

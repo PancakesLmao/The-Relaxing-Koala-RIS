@@ -3,8 +3,12 @@ import SingleTableUnoccupied from "../../components/staff/SingleTableUnoccupied"
 import SingleTableOccupied from "../../components/staff/SingleTableOccupied";
 import TableSvg from "../../assets/table.svg";
 import OccupiedTableSvg from "../../assets/table-occupied.svg";
+import ReservedTableSvg from "../../assets/table-reserved.svg"
+import SingleTableReserved from "../../components/staff/SingleTableReserved";
+import { getCookie } from "../../js/staff/Methods";
 
 export default function Table() {
+
     const [tables, setTables] = useState([]);
     const [fetchTables, setFetchTables] = useState(true);
     const [selectedTable, setSelectedTable] = useState(null);
@@ -39,7 +43,13 @@ export default function Table() {
                 <div className="text-[2.4vw] font-medium pt-[0.6vw]">
                     Table Management
                 </div>
-                <i className="material-symbols-outlined text-[4vw] act-circ">account_circle</i>
+                <div className="flex gap-[1vw] items-center">
+                    <div className="flex flex-col font-medium text-right text-[1.2vw]">
+                        <p>{getCookie("name")}</p>
+                        <p>{getCookie("role")}</p>
+                    </div>
+                    <i className="material-symbols-outlined text-[4vw] act-circ">account_circle</i>
+                </div>  
             </div>
             <div className="h-[0.2vw] w-[100%] bg-gunmetal"></div>
             <div className="flex">
@@ -68,6 +78,16 @@ export default function Table() {
                                                 </div>
                                             </div>
                                         )
+                                    } else if (table.table_status === "RESERVED") {
+                                        return (
+                                            <div className={`cursor-pointer ${selectedTable !== null ? selectedTable.table_number === table.table_number ? "border-[0.2vw] border-solid border-gunmetal" : "" : ""}`} onClick={() => setSelectedTable(table)}>
+                                                <img src={ReservedTableSvg} alt="table" className="rotate-90 w-[11vw] h-[11vw]" onClick={() => setSelectedTable(table)}></img>
+                                                <div className="absolute font-medium text-white text-[1.3vw] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+                                                    <p>Table {table.table_number}</p>
+                                                    <p>{table.table_capacity} Seats</p>
+                                                </div>
+                                            </div>
+                                        )
                                     }
                                 })()                           
                             }
@@ -88,10 +108,13 @@ export default function Table() {
                             }
                             
                             if (selectedTable.table_status === "OCCUPIED") {
-                                return (
-                                    <SingleTableOccupied selectedTable={selectedTable} setSelectedTable={setSelectedTable} setFetchTables={setFetchTables}/>
-                                ) 
+                                return <SingleTableOccupied selectedTable={selectedTable} setSelectedTable={setSelectedTable} setFetchTables={setFetchTables}/>
+ 
                             }
+
+                            if (selectedTable.table_status === "RESERVED") {
+                                return <SingleTableReserved selectedTable={selectedTable} setFetchTables={setFetchTables} setSelectedTable={setSelectedTable}/> 
+                            } 
                         })()
                     }
                                 

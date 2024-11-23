@@ -1,7 +1,9 @@
 import logo from "../../assets/staff-logo.png"
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
+import { deleteCookie } from "../../js/staff/Methods"
 
 export default function Navbar() {
+    const kick = useNavigate()
     const navItems = [
         {
             name: "Table",
@@ -32,6 +34,11 @@ export default function Navbar() {
             name: "Manager",
             icon: "group",
             path: "manager"
+        },
+        {
+            name: "Delivery",
+            icon: "takeout_dining",
+            path: "delivery"
         }
     ]
 
@@ -51,7 +58,12 @@ export default function Navbar() {
                     ))}
                 </div>
             </div> 
-            <i className="material-symbols-outlined mx-auto text-[3vw] mb-1 text-honeydew bottom-0 cursor-pointer">logout</i>
+            <i className="material-symbols-outlined mx-auto text-[3vw] mb-1 text-honeydew bottom-0 cursor-pointer"
+                onClick={() => {
+                    deleteCookie("name")
+                    deleteCookie("role")
+                    kick("../staff-login")
+                }}>logout</i>
 
                 
         </nav>

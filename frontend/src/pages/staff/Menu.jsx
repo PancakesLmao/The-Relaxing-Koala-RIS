@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import DisplayMenu from "../../components/staff/DisplayMenu";
 import SingleTableOrder from "../../components/staff/SingleTableOrder";
-import NewOrdersContextProvider from "../../context/customer/NewOrderContext";
+import NewOrdersContextProvider from "../../context/staff/NewOrderContext";
 import TableList from "../../components/staff/TableList";
+import { getCookie } from "../../js/staff/Methods";
 
 
 export default function Menu() {
+
     const [tables, setTables] = useState([])
     const [selectedTable, setSelectedTable] = useState(null)
 
@@ -31,7 +33,13 @@ export default function Menu() {
                 <div className="text-[2.4vw] font-medium pt-[0.6vw]">
                     Menu/Order
                 </div>
-                <i className="material-symbols-outlined text-[4vw] act-circ">account_circle</i>
+                <div className="flex gap-[1vw] items-center">
+                    <div className="flex flex-col font-medium text-right text-[1.2vw]">
+                        <p>{getCookie("name")}</p>
+                        <p>{getCookie("role")}</p>
+                    </div>
+                    <i className="material-symbols-outlined text-[4vw] act-circ">account_circle</i>
+                </div> 
             </div>
             <div className="h-[0.2vw] w-[100%] bg-gunmetal"></div>
             <div className="flex">
