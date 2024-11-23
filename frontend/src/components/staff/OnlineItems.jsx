@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 
 
-export default function OnlineItems({order}) {
+export default function OnlineItems({order, setFetchOnlineOrders}) {
     const [orderItems, setOrderItems] = useState([])
     const [receipt, setReceipt] = useState({})
     useEffect(() => {
@@ -20,27 +20,54 @@ export default function OnlineItems({order}) {
         })
     }, [order.order_id])
 
-    // function checkOutOnline() {
-    //     fetch(`http://127.0.0.1:8000/invoices/get-single-invoice/${order.order_id}`).then(
-    //         response => {
-    //             if (response.status === 200) {
-    //                 return response.json()
-    //             }
-    //         }
-    //     ).then(data => {
-    //         fetch('http://127.0.0.1:8000/receipts/check-out', {
-    //             method: 'PUT',
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify({
-    //                 invoice_id: data.invoice_id,
-    //                 order_id:,
-                    
-    //             })
-    //         })
-    //     })
-    // }
+    function checkOutOnline() {
+        fetch(`http://127.0.0.1:8000/invoices/get-single-invoice/${order.order_id}`).then(
+            response => {
+                if (response.status === 200) {
+                    return response.json()
+                }
+            }
+        ).then(data => {
+            console.log({
+                invoice_id: data.invoice_id,
+                order_id: order.order_id,
+                total: receipt.total,
+                total_after_tax: receipt.total_after_tax,
+                payment_method: "Credit Card",
+                amount_given: receipt.total_after_tax     
+            })
+            fetch('http://127.0.0.1:8000/receipts/online-check-out', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    invoice_id: data.invoice_id,
+                    order_id: order.order_id,
+                    total: receipt.total,
+                    total_after_tax: receipt.total_after_tax,
+                    payment_method: "Credit Card",
+                    amount_given: receipt.total_after_tax     
+                })
+            })
+        }).finally(() => {
+            setFetchOnlineOrders(true)
+        })
+    }
+
+    function removeOrder() {
+        fetch('http://127.0.0.1:8000/orders/remove-order', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                order_id: order.order_id
+            })
+        }).then(() => {
+            setFetchOnlineOrders(true)
+        })
+    }
 
     function receiptCalculation(orders) {
         let receipt = {
@@ -75,7 +102,7 @@ export default function OnlineItems({order}) {
             <div className="w-[100%] h-[0.1vw] bg-gunmetal"></div>
             <div className="flex flex-col">
                 {orderItems.map((item, index) => (
-                    <div index={index}>
+                    <div key={index}>
                         <div className="flex justify-between items-center font-normal text-[1.3vw] py-[0.5vw]">
                             <div className="flex items-center gap-[2.5vw]">
                                 <p className="w-[15vw]">{item.name}</p>
@@ -112,8 +139,8 @@ export default function OnlineItems({order}) {
                 </div>
             )}
             <div className="flex flex-row-reverse mt-[3vw] mr-[1vw] gap-[2vw] font-medium text-[1.3vw] text-white">
-                <button className="bg-lime-green py-[0.4vw] w-[9vw] rounded-[0.7vw]">Check-out</button>
-                <button className="bg-red py-[0.4vw] w-[9vw] rounded-[0.7vw]">Delete</button>
+                <button className="bg-lime-green py-[0.4vw] w-[9vw] rounded-[0.7vw]" onClick={() => checkOutOnline()}>Check-out</button>
+                <button className="bg-red py-[0.4vw] w-[9vw] rounded-[0.7vw]" onClick={() => removeOrder()}>Delete</button>
             </div>       
             
         </div>

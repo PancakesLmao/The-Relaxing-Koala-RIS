@@ -1,11 +1,12 @@
 import { useState } from "react"
 import { formatDateTime } from "../../js/staff/Methods"
-import OrderItemsHistory from "./OrderItemsHistory"
 import OnlineItems from "./OnlineItems"
 
 
-export default function SingleOnlineOrder({order}) {
+export default function SingleOnlineOrder({order, setFetchOnlineOrders}) {
     const [open, setOpen] = useState(false)
+
+
     return (
         <div className="bg-antiflash-white w-[100%] flex flex-col border-[0.1vw] border-silver mb-[1.5vw] cursor-pointer"
             onClick={() => setOpen(!open)}>
@@ -21,7 +22,7 @@ export default function SingleOnlineOrder({order}) {
             </div>
             {open && (
                 <div className="bg-silver flex items-center w-[100%] p-[0.7vw]">
-                    <OnlineItems order={order}/>
+                    <OnlineItems order={order} setFetchOnlineOrders={setFetchOnlineOrders}/>
 
                 </div>
             )}  

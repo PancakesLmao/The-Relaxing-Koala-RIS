@@ -5,7 +5,7 @@ import SingleOnlineOrder from "../../components/staff/SingleOnlineOrder";
 
 export default function Delivery() {
     const [onlineOrders, setOnlineOrders] = useState([])
-    const [fetchOnlineOrders, setFetchOnlineOrders] = useState([])
+    const [fetchOnlineOrders, setFetchOnlineOrders] = useState(true)
 
     useEffect(() => {
         if (fetchOnlineOrders) {
@@ -16,8 +16,8 @@ export default function Delivery() {
                     }
                 }
             ).then(data => {
-                console.log(data)
-                setOnlineOrders(data)
+                const filteredData = data.filter((item) => item.status === "PENDING")
+                setOnlineOrders(filteredData)
             }).finally(() => {
                 setFetchOnlineOrders(false)
             })
@@ -47,7 +47,7 @@ export default function Delivery() {
                 <p className="w-[14vw]">Delivery ID</p>
             </div>    
             {onlineOrders.map((order, index) => (
-                <SingleOnlineOrder key={index} order={order} />
+                <SingleOnlineOrder key={index} order={order} setFetchOnlineOrders={setFetchOnlineOrders}/>
             ))}                
         </div>
     )

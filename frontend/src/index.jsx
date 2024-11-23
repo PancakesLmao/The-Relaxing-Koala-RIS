@@ -34,6 +34,7 @@ import CustomerMenu from './pages/customer/CustomerMenu';
 import CustomerReservation from './pages/customer/CustomerReservation';
 import Login from './pages/Login';
 import Delivery from './pages/staff/Delivery';
+import OnlineSimulator from './pages/OnlineSimulator';
 
 
 const router = createBrowserRouter(
@@ -72,6 +73,8 @@ const router = createBrowserRouter(
 
         <Route path="delivery" element={<Delivery />} />
       </Route>
+
+      <Route path="online-sim" element={<OnlineSimulator />} />
 
       <Route path="*" element={<Error />}></Route>
     </Route>
