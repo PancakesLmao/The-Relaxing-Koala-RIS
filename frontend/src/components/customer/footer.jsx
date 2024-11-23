@@ -52,7 +52,7 @@ export default function Footer() {
       {/* Copy-right Layer */}
       <div class="copy-right px-4 py-6 md:flex md:items-center md:justify-between">
         <span class="text-sm text-gray-500 dark:text-gray-300 sm:text-center">
-          © 2024 <a href="#">Koala Team</a>. All Rights Reserved.
+          © 2024 <a href="#">Koala Team</a>. SWE3003 - Software Architecture & Design.
         </span>
         <div class="flex mt-4 sm:justify-center md:mt-0 space-x-5 rtl:space-x-reverse">
           <a

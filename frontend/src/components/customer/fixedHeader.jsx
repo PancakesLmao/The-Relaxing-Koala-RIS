@@ -21,11 +21,11 @@ export default function FixedHeader() {
     },
     {
       name: "About",
-      path: "about",
+      path: "/",
     },
     {
       name: "Menu",
-      path: "menu",
+      path: "#menu",
     },
     {
       name: "Reservation",

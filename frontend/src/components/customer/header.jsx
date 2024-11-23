@@ -21,11 +21,11 @@ export default function Header() {
     },
     {
       name: "About",
-      path: "about"
+      path: "#about"
     },
     {
       name: "Menu",
-      path: "menu"
+      path: "#menu"
     },
     {
       name: "Reservation",
