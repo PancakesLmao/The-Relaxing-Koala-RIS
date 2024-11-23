@@ -62,7 +62,7 @@ async def online_check_out(request: OnlineCheckOutReq):
 
     change = request.amount_given - request.total_after_tax
     query: str = '''
-    select ifnull(max(invoice_id),0) from invoices;
+    select ifnull(max(receipt_id),0) from receipts;
     '''
     max_id = db.cursor.execute(query).fetchone()[0]
     query: str = '''
