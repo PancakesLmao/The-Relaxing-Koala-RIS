@@ -77,7 +77,7 @@ async def add_online_order(request: AddOnlineOrderReq):
             quantity=order_item.quantity,
             note=order_item.note
             ))
-        await add_order_item(orders)
+    await add_order_item(orders)
     return
 
 @router.get("/get-menu-item-count-from-date/{date}")
