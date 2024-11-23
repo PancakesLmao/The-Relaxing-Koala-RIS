@@ -41,6 +41,45 @@ class CountRes(BaseModel):
     menu_item_id: int 
     name: str
     count: int
+
+class OnlineOrderItem(BaseModel):
+    menu_item_id: int
+    quantity: int
+    note: str
+class AddOnlineOrderReq(BaseModel):
+    customer_name : str
+    orders: list[OnlineOrderItem]
+
+@router.put("/add-online-order", status_code=204)
+async def add_online_order(request: AddOnlineOrderReq):
+    query: str = '''
+    select ifnull(max(order_id), 0) from orders;
+    '''
+    max_id: int = db.cursor.execute(query).fetchone()[0]
+
+    query: str = '''
+    insert into orders
+    values(?,?,?,?,?);
+    '''
+    db.cursor.execute(query, (
+        max_id + 1,
+        request.customer_name,
+        'PENDING',
+        'ONLINE',
+        datetime.datetime.now().isoformat()
+        ))
+    db.connection.commit()
+    orders = []
+    for order_item in request.orders:
+        orders.append(AddOrderItemReq(
+            order_id=max_id + 1,
+            menu_item_id=order_item.menu_item_id,
+            quantity=order_item.quantity,
+            note=order_item.note
+            ))
+        await add_order_item(orders)
+    return
+
 @router.get("/get-menu-item-count-from-date/{date}")
 async def get_menu_item_count_from_date(date: str) -> list[CountRes]:
     date = f"%{date}%"

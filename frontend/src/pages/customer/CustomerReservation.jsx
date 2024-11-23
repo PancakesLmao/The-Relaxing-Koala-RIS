@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import FixedHeader from "../../components/customer/fixedHeader";
 import { handleSubmit } from "../../js/customer/handleSubmit";
-import "../../assets/image-assets.json";
+import assets from "../../assets/image-assets.json"
 
 export default function CustomerReservation() {
   const fullName = useRef();
@@ -38,12 +38,18 @@ export default function CustomerReservation() {
   };
   return (
     <>
-      <div className="" style={{ backgroundImage: `url("")` }}>
+      <div
+        className="bg-no-repeat bg-cover"
+        style={{ backgroundImage: `url(${assets.reservationBg})` }}
+      >
         <FixedHeader />
         <div className="min-h-[105vh] flex items-center justify-center pt-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-md">
             <div>
-              <h2 className="mt-6 text-center text-3xl font-extrabold text-[#28472a]">
+              <h2
+                className="mt-6 text-center text-3xl font-extrabold text-[#28472a]"
+                style={{ fontFamily: "Mireille-Bold" }}
+              >
                 Make a Reservation
               </h2>
             </div>
@@ -154,6 +160,7 @@ export default function CustomerReservation() {
               <button
                 type="submit"
                 class="text-white bg-[#558d57] hover:bg-[#28472a] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-[#558d57] dark:hover:bg-[#28472a] dark:focus:ring-blue-800 transition ease-in-out delay-70"
+                style={{ fontFamily: "Mireille-Regular" }}
               >
                 Submit
               </button>
