@@ -1,9 +1,26 @@
+import { useState, useEffect } from "react";
 import "../../css/customer/koalaHome.css";
 import { NavLink } from "react-router-dom";
 import assets from "../../assets/image-assets.json";
 import Header from "../../components/customer/header";
+import loadFeatured from "../../js/customer/loadFeatured";
 //
 export default function Home() {
+  const [featuredData, setFeaturedData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await loadFeatured();
+        setFeaturedData(data);
+        console.log(data);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <>
       <Header />
@@ -98,29 +115,10 @@ export default function Home() {
             Featured Dishes
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Local Black Mussels",
-                description:
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                src: assets.local_black_mussels,
-              },
-              {
-                name: "Grape Spritz",
-                description:
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                src: assets.grape_spritz,
-              },
-              {
-                name: "Wagyu Steak",
-                description:
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                src: assets["250gm_rump"],
-              },
-            ].map((item, index) => (
+            {featuredData.map((item, index) => (
               <div key={index} className="bg-white p-6 rounded-lg">
                 <img
-                  src={`${item.src}`}
+                  src={assets[`${item.image_name}`]}
                   alt={item.name}
                   width={300}
                   height={200}
@@ -132,7 +130,10 @@ export default function Home() {
                 >
                   {item.name}
                 </h3>
-                <p className="text-gray-500">{item.description}</p>
+                <p className="text-gray-500">
+                  Neque porro quisquam est qui dolorem ipsum quia dolor sit
+                  amet, consectetur, adipisci velit...
+                </p>
               </div>
             ))}
           </div>
@@ -150,7 +151,7 @@ export default function Home() {
         </div>
         {/* Testimonials */}
         <div className="grid gap-0 md:grid-cols-2 lg:gap-0 mx-7">
-          <div className="mb-12 md:mb-0 px-[10rem]">
+          <div className="mb-12 md:mb-0 lg:px-[10rem] md:px-[5rem]">
             <div className="mb-6 flex justify-start">
               <img
                 src="https://tecdn.b-cdn.net/img/Photos/Avatars/img%20(1).jpg"
@@ -251,7 +252,7 @@ export default function Home() {
             </ul>
           </div>
 
-          <div className="mb-12 md:mb-0 px-[10rem]">
+          <div className="mb-12 md:mb-0 lg:px-[10rem] md:px-[5rem]">
             <div className="mb-6 flex justify-start">
               <img
                 src="https://tecdn.b-cdn.net/img/Photos/Avatars/img%20(9).jpg"
