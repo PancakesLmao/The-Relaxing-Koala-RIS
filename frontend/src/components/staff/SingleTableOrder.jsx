@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import MenuOrderList from "./MenuOrderList";
 import NewOrderItems from "./NewOrderItems";
 import { useNewOrderContext } from "../../context/staff/NewOrderContext";
+import { formatDateTime } from "../../js/staff/Methods";
 
 
 export default function SingleTableOrder({selectedTable, setSelectedTable}) {
@@ -72,7 +73,7 @@ export default function SingleTableOrder({selectedTable, setSelectedTable}) {
                         <div className="mt-[0.7vw] text-[1.3vw] text-left">
                             <div>Order ID: {orderInfor.order_id}</div>
                             <div>Name: {orderInfor.name}</div>
-                            <div>Date: {orderInfor.date_added}</div>
+                            <div>Date: {orderInfor.date_added ? formatDateTime(orderInfor.date_added) : ""}</div>
                         </div>
                         <div className="my-[1vw]">
                             <MenuOrderList orderId={orderInfor.order_id} fetchOrderItems={fetchOrderItems} setFetchOrderItems={setFetchOrderItems}/>

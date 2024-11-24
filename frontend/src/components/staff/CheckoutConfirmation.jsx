@@ -1,5 +1,6 @@
 import { useRef } from "react"
 import ReceiptDisplay from "./ReceiptDisplay"
+import { formatDateTime } from "../../js/staff/Methods"
 
 export default function CheckoutConfirmation({selectedTable, invoice, setCheckoutModal, setSelectedTable, setFetchTables}) {
     const paymentMethod = useRef("")
@@ -46,7 +47,7 @@ export default function CheckoutConfirmation({selectedTable, invoice, setCheckou
                     <p>Invoice ID: {invoice.invoice_id}</p>
                     <p>Order ID: {invoice.order_id}</p>
                     <p>Customer's Name: {invoice.customer_name}</p>
-                    <p>Date: {invoice.date_added}</p>
+                    <p>Date: {invoice.date_added ? formatDateTime(invoice.date_added) : ""}</p>
                 </div>
                 <div className="mt-[1vw]">
                     <ReceiptDisplay receipt={invoice}/>
