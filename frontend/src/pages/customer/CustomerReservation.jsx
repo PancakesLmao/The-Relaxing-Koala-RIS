@@ -10,6 +10,7 @@ export default function CustomerReservation() {
   const date = useRef();
   const time = useRef();
   const note = useRef();
+  const formRef = useRef();
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -28,7 +29,7 @@ export default function CustomerReservation() {
       const response = await handleSubmit(formData);
       if (response && response.ok) {
         alert("Reservation submitted successfully");
-        e.currentTarget.reset();
+        formRef.current.reset();
       } else {
         alert("Failed to submit reservation");
       }
@@ -53,7 +54,7 @@ export default function CustomerReservation() {
                 Make a Reservation
               </h2>
             </div>
-            <form onSubmit={onSubmit} class="max-w-md mx-auto bg-white">
+            <form ref={formRef} onSubmit={onSubmit} class="max-w-md mx-auto bg-white">
               {/* Full name */}
               <div class="relative z-0 w-full mb-5 group">
                 <input

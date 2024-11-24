@@ -95,7 +95,7 @@ export default function Home() {
             className="text-white text-3xl font-semibold text-center mb-8"
             style={{ fontFamily: "Mireille-Bold" }}
           >
-            Featured Menu Items
+            Featured Dishes
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
@@ -115,7 +115,7 @@ export default function Home() {
                 name: "Wagyu Steak",
                 description:
                   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                src: assets.steak,
+                src: assets["250gm_rump"],
               },
             ].map((item, index) => (
               <div key={index} className="bg-white p-6 rounded-lg">
@@ -142,19 +142,19 @@ export default function Home() {
       <div className="container py-16">
         <div className="mb-[50px] max-xl:mb-[30px] relative mx-auto text-center">
           <h2
-            className="font-semibold text-gray-900 uppercase text-dark text-4xl pt-3"
+            className="font-semibold text-gray-900 uppercase text-dark text-4xl py-4"
             style={{ fontFamily: "Mireille-Bold" }}
           >
-            Customer Comment
+            What Our Customer Say
           </h2>
         </div>
         {/* Testimonials */}
-        <div className="grid gap-6 text-center md:grid-cols-2 lg:gap-8 mx-7">
-          <div className="mb-12 md:mb-0 px-[5rem]">
-            <div className="mb-6 flex justify-center">
+        <div className="grid gap-0 md:grid-cols-2 lg:gap-0 mx-7">
+          <div className="mb-12 md:mb-0 px-[10rem]">
+            <div className="mb-6 flex justify-start">
               <img
                 src="https://tecdn.b-cdn.net/img/Photos/Avatars/img%20(1).jpg"
-                className="w-32 rounded-full shadow-lg dark:shadow-black/30"
+                className="w-32 rounded-full"
               />
             </div>
             <h5 className="mb-4 text-xl font-semibold">Maria Smantha</h5>
@@ -174,7 +174,7 @@ export default function Home() {
               Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod eos
               id officiis hic tenetur quae quaerat ad velit ab hic tenetur.
             </p>
-            <ul className="mb-0 flex items-center justify-center">
+            <ul className="mb-0 flex items-center justify-start">
               <li>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -251,11 +251,11 @@ export default function Home() {
             </ul>
           </div>
 
-          <div className="mb-12 md:mb-0 px-[5rem]">
-            <div className="mb-6 flex justify-center">
+          <div className="mb-12 md:mb-0 px-[10rem]">
+            <div className="mb-6 flex justify-start">
               <img
                 src="https://tecdn.b-cdn.net/img/Photos/Avatars/img%20(9).jpg"
-                className="w-32 rounded-full shadow-lg dark:shadow-black/30"
+                className="w-32 rounded-full"
               />
             </div>
             <h5 className="mb-4 text-xl font-semibold">John Smith</h5>
@@ -275,7 +275,7 @@ export default function Home() {
               At vero eos et accusamus et iusto odio dignissimos ducimus qui
               blanditiis praesentium voluptatum deleniti atque corrupti.
             </p>
-            <ul className="mb-0 flex items-center justify-center">
+            <ul className="mb-0 flex items-center justify-start">
               <li>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -353,6 +353,7 @@ export default function Home() {
         </div>
       </div>
       {/* Reservation */}
+      <div className="before:content-[' '] pt-[5vh]" id="reservation"></div>
       <div
         className="flex justify-center items-center h-[40vh] bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${assets.reservationBg})` }}

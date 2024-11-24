@@ -29,7 +29,7 @@ export default function Header() {
     },
     {
       name: "Reservation",
-      path: "reservation"
+      path: "#reservation"
     },
     {
       name: "Contact",

@@ -1,55 +1,57 @@
+import { useState, useEffect } from "react";
 import FixedHeader from "../../components/customer/fixedHeader";
-import { NavLink } from "react-router-dom";
+import assets from "../../assets/image-assets.json"
 export default function CustomerMenu() {
+  const MENU_API = "http://127.0.0.1:8000/menus/get-menu-items";
+  const [menuItems, setMenuItems] = useState([]);
+  useEffect(() => {
+    fetch(MENU_API)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        }
+        return Promise.reject();
+      })
+      .then((data) => {
+        setMenuItems(data);
+        console.log(menuItems);
+      })
+      .catch((response) => {
+        response.json().then((data) => console.error(data));
+      });
+  }, []);
   return (
     <>
-      <div className="bg-[#b0dbb2] flex flex-col items-center justify-center min-h-screen">
-        <div class="relative flex flex-col my-6 bg-[#e2f1e7] shadow-sm border border-slate-200 rounded-lg w-96 p-6">
-          <div class="flex items-center mb-4">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="h-6 w-6 text-slate-600"
+      <FixedHeader />
+      <div className="container mx-auto py-8 px-8 mt-[8rem]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {menuItems.map((item) => (
+            <div
+              key={item.menu_item_id}
+              className="max-w-sm bg-white border border-gray-200 rounded-lg shadow"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418"
-              />
-            </svg>
-            <h5 class="ml-3 text-slate-800 text-xl font-semibold">
-              Page Unavailable
-            </h5>
-          </div>
-          <p class="block text-slate-600 leading-normal font-light mb-4">
-            This page is currently being updated and will be available soon. <br/>
-            We really sorry for the inconvenience.
-          </p>
-          <div>
-            <NavLink
-              to="/"
-              className="text-slate-800 font-semibold text-sm hover:underline flex items-center"
-            >
-              Back to Homepage
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="ml-2 h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+              <a href="#">
+                <img
+                  className="rounded-t-lg"
+                  src={assets[item.image_name]} // Use the image from the assets
+                  alt={item.item_name}
                 />
-              </svg>
-            </NavLink>
-          </div>
+              </a>
+              <div className="p-5">
+                <h5
+                  className="mb-2 text-md font-bold tracking-tight text-gray-900"
+                  style={{ fontFamily: "Mireille-Regular" }}
+                >
+                  {item.item_name}
+                </h5>
+                <p className="mb-3 font-normal text-gray-700">
+                  Neque porro quisquam est qui dolorem ipsum quia dolor sit
+                  amet, consectetur, adipisci velit...
+                </p>
+                <p>Price: ${item.price.toFixed(2)}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </>
