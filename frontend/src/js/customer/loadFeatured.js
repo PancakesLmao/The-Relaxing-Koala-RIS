@@ -16,7 +16,7 @@ export default async function loadFeatured() {
     const data = await response.json();
     // Sort data from highest to lowest count
     const sortedData = data.sort((a, b) => b.count - a.count);
-    // Pick top 3 dishes
+    // Pick top 3 dishes of the month
     const top3FeaturedData = sortedData.slice(0, 3);
     // Add image_name
     const top3withImage = top3FeaturedData.map((item) => ({
