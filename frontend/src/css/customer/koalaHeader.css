@@ -1,7 +1,7 @@
 .header-fixed .wrap-header {
     position: fixed;
     height: 100px;
-    background: #28472a;
+    background: #4a614c;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 .wrap-header {
@@ -49,8 +49,8 @@
     padding: 10px;
 }
 .btn-show-sidebar:hover {
-    border-top: 2px solid #387478;
-    border-bottom: 2px solid #387478;
+    border-top: 2px solid white;
+    border-bottom: 2px solid white;
 }
 .trans-0-4 {
     transition: all 0.4s;

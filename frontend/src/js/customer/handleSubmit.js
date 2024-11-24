@@ -20,24 +20,4 @@ export async function handleSubmit(formData) {
   } catch (error) {
     console.error("Error: ", error);
   }
-
-  // return fetch(FORMAPI, {
-  //   method: "PUT",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify(formData),
-  // })
-  //   .then((response) => {
-  //     if (response.ok) {
-  //       console.log("Reservation submitted successfully");
-  //       return response;
-  //     } else {
-  //       console.error("Failed to submit reservation");
-  //       return response;
-  //     }
-  //   })
-  //   .catch((error) => {
-  //     console.error("Error: ", error);
-  //   });
 }
