@@ -25,7 +25,7 @@ export default function FixedHeader() {
     },
     {
       name: "Menu",
-      path: "#menu",
+      path: "menu",
     },
     {
       name: "Reservation",

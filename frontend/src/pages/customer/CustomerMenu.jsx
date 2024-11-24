@@ -31,7 +31,7 @@ export default function CustomerMenu() {
         />
       </div>
       <div className="container mx-auto py-8">
-        <div className="bg-[#28472a] flex flex-col px-7 items-center justify-center my-4 sticky top-[6rem]">
+        <div className="bg-[#4a614c] flex flex-col px-7 items-center justify-center my-4 sticky top-[6rem]">
           <h1
             className="font-semibold text-white uppercase text-dark lg:text-4xl text-2xl pt-3"
             style={{ fontFamily: "Mireille-Bold" }}
@@ -48,7 +48,7 @@ export default function CustomerMenu() {
             >
               <img
                 className="h-64 object-cover rounded-t-lg"
-                src={assets[item.image_name]} // Use the image from the assets
+                src={assets[item.image_name]}
                 alt={item.item_name}
               />
               <div className="p-5">
