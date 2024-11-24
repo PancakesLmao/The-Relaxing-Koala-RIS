@@ -10,11 +10,11 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
     },
     {
       name: "About",
-      path: "about",
+      path: "#about",
     },
     {
       name: "Menu",
-      path: "menu",
+      path: "#menu",
     },
     {
       name: "Contact",

@@ -10,6 +10,7 @@ export default function CustomerReservation() {
   const date = useRef();
   const time = useRef();
   const note = useRef();
+  const formRef = useRef();
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -28,7 +29,7 @@ export default function CustomerReservation() {
       const response = await handleSubmit(formData);
       if (response && response.ok) {
         alert("Reservation submitted successfully");
-        e.currentTarget.reset();
+        formRef.current.reset();
       } else {
         alert("Failed to submit reservation");
       }
@@ -53,7 +54,7 @@ export default function CustomerReservation() {
                 Make a Reservation
               </h2>
             </div>
-            <form onSubmit={onSubmit} class="max-w-md mx-auto bg-white">
+            <form ref={formRef} onSubmit={onSubmit} class="max-w-md mx-auto bg-white">
               {/* Full name */}
               <div class="relative z-0 w-full mb-5 group">
                 <input
@@ -162,7 +163,7 @@ export default function CustomerReservation() {
                 class="text-white bg-[#558d57] hover:bg-[#28472a] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-[#558d57] dark:hover:bg-[#28472a] dark:focus:ring-blue-800 transition ease-in-out delay-70"
                 style={{ fontFamily: "Mireille-Regular" }}
               >
-                Submit
+                Complete reservation
               </button>
             </form>
           </div>
