@@ -3,7 +3,8 @@
 ## Frontend: React + tailwind  
 first go to the frontend directory  
 ```cd frontend```
-
+make sure you downloaded necessary dependencies
+```npm install```
 to init the frontend server:  
 ```npm start```
 
@@ -17,6 +18,8 @@ make sure you have fastapi and other dependencies(if exists) installed
 
 and then init the backend server  
 ```python3 -m fastapi```
+or 
+```fastapi dev```
 ## DB: Sqlite 
 nothing needs to be done :D
 
