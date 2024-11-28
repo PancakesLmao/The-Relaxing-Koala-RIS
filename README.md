@@ -1,4 +1,6 @@
 # Assignment 3 SWE30003 project :D
+# Overview of our website
+![WebUI](https://raw.githubusercontent.com/PancakesLmao/The-Relaxing-Koala-RIS/refs/heads/master/WebUI.png)
 
 ## Frontend: React + tailwind  
 first go to the frontend directory  
