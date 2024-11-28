@@ -13,13 +13,13 @@ export default function Footer() {
           <div class="grid gap-8 px-4 py-6 lg:py-8 md:grid-cols-2 sm:grid-cols-1">
             <div>
               <h2
-                class="font-semibold text-gray-900 uppercase dark:text-white text-2xl"
+                class="font-semibold text-gray-900 uppercase text-white text-2xl"
                 style={{ fontFamily: "Mireille-Bold" }}
               >
                 Contact us
               </h2>
               <hr className="my-2 w-[250px]"></hr>
-              <ul class="text-gray-900 dark:text-white font-medium">
+              <ul class="text-gray-900 text-white font-medium">
                 <li class="mb-4">
                   <div className="flex inline-flex items-center">
                     <IoMdHome className="inline-block mr-1 text-lg" />
@@ -51,7 +51,7 @@ export default function Footer() {
 
       {/* Copy-right Layer */}
       <div class="copy-right px-4 py-6 md:flex md:items-center md:justify-between">
-        <span class="text-sm text-gray-500 dark:text-gray-300 sm:text-center">
+        <span class="text-sm text-gray-500 text-gray-300 sm:text-center">
           © 2024 <a href="#">Koala Team</a>. SWE3003 - Software Architecture & Design.
         </span>
         <div class="flex mt-4 sm:justify-center md:mt-0 space-x-5 rtl:space-x-reverse">

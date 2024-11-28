@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import TableOrderList from "./TableOrderList";
 import CheckoutConfirmation from "./CheckoutConfirmation";
+import { formatDateTime } from "../../js/staff/Methods";
 
 export default function SingleTableOccupied({selectedTable, setSelectedTable, setFetchTables}) {
     const [orderInfor, setOrderInfor] = useState({})
@@ -66,7 +67,7 @@ export default function SingleTableOccupied({selectedTable, setSelectedTable, se
                 <div className="mt-[0.7vw] text-[1.3vw] text-left">
                     <div>Name: {orderInfor.name}</div>
                     <div>Order ID: {orderInfor.order_id}</div>
-                    <div>Date: {orderInfor.date_added}</div>
+                    <div>Date: {orderInfor.date_added ? formatDateTime(orderInfor.date_added) : ""}</div>
                     {invoice && (
                         <div className="text-red">Invoice Created!</div>
                     )}               
