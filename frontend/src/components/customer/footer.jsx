@@ -13,13 +13,13 @@ export default function Footer() {
           <div class="grid gap-8 px-4 py-6 lg:py-8 md:grid-cols-2 sm:grid-cols-1">
             <div>
               <h2
-                class="font-semibold text-gray-900 uppercase dark:text-white text-2xl"
+                class="font-semibold text-gray-900 uppercase text-white text-2xl"
                 style={{ fontFamily: "Mireille-Bold" }}
               >
                 Contact us
               </h2>
               <hr className="my-2 w-[250px]"></hr>
-              <ul class="text-gray-900 dark:text-white font-medium">
+              <ul class="text-gray-900 text-white font-medium">
                 <li class="mb-4">
                   <div className="flex inline-flex items-center">
                     <IoMdHome className="inline-block mr-1 text-lg" />
